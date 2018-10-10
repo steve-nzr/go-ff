@@ -17,7 +17,7 @@ type NetClient struct {
 func newNetClient(c net.Conn) *NetClient {
 	nc := new(NetClient)
 	nc.Conn = c
-	nc.ID = generateID()
+	nc.ID = GenerateID()
 
 	return nc
 }
@@ -33,7 +33,7 @@ func (nc *NetClient) Send(p Packet) {
 	}
 }
 
-func generateID() uint32 {
+func GenerateID() uint32 {
 	src := rand.NewSource(time.Now().UnixNano())
 	rnd := rand.New(src)
 	return rnd.Uint32()

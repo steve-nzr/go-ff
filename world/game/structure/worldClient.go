@@ -4,5 +4,5 @@ import "flyff/core"
 
 type WorldClient struct {
 	*core.NetClient
-	Character *core.Character
+	PlayerEntity *PlayerEntity
 }

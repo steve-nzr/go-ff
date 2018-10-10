@@ -10,7 +10,7 @@ import (
 
 type GameMap struct {
 	ID      uint32
-	Players map[uint32]*structure.WorldClient
+	Players map[uint32]*structure.PlayerEntity
 }
 
 type mapManager struct {
@@ -25,21 +25,21 @@ func initialize() *mapManager {
 
 	m.Maps[1] = new(GameMap)
 	m.Maps[1].ID = 1
-	m.Maps[1].Players = make(map[uint32]*structure.WorldClient)
+	m.Maps[1].Players = make(map[uint32]*structure.PlayerEntity)
 
 	return m
 }
 
 func (m *mapManager) Register(wc *structure.WorldClient) {
-	gameMap, ok := m.Maps[wc.Character.MapID]
+	gameMap, ok := m.Maps[wc.PlayerEntity.Position.MapID]
 	if gameMap == nil || ok == false {
-		log.Fatalln("GameMap not found", wc.Character.MapID)
+		log.Fatalln("GameMap not found", wc.PlayerEntity.Position.MapID)
 		return
 	}
 
 	fmt.Println("New player on map", gameMap.ID)
 
-	addObjPacket := out.MakeAddObj(wc)
+	addObjPacket := out.MakeAddObj(wc.PlayerEntity)
 	m.SendFrom(wc, &addObjPacket)
 
 	for _, player := range gameMap.Players {
@@ -47,27 +47,27 @@ func (m *mapManager) Register(wc *structure.WorldClient) {
 		wc.Send(addObjPacket)
 	}
 
-	gameMap.Players[uint32(wc.Character.ID)] = wc
+	gameMap.Players[uint32(wc.PlayerEntity.ID)] = wc.PlayerEntity
 }
 
 func (m *mapManager) Unregister(wc *structure.WorldClient) {
-	gameMap, ok := m.Maps[wc.Character.MapID]
+	gameMap, ok := m.Maps[wc.PlayerEntity.Position.MapID]
 	if gameMap == nil || ok == false {
-		log.Fatalln("GameMap not found", wc.Character.MapID)
+		log.Fatalln("GameMap not found", wc.PlayerEntity.Position.MapID)
 		return
 	}
 
 	fmt.Println("Removing player from map", gameMap.ID)
-	delObjPacket := out.MakeDeleteObj(wc)
+	delObjPacket := out.MakeDeleteObj(wc.PlayerEntity)
 	m.SendFrom(wc, &delObjPacket)
 
-	delete(gameMap.Players, wc.Character.MapID)
+	delete(gameMap.Players, wc.PlayerEntity.Position.MapID)
 }
 
 func (m *mapManager) SendFrom(wc *structure.WorldClient, p *core.Packet) {
-	gameMap, ok := m.Maps[wc.Character.MapID]
+	gameMap, ok := m.Maps[wc.PlayerEntity.Position.MapID]
 	if gameMap == nil || ok == false {
-		log.Fatalln("GameMap not found", wc.Character.MapID)
+		log.Fatalln("GameMap not found", wc.PlayerEntity.Position.MapID)
 		return
 	}
 
@@ -76,7 +76,7 @@ func (m *mapManager) SendFrom(wc *structure.WorldClient, p *core.Packet) {
 			continue
 		}
 
-		fmt.Println("Sending to", player.Character.Name)
-		player.Send(*p)
+		fmt.Println("Sending to", player.Name)
+		player.WorldClient.Send(*p)
 	}
 }

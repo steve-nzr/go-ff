@@ -5,7 +5,7 @@ import (
 	"flyff/world/game/structure"
 	"flyff/world/packets/format"
 	"flyff/world/packets/out"
-	"flyff/world/service/map"
+	"flyff/world/service/mapmanager"
 )
 
 func Chat(wc *structure.WorldClient, p *core.Packet) {

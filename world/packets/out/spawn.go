@@ -6,38 +6,38 @@ import (
 	"math"
 )
 
-func MakeSpawn(from *structure.WorldClient) core.Packet {
-	p := core.StartMergePacket(uint32(from.Character.ID), uint16(core.ENVIRONMENTALL), 0x0000FF00).
+func MakeSpawn(from *structure.PlayerEntity) core.Packet {
+	p := core.StartMergePacket(uint32(from.ID), uint16(core.ENVIRONMENTALL), 0x0000FF00).
 		WriteUInt32(0)
 
-	p = p.AddMergePart(core.WORLDREADINFO, uint32(from.Character.ID)).
-		WriteUInt32(from.Character.MapID).
-		WriteFloat32(from.Character.PosX).
-		WriteFloat32(from.Character.PosY).
-		WriteFloat32(from.Character.PosZ)
+	p = p.AddMergePart(core.WORLDREADINFO, uint32(from.ID)).
+		WriteUInt32(from.Position.MapID).
+		WriteFloat32(from.Position.X).
+		WriteFloat32(from.Position.Y).
+		WriteFloat32(from.Position.Z)
 
-	p = p.AddMergePart(core.ADDOBJ, uint32(from.Character.ID))
+	p = p.AddMergePart(core.ADDOBJ, uint32(from.ID))
 
 	p = p.WriteUInt8(5)
-	if from.Character.Gender == 0 {
+	if from.Gender == 0 {
 		p = p.WriteUInt32(11)
-	} else if from.Character.Gender == 1 {
+	} else if from.Gender == 1 {
 		p = p.WriteUInt32(12)
 	}
 
 	p = p.WriteUInt8(5)
-	if from.Character.Gender == 0 {
+	if from.Gender == 0 {
 		p = p.WriteUInt32(11)
-	} else if from.Character.Gender == 1 {
+	} else if from.Gender == 1 {
 		p = p.WriteUInt32(12)
 	}
 
 	p = p.WriteUInt16(100).
-		WriteFloat32(from.Character.PosX).
-		WriteFloat32(from.Character.PosY).
-		WriteFloat32(from.Character.PosZ).
+		WriteFloat32(from.Position.X).
+		WriteFloat32(from.Position.Y).
+		WriteFloat32(from.Position.Z).
 		WriteUInt16(360).
-		WriteUInt32(uint32(from.Character.ID))
+		WriteUInt32(uint32(from.ID))
 
 	p = p.WriteUInt16(0).
 		WriteUInt8(1).
@@ -47,19 +47,19 @@ func MakeSpawn(from *structure.WorldClient) core.Packet {
 		WriteUInt8(1).
 		WriteInt32(-1)
 
-	p = p.WriteString(from.Character.Name).
-		WriteUInt8(from.Character.Gender).
-		WriteUInt8(uint8(from.Character.SkinSetID)).
-		WriteUInt8(uint8(from.Character.HairID)).
-		WriteUInt32(from.Character.HairColor).
-		WriteUInt8(uint8(from.Character.FaceID)).
-		WriteUInt32(uint32(from.Character.ID)). // Playerdata ID
-		WriteUInt8(uint8(from.Character.JobID)).
-		WriteUInt16(from.Character.Strength).
-		WriteUInt16(from.Character.Stamina).
-		WriteUInt16(from.Character.Dexterity).
-		WriteUInt16(from.Character.Intelligence).
-		WriteUInt16(from.Character.Level)
+	p = p.WriteString(from.Name).
+		WriteUInt8(from.Gender).
+		WriteUInt8(uint8(from.SkinSetID)).
+		WriteUInt8(uint8(from.HairID)).
+		WriteUInt32(from.HairColor).
+		WriteUInt8(uint8(from.FaceID)).
+		WriteUInt32(uint32(from.ID)). // Playerdata ID
+		WriteUInt8(uint8(from.JobID)).
+		WriteUInt16(from.Statistics.Strength).
+		WriteUInt16(from.Statistics.Stamina).
+		WriteUInt16(from.Statistics.Dexterity).
+		WriteUInt16(from.Statistics.Intelligence).
+		WriteUInt16(uint16(from.Level))
 
 	p = p.WriteInt32(-1).
 		WriteUInt32(0).
@@ -107,10 +107,10 @@ func MakeSpawn(from *structure.WorldClient) core.Packet {
 	}
 
 	// Marking pos
-	p = p.WriteUInt32(from.Character.MapID).
-		WriteFloat32(from.Character.PosX).
-		WriteFloat32(from.Character.PosY).
-		WriteFloat32(from.Character.PosZ)
+	p = p.WriteUInt32(from.Position.MapID).
+		WriteFloat32(from.Position.X).
+		WriteFloat32(from.Position.Y).
+		WriteFloat32(from.Position.Z)
 
 	p = p.WriteUInt8(0).
 		WriteUInt8(0).
@@ -132,7 +132,7 @@ func MakeSpawn(from *structure.WorldClient) core.Packet {
 	p = p.WriteUInt8(0). // Cheer point
 				WriteUInt32(0)
 
-	p = p.WriteUInt8(from.Character.Slot)
+	p = p.WriteUInt8(from.Slot)
 	for i := 0; i < 3; i++ {
 		p = p.WriteUInt32(0).
 			WriteUInt32(0)
@@ -192,18 +192,18 @@ func MakeSpawn(from *structure.WorldClient) core.Packet {
 	return p
 }
 
-func MakeAddObj(from *structure.WorldClient) core.Packet {
-	p := core.StartMergePacket(uint32(from.Character.ID), uint16(core.ADDOBJ), 0xFFFFFF00)
+func MakeAddObj(from *structure.PlayerEntity) core.Packet {
+	p := core.StartMergePacket(uint32(from.ID), uint16(core.ADDOBJ), 0xFFFFFF00)
 	p = p.WriteUInt8(5).
 		WriteUInt32(11).
 		WriteUInt8(5).
 		WriteUInt32(11).
 		WriteUInt16(100).
-		WriteFloat32(from.Character.PosX).
-		WriteFloat32(from.Character.PosY).
-		WriteFloat32(from.Character.PosZ).
+		WriteFloat32(from.Position.X).
+		WriteFloat32(from.Position.Y).
+		WriteFloat32(from.Position.Z).
 		WriteUInt16(360).
-		WriteUInt32(uint32(from.Character.ID)).
+		WriteUInt32(uint32(from.ID)).
 		WriteUInt16(0).
 		WriteUInt8(1).
 		WriteUInt32(230).
@@ -211,19 +211,19 @@ func MakeAddObj(from *structure.WorldClient) core.Packet {
 		WriteUInt32(0).
 		WriteUInt8(1).
 		WriteInt32(-1).
-		WriteString(from.Character.Name).
-		WriteUInt8(from.Character.Gender).
-		WriteUInt8(uint8(from.Character.SkinSetID)).
-		WriteUInt8(uint8(from.Character.HairID)).
-		WriteUInt32(from.Character.HairColor).
-		WriteUInt8(uint8(from.Character.FaceID)).
-		WriteUInt32(uint32(from.Character.ID)).
+		WriteString(from.Name).
+		WriteUInt8(from.Gender).
+		WriteUInt8(uint8(from.SkinSetID)).
+		WriteUInt8(uint8(from.HairID)).
+		WriteUInt32(from.HairColor).
+		WriteUInt8(uint8(from.FaceID)).
+		WriteUInt32(uint32(from.ID)).
 		WriteUInt8(1).
 		WriteUInt16(0).
 		WriteUInt16(0).
 		WriteUInt16(0).
 		WriteUInt16(0).
-		WriteUInt16(from.Character.Level).
+		WriteUInt16(uint16(from.Level)).
 		WriteInt32(-1).
 		WriteUInt32(0).
 		WriteUInt8(0).
@@ -254,6 +254,6 @@ func MakeAddObj(from *structure.WorldClient) core.Packet {
 	return p
 }
 
-func MakeDeleteObj(wc *structure.WorldClient) core.Packet {
-	return core.StartMergePacket(uint32(wc.Character.ID), uint16(0x00F1), 0xFFFFFF00)
+func MakeDeleteObj(wc *structure.PlayerEntity) core.Packet {
+	return core.StartMergePacket(uint32(wc.ID), uint16(0x00F1), 0xFFFFFF00)
 }
