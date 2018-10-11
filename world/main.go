@@ -3,11 +3,11 @@ package main
 import (
 	"flyff/world/game/structure"
 	"flyff/world/packets/in"
+	"flyff/world/service/gamemap"
 	"fmt"
 	"sync"
 
 	"flyff/core"
-	"flyff/world/service/map"
 )
 
 type WorldClients map[uint32]*structure.WorldClient
@@ -34,12 +34,10 @@ func main() {
 func onConnectionClosed(c *core.NetClient) {
 	clientsMutex.Lock()
 	wc := clients[c.ID]
-	clientsMutex.Unlock()
-
-	mapmanager.Manager.Unregister((*structure.WorldClient)(wc))
-
-	clientsMutex.Lock()
 	defer clientsMutex.Unlock()
+
+	gamemap.Manager.Unregister((*structure.WorldClient)(wc))
+
 	delete(clients, c.ID)
 }
 

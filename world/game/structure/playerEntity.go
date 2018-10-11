@@ -4,6 +4,7 @@ import "flyff/world/game/component"
 
 type PlayerEntity struct {
 	Entity
+	PlayerID   uint32
 	Slot       uint8
 	JobID      uint8
 	HairColor  uint32

@@ -6,7 +6,7 @@ import (
 	"flyff/world/game/structure"
 	"flyff/world/packets/format"
 	"flyff/world/packets/out"
-	"flyff/world/service/mapmanager"
+	"flyff/world/service/gamemap"
 	"fmt"
 )
 
@@ -26,6 +26,7 @@ func Join(wc *structure.WorldClient, p *core.Packet) {
 	wc.PlayerEntity = new(structure.PlayerEntity)
 	wc.PlayerEntity.WorldClient = wc
 	wc.PlayerEntity.ID = core.GenerateID()
+	wc.PlayerEntity.PlayerID = uint32(c.ID)
 	wc.PlayerEntity.Slot = c.Slot
 	wc.PlayerEntity.HairColor = c.HairColor
 	wc.PlayerEntity.HairID = c.HairID
@@ -49,7 +50,13 @@ func Join(wc *structure.WorldClient, p *core.Packet) {
 	} else if c.Gender == 1 {
 		wc.PlayerEntity.ModelID = 12
 	}
+	wc.PlayerEntity.Statistics = component.Statistics{
+		Strength:     c.Strength,
+		Stamina:      c.Stamina,
+		Dexterity:    c.Dexterity,
+		Intelligence: c.Intelligence,
+	}
 
 	wc.Send(out.MakeSpawn(wc.PlayerEntity))
-	mapmanager.Manager.Register(wc)
+	gamemap.Manager.Register(wc)
 }

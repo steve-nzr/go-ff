@@ -5,7 +5,7 @@ import (
 	"flyff/world/game/structure"
 	"flyff/world/packets/format"
 	"flyff/world/packets/out"
-	"flyff/world/service/mapmanager"
+	"flyff/world/service/gamemap"
 )
 
 func Chat(wc *structure.WorldClient, p *core.Packet) {
@@ -14,6 +14,6 @@ func Chat(wc *structure.WorldClient, p *core.Packet) {
 
 	chatPacket := out.MakeChat(wc, &chat)
 
-	mapmanager.Manager.SendFrom(wc, &chatPacket)
+	gamemap.Manager.SendFrom(wc, &chatPacket)
 	wc.Send(chatPacket)
 }

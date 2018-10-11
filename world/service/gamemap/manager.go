@@ -1,4 +1,4 @@
-package mapmanager
+package gamemap
 
 import (
 	"flyff/core"
@@ -8,29 +8,24 @@ import (
 	"log"
 )
 
-type GameMap struct {
-	ID      uint32
-	Players map[uint32]*structure.PlayerEntity
-}
-
-type mapManager struct {
-	Maps map[uint32]*GameMap
+type manager struct {
+	Maps map[uint32]*gameMap
 }
 
 var Manager = initialize()
 
-func initialize() *mapManager {
-	m := new(mapManager)
-	m.Maps = make(map[uint32]*GameMap)
+func initialize() *manager {
+	m := new(manager)
+	m.Maps = make(map[uint32]*gameMap)
 
-	m.Maps[1] = new(GameMap)
+	m.Maps[1] = new(gameMap)
 	m.Maps[1].ID = 1
 	m.Maps[1].Players = make(map[uint32]*structure.PlayerEntity)
 
 	return m
 }
 
-func (m *mapManager) Register(wc *structure.WorldClient) {
+func (m *manager) Register(wc *structure.WorldClient) {
 	gameMap, ok := m.Maps[wc.PlayerEntity.Position.MapID]
 	if gameMap == nil || ok == false {
 		log.Fatalln("GameMap not found", wc.PlayerEntity.Position.MapID)
@@ -50,7 +45,7 @@ func (m *mapManager) Register(wc *structure.WorldClient) {
 	gameMap.Players[uint32(wc.PlayerEntity.ID)] = wc.PlayerEntity
 }
 
-func (m *mapManager) Unregister(wc *structure.WorldClient) {
+func (m *manager) Unregister(wc *structure.WorldClient) {
 	gameMap, ok := m.Maps[wc.PlayerEntity.Position.MapID]
 	if gameMap == nil || ok == false {
 		log.Fatalln("GameMap not found", wc.PlayerEntity.Position.MapID)
@@ -64,7 +59,7 @@ func (m *mapManager) Unregister(wc *structure.WorldClient) {
 	delete(gameMap.Players, wc.PlayerEntity.Position.MapID)
 }
 
-func (m *mapManager) SendFrom(wc *structure.WorldClient, p *core.Packet) {
+func (m *manager) SendFrom(wc *structure.WorldClient, p *core.Packet) {
 	gameMap, ok := m.Maps[wc.PlayerEntity.Position.MapID]
 	if gameMap == nil || ok == false {
 		log.Fatalln("GameMap not found", wc.PlayerEntity.Position.MapID)

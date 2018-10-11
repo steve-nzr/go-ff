@@ -53,7 +53,7 @@ func MakeSpawn(from *structure.PlayerEntity) core.Packet {
 		WriteUInt8(uint8(from.HairID)).
 		WriteUInt32(from.HairColor).
 		WriteUInt8(uint8(from.FaceID)).
-		WriteUInt32(uint32(from.ID)). // Playerdata ID
+		WriteUInt32(uint32(from.PlayerID)). // Playerdata ID
 		WriteUInt8(uint8(from.JobID)).
 		WriteUInt16(from.Statistics.Strength).
 		WriteUInt16(from.Statistics.Stamina).
