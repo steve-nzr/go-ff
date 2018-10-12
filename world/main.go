@@ -1,10 +1,11 @@
 package main
 
 import (
+	"flyff/core/net"
 	"flyff/world/game/structure"
 	"flyff/world/packets/in"
+	gametimer "flyff/world/service/gameTimer"
 	"flyff/world/service/gamemap"
-	"fmt"
 	"sync"
 
 	"flyff/core"
@@ -22,40 +23,42 @@ func main() {
 	db := core.GetDbConnection()
 	db.AutoMigrate(&core.Character{})
 
-	core.StartNetServer(core.NetServerConfig{
-		Host:                "0.0.0.0",
-		Port:                "5400",
-		Type:                core.NetServerTCP,
-		ConnectionClosed:    onConnectionClosed,
-		ConnectionInitiated: onConnectionInitiated,
-		ConnectionMessage:   onConnectionMessage})
+	go gametimer.Timer.Start()
+
+	server := net.Create("0.0.0.0:5400")
+	server.OnConnected(onConnectionInitiated)
+	server.OnDisconnected(onConnectionClosed)
+	server.OnMessage(onConnectionMessage)
+	server.Start()
 }
 
-func onConnectionClosed(c *core.NetClient) {
-	clientsMutex.Lock()
+func onConnectionClosed(c *net.Client) {
+	clientsMutex.RLock()
 	wc := clients[c.ID]
-	defer clientsMutex.Unlock()
+	clientsMutex.RUnlock()
 
 	gamemap.Manager.Unregister((*structure.WorldClient)(wc))
 
+	clientsMutex.Lock()
 	delete(clients, c.ID)
+	clientsMutex.Unlock()
 }
 
-func onConnectionInitiated(c *core.NetClient) {
+func onConnectionInitiated(c *net.Client) {
 	wc := new(structure.WorldClient)
-	wc.NetClient = c
+	wc.Client = c
 
-	clientsMutex.Lock()
+	clientsMutex.RLock()
 	clients[c.ID] = wc
-	clientsMutex.Unlock()
+	clientsMutex.RUnlock()
 
 	wc.SendGreetings()
 }
 
-func onConnectionMessage(nc *core.NetClient, packet *core.Packet) {
-	clientsMutex.Lock()
+func onConnectionMessage(nc *net.Client, packet *net.Packet) {
+	clientsMutex.RLock()
 	wc := clients[nc.ID]
-	clientsMutex.Unlock()
+	clientsMutex.RUnlock()
 	if wc == nil {
 		return
 	}
@@ -64,17 +67,23 @@ func onConnectionMessage(nc *core.NetClient, packet *core.Packet) {
 	packet.ReadUInt32()
 
 	protocol := packet.ReadUInt32()
-	//fmt.Printf("New packet with id : 0x%02x\n", protocol)
 
-	if protocol == 0xff00 {
-		in.Join(wc, packet)
-	} else if protocol == 0xffffff00 {
-		packet.ReadUInt8()
-		snapshotProtocol := packet.ReadUInt16()
-		if snapshotProtocol == 0x00C1 {
-			fmt.Println("Destpos")
+	switch protocol {
+	case 0xff00:
+		{
+			in.Join(wc, packet)
 		}
-	} else if protocol == 0x00FF0000 {
-		in.Chat(wc, packet)
+	case 0xffffff00:
+		{
+			packet.ReadUInt8()
+			snapshotProtocol := packet.ReadUInt16()
+			if snapshotProtocol == 0x00C1 {
+				in.DestPos(wc, packet)
+			}
+		}
+	case 0x00FF0000:
+		{
+			in.Chat(wc, packet)
+		}
 	}
 }

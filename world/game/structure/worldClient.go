@@ -1,8 +1,8 @@
 package structure
 
-import "flyff/core"
+import "flyff/core/net"
 
 type WorldClient struct {
-	*core.NetClient
+	*net.Client
 	PlayerEntity *PlayerEntity
 }

@@ -1,22 +1,22 @@
 package out
 
 import (
-	"flyff/core"
+	"flyff/core/net"
 	"flyff/world/game/structure"
 	"math"
 )
 
-func MakeSpawn(from *structure.PlayerEntity) core.Packet {
-	p := core.StartMergePacket(uint32(from.ID), uint16(core.ENVIRONMENTALL), 0x0000FF00).
+func MakeSpawn(from *structure.PlayerEntity) net.Packet {
+	p := net.StartMergePacket(uint32(from.ID), uint16(net.ENVIRONMENTALL), 0x0000FF00).
 		WriteUInt32(0)
 
-	p = p.AddMergePart(core.WORLDREADINFO, uint32(from.ID)).
+	p = p.AddMergePart(net.WORLDREADINFO, uint32(from.ID)).
 		WriteUInt32(from.Position.MapID).
-		WriteFloat32(from.Position.X).
-		WriteFloat32(from.Position.Y).
-		WriteFloat32(from.Position.Z)
+		WriteFloat32(float32(from.Position.Vec.X)).
+		WriteFloat32(float32(from.Position.Vec.Y)).
+		WriteFloat32(float32(from.Position.Vec.Z))
 
-	p = p.AddMergePart(core.ADDOBJ, uint32(from.ID))
+	p = p.AddMergePart(net.ADDOBJ, uint32(from.ID))
 
 	p = p.WriteUInt8(5)
 	if from.Gender == 0 {
@@ -33,9 +33,9 @@ func MakeSpawn(from *structure.PlayerEntity) core.Packet {
 	}
 
 	p = p.WriteUInt16(100).
-		WriteFloat32(from.Position.X).
-		WriteFloat32(from.Position.Y).
-		WriteFloat32(from.Position.Z).
+		WriteFloat32(float32(from.Position.Vec.X)).
+		WriteFloat32(float32(from.Position.Vec.Y)).
+		WriteFloat32(float32(from.Position.Vec.Z)).
 		WriteUInt16(360).
 		WriteUInt32(uint32(from.ID))
 
@@ -108,9 +108,9 @@ func MakeSpawn(from *structure.PlayerEntity) core.Packet {
 
 	// Marking pos
 	p = p.WriteUInt32(from.Position.MapID).
-		WriteFloat32(from.Position.X).
-		WriteFloat32(from.Position.Y).
-		WriteFloat32(from.Position.Z)
+		WriteFloat32(float32(from.Position.Vec.X)).
+		WriteFloat32(float32(from.Position.Vec.Y)).
+		WriteFloat32(float32(from.Position.Vec.Z))
 
 	p = p.WriteUInt8(0).
 		WriteUInt8(0).
@@ -192,16 +192,16 @@ func MakeSpawn(from *structure.PlayerEntity) core.Packet {
 	return p
 }
 
-func MakeAddObj(from *structure.PlayerEntity) core.Packet {
-	p := core.StartMergePacket(uint32(from.ID), uint16(core.ADDOBJ), 0xFFFFFF00)
+func MakeAddObj(from *structure.PlayerEntity) net.Packet {
+	p := net.StartMergePacket(uint32(from.ID), uint16(net.ADDOBJ), 0xFFFFFF00)
 	p = p.WriteUInt8(5).
 		WriteUInt32(11).
 		WriteUInt8(5).
 		WriteUInt32(11).
 		WriteUInt16(100).
-		WriteFloat32(from.Position.X).
-		WriteFloat32(from.Position.Y).
-		WriteFloat32(from.Position.Z).
+		WriteFloat32(float32(from.Position.Vec.X)).
+		WriteFloat32(float32(from.Position.Vec.Y)).
+		WriteFloat32(float32(from.Position.Vec.Z)).
 		WriteUInt16(360).
 		WriteUInt32(uint32(from.ID)).
 		WriteUInt16(0).
@@ -254,6 +254,6 @@ func MakeAddObj(from *structure.PlayerEntity) core.Packet {
 	return p
 }
 
-func MakeDeleteObj(wc *structure.PlayerEntity) core.Packet {
-	return core.StartMergePacket(uint32(wc.ID), uint16(0x00F1), 0xFFFFFF00)
+func MakeDeleteObj(wc *structure.PlayerEntity) net.Packet {
+	return net.StartMergePacket(uint32(wc.ID), uint16(0x00F1), 0xFFFFFF00)
 }

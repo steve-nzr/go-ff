@@ -1,6 +1,6 @@
 package format
 
-import "flyff/core"
+import "flyff/core/net"
 
 // Join packet struct
 type Join struct {
@@ -20,7 +20,7 @@ type Join struct {
 }
 
 // Construct ...
-func (d *Join) Construct(p *core.Packet) {
+func (d *Join) Construct(p *net.Packet) {
 	d.WorldID = p.ReadUInt32()
 	d.PlayerID = p.ReadUInt32()
 	d.AuthenticationKey = p.ReadInt32()

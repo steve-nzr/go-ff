@@ -1,7 +1,7 @@
 package gamemap
 
 import (
-	"flyff/core"
+	"flyff/core/net"
 	"flyff/world/game/structure"
 	"flyff/world/packets/out"
 	"fmt"
@@ -23,6 +23,12 @@ func initialize() *manager {
 	m.Maps[1].Players = make(map[uint32]*structure.PlayerEntity)
 
 	return m
+}
+
+func (m *manager) Update(time int64) {
+	for _, gm := range m.Maps {
+		gm.Update(time)
+	}
 }
 
 func (m *manager) Register(wc *structure.WorldClient) {
@@ -59,7 +65,7 @@ func (m *manager) Unregister(wc *structure.WorldClient) {
 	delete(gameMap.Players, wc.PlayerEntity.Position.MapID)
 }
 
-func (m *manager) SendFrom(wc *structure.WorldClient, p *core.Packet) {
+func (m *manager) SendFrom(wc *structure.WorldClient, p *net.Packet) {
 	gameMap, ok := m.Maps[wc.PlayerEntity.Position.MapID]
 	if gameMap == nil || ok == false {
 		log.Fatalln("GameMap not found", wc.PlayerEntity.Position.MapID)
@@ -67,7 +73,7 @@ func (m *manager) SendFrom(wc *structure.WorldClient, p *core.Packet) {
 	}
 
 	for _, player := range gameMap.Players {
-		if player.ID == wc.ID {
+		if player.ID == wc.PlayerEntity.ID {
 			continue
 		}
 

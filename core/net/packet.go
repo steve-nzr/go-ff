@@ -1,4 +1,4 @@
-package core
+package net
 
 import (
 	"encoding/binary"
@@ -171,6 +171,13 @@ func ReadPacket(d []byte) *Packet {
 	p.data = d
 
 	return p
+}
+
+// ReadFloat32 at the current offset
+func (p *Packet) ReadFloat32() float32 {
+	i := binary.LittleEndian.Uint32(p.data[p.offset:])
+	p.offset += (32 / 8)
+	return math.Float32frombits(i)
 }
 
 // ReadInt32 at the current offset

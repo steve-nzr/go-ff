@@ -12,4 +12,5 @@ type PlayerEntity struct {
 	SkinSetID  uint32
 	FaceID     uint32
 	Statistics component.Statistics
+	Moving     component.Moving
 }

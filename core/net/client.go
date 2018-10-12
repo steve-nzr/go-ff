@@ -1,4 +1,4 @@
-package core
+package net
 
 import (
 	"fmt"
@@ -7,23 +7,23 @@ import (
 	"time"
 )
 
-// NetClient stores the network connection + the ID
-type NetClient struct {
+// Client stores the network connection + the ID
+type Client struct {
 	net.Conn
 	ID uint32
 }
 
-// NewNetClient returns a NetClient instance with the given net.Conn
-func newNetClient(c net.Conn) *NetClient {
-	nc := new(NetClient)
+// NewClient returns a Client instance with the given net.Conn
+func newClient(c net.Conn) *Client {
+	nc := new(Client)
 	nc.Conn = c
 	nc.ID = GenerateID()
 
 	return nc
 }
 
-// Send a Packet to the NetClient
-func (nc *NetClient) Send(p Packet) {
+// Send a Packet to the Client
+func (nc *Client) Send(p Packet) {
 	p = p.finalize()
 
 	_, err := nc.Write(p.data[:p.offset])
@@ -39,7 +39,7 @@ func GenerateID() uint32 {
 	return rnd.Uint32()
 }
 
-func (nc *NetClient) SendGreetings() *NetClient {
+func (nc *Client) SendGreetings() *Client {
 	p := MakePacket(GREETINGS).
 		WriteUInt32(nc.ID)
 

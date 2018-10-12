@@ -3,31 +3,31 @@ package main
 import (
 	"fmt"
 
-	"flyff/core"
+	"flyff/core/net"
 )
 
 func main() {
-	core.StartNetServer(core.NetServerConfig{
-		Host:                "0.0.0.0",
-		Port:                "23000",
-		Type:                core.NetServerTCP,
-		ConnectionInitiated: onConnectionInitiated,
-		ConnectionMessage:   onConnectionMessage})
+	server := net.Create("0.0.0.0:23000")
+	server.OnConnected(onConnectionInitiated)
+	server.OnDisconnected(onConnectionClosed)
+	server.OnMessage(onConnectionMessage)
+	server.Start()
 }
 
-func onConnectionInitiated(c *core.NetClient) {
-	loginClient{c}.SendGreetings()
+func onConnectionInitiated(nc *net.Client) {
+	fmt.Println("Client", nc.ID, "connected")
+	nc.SendGreetings()
 }
 
-func onConnectionMessage(c *core.NetClient, packet *core.Packet) {
-	lc := loginClient{c}
+func onConnectionClosed(nc *net.Client) {
+	fmt.Println("Client", nc.ID, "disconnected")
+}
 
-	protocol := packet.ReadUInt32()
-	fmt.Printf("New packet with id : 0x%02x\n", protocol)
-
-	if protocol == 0xfc {
-		fmt.Println("Login request")
-
-		lc.sendServerList()
+func onConnectionMessage(nc *net.Client, packet *net.Packet) {
+	switch packet.ReadUInt32() {
+	case 0xfc:
+		{
+			sendServerList(nc)
+		}
 	}
 }

@@ -3,15 +3,11 @@ package main
 import (
 	"math"
 
-	"flyff/core"
+	"flyff/core/net"
 )
 
-type loginClient struct {
-	*core.NetClient
-}
-
-func (nc loginClient) sendServerList() loginClient {
-	p := core.MakePacket(core.SERVERLIST).
+func sendServerList(nc *net.Client) {
+	p := net.MakePacket(net.SERVERLIST).
 		WriteUInt32(0).
 		WriteUInt8(1).
 		WriteString("test").
@@ -40,5 +36,4 @@ func (nc loginClient) sendServerList() loginClient {
 	}
 
 	nc.Send(p)
-	return nc
 }

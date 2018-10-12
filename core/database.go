@@ -17,7 +17,7 @@ func setActiveConnection(db *gorm.DB) {
 
 // InitiateDbConnection open a new db connection & set it to active
 func InitiateDbConnection() {
-	db, err := gorm.Open("postgres", "host=192.168.1.201 port=5432 user=user dbname=db password=password sslmode=disable")
+	db, err := gorm.Open("postgres", "host=192.168.2.201 port=5432 user=user dbname=db password=password sslmode=disable")
 	if err != nil {
 		panic(err)
 	}

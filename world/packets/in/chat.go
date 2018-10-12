@@ -1,14 +1,14 @@
 package in
 
 import (
-	"flyff/core"
+	"flyff/core/net"
 	"flyff/world/game/structure"
 	"flyff/world/packets/format"
 	"flyff/world/packets/out"
 	"flyff/world/service/gamemap"
 )
 
-func Chat(wc *structure.WorldClient, p *core.Packet) {
+func Chat(wc *structure.WorldClient, p *net.Packet) {
 	var chat format.Chat
 	chat.Construct(p)
 

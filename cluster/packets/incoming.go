@@ -1,6 +1,6 @@
 package packets
 
-import "flyff/core"
+import "flyff/core/net"
 
 // CreatePlayer packet struct
 type CreatePlayer struct {
@@ -36,7 +36,7 @@ type PreJoin struct {
 }
 
 // Construct ...
-func (c *CreatePlayer) Construct(p *core.Packet) {
+func (c *CreatePlayer) Construct(p *net.Packet) {
 	c.Username = p.ReadString()
 	c.Password = p.ReadString()
 	c.Slot = p.ReadUInt8()
@@ -54,7 +54,7 @@ func (c *CreatePlayer) Construct(p *core.Packet) {
 }
 
 // Construct ...
-func (d *DeletePlayer) Construct(p *core.Packet) {
+func (d *DeletePlayer) Construct(p *net.Packet) {
 	d.Username = p.ReadString()
 	d.Password = p.ReadString()
 	d.PasswordConfirm = p.ReadString()
@@ -62,7 +62,7 @@ func (d *DeletePlayer) Construct(p *core.Packet) {
 }
 
 // Construct ...
-func (pj *PreJoin) Construct(p *core.Packet) {
+func (pj *PreJoin) Construct(p *net.Packet) {
 	pj.Username = p.ReadString()
 	pj.CharacterID = p.ReadUInt32()
 	pj.CharacterName = p.ReadString()

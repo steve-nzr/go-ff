@@ -5,6 +5,7 @@ import (
 
 	"flyff/cluster/packets"
 	"flyff/core"
+	"flyff/core/net"
 )
 
 func main() {
@@ -14,21 +15,23 @@ func main() {
 	db := core.GetDbConnection()
 	db.AutoMigrate(&core.Character{})
 
-	core.StartNetServer(core.NetServerConfig{
-		Host:                "0.0.0.0",
-		Port:                "28000",
-		Type:                core.NetServerTCP,
-		ConnectionInitiated: onConnectionInitiated,
-		ConnectionMessage:   onConnectionMessage})
+	server := net.Create("0.0.0.0:28000")
+	server.OnConnected(onConnectionInitiated)
+	server.OnDisconnected(onConnectionInitiated)
+	server.OnMessage(onConnectionMessage)
+	server.Start()
 }
 
-func onConnectionInitiated(c *core.NetClient) {
-	clusterClient{c}.sendGreetings()
+func onConnectionInitiated(nc *net.Client) {
+	fmt.Println("Client", nc.ID, "connected")
+	nc.SendGreetings()
 }
 
-func onConnectionMessage(c *core.NetClient, packet *core.Packet) {
-	cc := clusterClient{c}
+func onConnectionClosed(nc *net.Client) {
+	fmt.Println("Client", nc.ID, "disconnected")
+}
 
+func onConnectionMessage(nc *net.Client, packet *net.Packet) {
 	// Always FFFFFFF
 	packet.ReadUInt32()
 
@@ -36,8 +39,8 @@ func onConnectionMessage(c *core.NetClient, packet *core.Packet) {
 	fmt.Printf("New packet with id : 0x%02x\n", protocol)
 
 	if protocol == 0xf6 {
-		cc.sendPlayerList(0).
-			sendWorldAddr()
+		sendPlayerList(nc, 0)
+		sendWorldAddr(nc)
 	} else if protocol == 0xf4 {
 		var p packets.CreatePlayer
 		p.Construct(packet)
@@ -64,7 +67,7 @@ func onConnectionMessage(c *core.NetClient, packet *core.Packet) {
 		db := core.GetDbConnection()
 		db.Save(&c)
 
-		cc.sendPlayerList(0)
+		sendPlayerList(nc, 0)
 	} else if protocol == 0xf5 {
 		var p packets.DeletePlayer
 		p.Construct(packet)
@@ -72,11 +75,11 @@ func onConnectionMessage(c *core.NetClient, packet *core.Packet) {
 		db := core.GetDbConnection()
 		db.Delete(&core.Character{}, p.CharacterID)
 
-		cc.sendPlayerList(0)
+		sendPlayerList(nc, 0)
 	} else if protocol == 0xff05 {
 		var p packets.PreJoin
 		p.Construct(packet)
 
-		cc.Send(core.MakePacket(core.PREJOIN))
+		nc.Send(net.MakePacket(net.PREJOIN))
 	}
 }

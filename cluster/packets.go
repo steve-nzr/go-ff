@@ -2,35 +2,23 @@ package main
 
 import (
 	"flyff/core"
+	"flyff/core/net"
 )
 
-type clusterClient struct {
-	*core.NetClient
-}
-
-func (nc clusterClient) sendGreetings() clusterClient {
-	p := core.MakePacket(core.GREETINGS).
-		WriteUInt32(nc.ID)
-
-	nc.Send(p)
-	return nc
-}
-
-func (nc clusterClient) sendWorldAddr() clusterClient {
-	packet := core.MakePacket(core.WORLDADDR).
+func sendWorldAddr(nc *net.Client) {
+	packet := net.MakePacket(net.WORLDADDR).
 		WriteString("127.0.0.1")
 
 	nc.Send(packet)
-	return nc
 }
 
-func (nc clusterClient) sendPlayerList(authKey int32) clusterClient {
+func sendPlayerList(nc *net.Client, authKey int32) {
 	db := core.GetDbConnection()
 
 	var characters []core.Character
 	db.Limit(3).Find(&characters)
 
-	packet := core.MakePacket(core.PLAYERLIST).
+	packet := net.MakePacket(net.PLAYERLIST).
 		WriteInt32(0).
 		WriteInt32(int32(len(characters)))
 
@@ -70,5 +58,4 @@ func (nc clusterClient) sendPlayerList(authKey int32) clusterClient {
 	packet = packet.WriteInt32(0)
 
 	nc.Send(packet)
-	return nc
 }
