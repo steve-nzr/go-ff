@@ -62,6 +62,6 @@ func Join(pe *entities.PlayerEntity, p *net.Packet) {
 		Intelligence: c.Intelligence,
 	}
 
-	pe.Client.Send(out.MakeSpawn(pe))
+	pe.Send(out.MakeSpawn(pe))
 	gamemap.Manager.Register(pe)
 }

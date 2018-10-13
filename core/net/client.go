@@ -24,9 +24,18 @@ func newClient(c net.Conn) *Client {
 
 // Send a Packet to the Client
 func (nc *Client) Send(p Packet) {
-	p = p.finalize()
+	p = p.Finalize()
 
-	_, err := nc.Write(p.data[:p.offset])
+	_, err := nc.Write(p.Data[:p.Offset])
+	if err != nil {
+		fmt.Println(err)
+		nc.Close()
+	}
+}
+
+// SendFinalized sends a Packet to the Client
+func (nc *Client) SendFinalized(p Packet) {
+	_, err := nc.Write(p.Data[:p.Offset])
 	if err != nil {
 		fmt.Println(err)
 		nc.Close()

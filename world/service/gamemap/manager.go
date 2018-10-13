@@ -1,12 +1,17 @@
 package gamemap
 
 import (
+	"encoding/json"
 	"flyff/core/net"
 	"flyff/world/entities"
 	"flyff/world/feature/movement"
 	"flyff/world/packets/out"
+	"flyff/world/service/messaging/channel"
+	"flyff/world/service/messaging/definitions"
 	"fmt"
 	"log"
+
+	"github.com/streadway/amqp"
 )
 
 type manager struct {
@@ -47,8 +52,7 @@ func (m *manager) Register(pe *entities.PlayerEntity) {
 	m.SendFrom(pe, &addObjPacket)
 
 	for _, player := range gameMap.Players {
-		addObjPacket = out.MakeAddObj(player)
-		pe.Client.Send(addObjPacket)
+		pe.Send(out.MakeAddObj(player))
 	}
 
 	gameMap.Players[uint32(pe.ID)] = pe
@@ -75,12 +79,25 @@ func (m *manager) SendFrom(pe *entities.PlayerEntity, p *net.Packet) {
 		return
 	}
 
+	var po definitions.ExternalPacket
+	po.Packet = p.Finalize()
 	for _, player := range gameMap.Players {
-		if player.ID == pe.ID {
+		if player.NetClientID == pe.NetClientID {
 			continue
 		}
 
-		fmt.Println("Sending to", player.Name)
-		player.Client.Send(*p)
+		po.To = append(po.To, player.NetClientID)
 	}
+
+	bytes, _ := json.Marshal(&po)
+	channel.Channel.Publish(
+		"packet_out",
+		"#",
+		false,
+		false,
+		amqp.Publishing{
+			ContentType: "text/plain",
+			Body:        bytes,
+		},
+	)
 }

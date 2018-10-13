@@ -15,5 +15,5 @@ func Chat(pe *entities.PlayerEntity, p *net.Packet) {
 	chatPacket := out.MakeChat(pe, &chat)
 
 	gamemap.Manager.SendFrom(pe, &chatPacket)
-	pe.Client.Send(chatPacket)
+	pe.Send(chatPacket)
 }
