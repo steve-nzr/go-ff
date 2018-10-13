@@ -3,8 +3,9 @@ package in
 import (
 	"flyff/core"
 	"flyff/core/net"
+	"flyff/world/entities"
+	movementComponent "flyff/world/feature/movement/component"
 	"flyff/world/game/component"
-	"flyff/world/game/structure"
 	"flyff/world/packets/format"
 	"flyff/world/packets/out"
 	"flyff/world/service/gamemap"
@@ -13,7 +14,7 @@ import (
 	"github.com/golang/geo/r3"
 )
 
-func Join(wc *structure.WorldClient, p *net.Packet) {
+func Join(pe *entities.PlayerEntity, p *net.Packet) {
 	var join format.Join
 	join.Construct(p)
 
@@ -26,22 +27,20 @@ func Join(wc *structure.WorldClient, p *net.Packet) {
 		return
 	}
 
-	wc.PlayerEntity = new(structure.PlayerEntity)
-	wc.PlayerEntity.WorldClient = wc
-	wc.PlayerEntity.ID = net.GenerateID()
-	wc.PlayerEntity.PlayerID = uint32(c.ID)
-	wc.PlayerEntity.Slot = c.Slot
-	wc.PlayerEntity.HairColor = c.HairColor
-	wc.PlayerEntity.HairID = c.HairID
-	wc.PlayerEntity.FaceID = c.FaceID
-	wc.PlayerEntity.SkinSetID = c.SkinSetID
-	wc.PlayerEntity.JobID = c.JobID
-	wc.PlayerEntity.Angle = 360.0
-	wc.PlayerEntity.Gender = c.Gender
-	wc.PlayerEntity.Level = c.Level
-	wc.PlayerEntity.Type = 5 // Mover
-	wc.PlayerEntity.Size = 100
-	wc.PlayerEntity.Position = component.Position{
+	pe.ID = net.GenerateID()
+	pe.PlayerID = uint32(c.ID)
+	pe.Slot = c.Slot
+	pe.HairColor = c.HairColor
+	pe.HairID = c.HairID
+	pe.FaceID = c.FaceID
+	pe.SkinSetID = c.SkinSetID
+	pe.JobID = c.JobID
+	pe.Angle = 360.0
+	pe.Gender = c.Gender
+	pe.Level = c.Level
+	pe.Type = 5 // Mover
+	pe.Size = 100
+	pe.Position = movementComponent.Position{
 		MapID: c.MapID,
 		Vec: r3.Vector{
 			X: float64(c.PosX),
@@ -49,20 +48,20 @@ func Join(wc *structure.WorldClient, p *net.Packet) {
 			Z: float64(c.PosZ),
 		},
 	}
-	wc.PlayerEntity.Name = c.Name
+	pe.Name = c.Name
 	if c.Gender == 0 {
-		wc.PlayerEntity.ModelID = 11
+		pe.ModelID = 11
 	} else if c.Gender == 1 {
-		wc.PlayerEntity.ModelID = 12
+		pe.ModelID = 12
 	}
 
-	wc.PlayerEntity.Statistics = component.Statistics{
+	pe.Statistics = component.Statistics{
 		Strength:     c.Strength,
 		Stamina:      c.Stamina,
 		Dexterity:    c.Dexterity,
 		Intelligence: c.Intelligence,
 	}
 
-	wc.Send(out.MakeSpawn(wc.PlayerEntity))
-	gamemap.Manager.Register(wc)
+	pe.Client.Send(out.MakeSpawn(pe))
+	gamemap.Manager.Register(pe)
 }

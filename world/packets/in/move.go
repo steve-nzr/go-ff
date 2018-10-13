@@ -2,16 +2,16 @@ package in
 
 import (
 	"flyff/core/net"
-	"flyff/world/game/structure"
+	"flyff/world/entities"
 	"flyff/world/packets/out"
 	"flyff/world/service/gamemap"
 )
 
-func DestPos(wc *structure.WorldClient, p *net.Packet) {
-	wc.PlayerEntity.Moving.Destination.X = float64(p.ReadFloat32())
-	wc.PlayerEntity.Moving.Destination.Y = float64(p.ReadFloat32())
-	wc.PlayerEntity.Moving.Destination.Z = float64(p.ReadFloat32())
+func DestPos(pe *entities.PlayerEntity, p *net.Packet) {
+	pe.Moving.X = float64(p.ReadFloat32())
+	pe.Moving.Y = float64(p.ReadFloat32())
+	pe.Moving.Z = float64(p.ReadFloat32())
 
-	destPosPacket := out.MakeDestPos(wc.PlayerEntity)
-	gamemap.Manager.SendFrom(wc, &destPosPacket)
+	destPosPacket := out.MakeDestPos(pe)
+	gamemap.Manager.SendFrom(pe, &destPosPacket)
 }

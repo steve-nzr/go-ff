@@ -1,9 +1,14 @@
-package structure
+package entities
 
-import "flyff/world/game/component"
+import (
+	"flyff/core/net"
+	mc "flyff/world/feature/movement/component"
+	"flyff/world/game/component"
+)
 
 type PlayerEntity struct {
 	Entity
+	Client     *net.Client
 	PlayerID   uint32
 	Slot       uint8
 	JobID      uint8
@@ -12,5 +17,5 @@ type PlayerEntity struct {
 	SkinSetID  uint32
 	FaceID     uint32
 	Statistics component.Statistics
-	Moving     component.Moving
+	Moving     mc.Moving
 }
