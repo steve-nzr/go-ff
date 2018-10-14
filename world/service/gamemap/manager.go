@@ -69,7 +69,7 @@ func (m *manager) Unregister(pe *entities.PlayerEntity) {
 	delObjPacket := out.MakeDeleteObj(pe)
 	m.SendFrom(pe, &delObjPacket)
 
-	delete(gameMap.Players, pe.Position.MapID)
+	delete(gameMap.Players, pe.ID)
 }
 
 func (m *manager) SendFrom(pe *entities.PlayerEntity, p *net.Packet) {

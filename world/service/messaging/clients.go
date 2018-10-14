@@ -45,10 +45,6 @@ func HandleNewClient(c *net.Client) {
 }
 
 func HandleRemoveClient(c *net.Client) {
-	NetClientsMutex.Lock()
-	delete(NetClients, c.ID)
-	NetClientsMutex.Unlock()
-
 	fullmsg := new(definitions.InternalPacket)
 	fullmsg.ID = c.ID
 	fullmsg.Todo = definitions.RemoveTodo

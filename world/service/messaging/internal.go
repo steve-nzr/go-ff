@@ -9,6 +9,9 @@ import (
 	"flyff/world/service/messaging/channel"
 	"flyff/world/service/messaging/definitions"
 	"fmt"
+
+	lock "github.com/bsm/redis-lock"
+	"github.com/go-redis/redis"
 )
 
 var internalExchangeName = "packet_in"
@@ -64,6 +67,7 @@ func HandleInternalPackets() {
 				if fullmsg.Todo == definitions.AddTodo {
 					pe = new(entities.PlayerEntity)
 					pe.NetClientID = fullmsg.ID
+
 					WorldClientsMutex.Lock()
 					WorldClients[fullmsg.ID] = pe
 					WorldClientsMutex.Unlock()
@@ -84,6 +88,10 @@ func HandleInternalPackets() {
 					WorldClientsMutex.Lock()
 					delete(WorldClients, fullmsg.ID)
 					WorldClientsMutex.Unlock()
+
+					NetClientsMutex.Lock()
+					delete(NetClients, fullmsg.ID)
+					NetClientsMutex.Unlock()
 					continue
 				} else {
 					WorldClientsMutex.RLock()
@@ -106,12 +114,28 @@ func HandleInternalPackets() {
 	}
 }
 
+var redisURL = "192.168.2.201:6379"
+var client = redis.NewClient(&redis.Options{
+	Network: "tcp",
+	Addr:    redisURL,
+})
+
 func handlePacket(pe *entities.PlayerEntity, p *net.Packet) {
 	protocol := p.ReadUInt32()
 
 	switch protocol {
 	case 0xff00:
 		{
+			lock, err := lock.Obtain(client, "lock.foo", &lock.Options{
+				RetryCount: 3,
+			})
+			if err != nil {
+				fmt.Println("Can't lock !")
+			} else {
+				fmt.Println("LOCKED")
+				lock.Unlock()
+			}
+
 			in.Join(pe, p)
 		}
 	case 0xffffff00:

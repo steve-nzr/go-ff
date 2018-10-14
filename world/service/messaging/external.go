@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"flyff/world/service/messaging/channel"
 	"flyff/world/service/messaging/definitions"
-	"fmt"
 )
 
 var externalExchangeName = "packet_out"
@@ -61,9 +60,12 @@ func HandleExternalPackets() {
 					c := NetClients[id]
 					NetClientsMutex.RUnlock()
 
+					if c == nil {
+						continue
+					}
+
 					c.SendFinalized(packetout.Packet)
 				}
-				fmt.Println("MESSAGE OUT !")
 			}
 		}
 	}
