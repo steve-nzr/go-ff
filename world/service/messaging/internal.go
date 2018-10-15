@@ -10,6 +10,8 @@ import (
 	"flyff/world/service/messaging/definitions"
 	"flyff/world/service/playerstate"
 	"fmt"
+	"strconv"
+	"time"
 
 	"github.com/streadway/amqp"
 
@@ -112,19 +114,20 @@ var client = redis.NewClient(&redis.Options{
 func handlePacket(pe *entities.PlayerEntity, p *net.Packet) {
 	protocol := p.ReadUInt32()
 
+	playerLock, err := lock.Obtain(client, strconv.FormatUint(uint64(pe.NetClientID), 10), &lock.Options{
+		RetryCount:  5,
+		LockTimeout: 200 * time.Millisecond,
+		RetryDelay:  50 * time.Millisecond,
+	})
+	if err != nil {
+		fmt.Println("Can't lock main player !")
+		return
+	}
+	defer playerLock.Unlock()
+
 	switch protocol {
 	case 0xff00:
 		{
-			lock, err := lock.Obtain(client, "lock.foo", &lock.Options{
-				RetryCount: 3,
-			})
-			if err != nil {
-				fmt.Println("Can't lock !")
-			} else {
-				fmt.Println("LOCKED")
-				lock.Unlock()
-			}
-
 			in.Join(pe, p)
 		}
 	case 0xffffff00:
