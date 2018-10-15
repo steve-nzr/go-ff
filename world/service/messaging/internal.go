@@ -124,6 +124,7 @@ func handlePacket(pe *entities.PlayerEntity, p *net.Packet) {
 		return
 	}
 	defer playerLock.Unlock()
+	defer playerstate.Connection.Save(pe)
 
 	switch protocol {
 	case 0xff00:
