@@ -11,6 +11,8 @@ import (
 	"flyff/world/service/playerstate"
 	"fmt"
 
+	"github.com/streadway/amqp"
+
 	lock "github.com/bsm/redis-lock"
 	"github.com/go-redis/redis"
 )
@@ -58,50 +60,47 @@ func HandleInternalPackets() {
 	}
 
 	for {
-		select {
-		case msg := <-msgs:
-			{
-				var fullmsg definitions.InternalPacket
-				json.Unmarshal(msg.Body, &fullmsg)
-
-				var pe = new(entities.PlayerEntity)
-				pe.NetClientID = fullmsg.ID
-				if fullmsg.Todo == definitions.AddTodo {
-					go playerstate.Connection.Save(pe)
-
-					p := net.MakePacket(net.GREETINGS).
-						WriteUInt32(fullmsg.ID).
-						Finalize()
-
-					pe.Send(p)
-					continue
-				} else if fullmsg.Todo == definitions.RemoveTodo {
-					playerstate.Connection.First(pe)
-					gamemap.Manager.Unregister(pe)
-					go playerstate.Connection.Delete(pe)
-
-					NetClientsMutex.Lock()
-					delete(NetClients, fullmsg.ID)
-					NetClientsMutex.Unlock()
-					continue
-				} else {
-					playerstate.Connection.First(pe)
-				}
-
-				if pe == nil {
-					fmt.Println("Null pe")
-					continue
-				}
-
-				// Always FFFFFFF
-				fullmsg.Packet.ReadUInt32()
-
-				go handlePacket(pe, &fullmsg.Packet)
-
-				fmt.Println("MESSAGE IN !")
-			}
-		}
+		go handleQueueMessage(<-msgs)
 	}
+}
+
+func handleQueueMessage(msg amqp.Delivery) {
+	var fullmsg definitions.InternalPacket
+	json.Unmarshal(msg.Body, &fullmsg)
+
+	var pe = new(entities.PlayerEntity)
+	pe.NetClientID = fullmsg.ID
+
+	if fullmsg.Todo == definitions.AddTodo {
+		go playerstate.Connection.Save(pe)
+
+		p := net.MakePacket(net.GREETINGS).
+			WriteUInt32(fullmsg.ID).
+			Finalize()
+
+		pe.Send(p)
+		return
+	} else if fullmsg.Todo == definitions.RemoveTodo {
+		playerstate.Connection.First(pe)
+		gamemap.Manager.Unregister(pe)
+		go playerstate.Connection.Delete(pe)
+
+		NetClientsMutex.Lock()
+		delete(NetClients, fullmsg.ID)
+		NetClientsMutex.Unlock()
+		return
+	} else {
+		playerstate.Connection.First(pe)
+	}
+
+	if pe == nil {
+		return
+	}
+
+	// Always FFFFFFF
+	fullmsg.Packet.ReadUInt32()
+
+	handlePacket(pe, &fullmsg.Packet)
 }
 
 var redisURL = "192.168.2.201:6379"
