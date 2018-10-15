@@ -16,8 +16,6 @@ type worldClients map[uint32]*entities.PlayerEntity
 
 var NetClients = make(netClients)
 var NetClientsMutex sync.RWMutex
-var WorldClients = make(worldClients)
-var WorldClientsMutex sync.RWMutex
 
 func HandleNewClient(c *net.Client) {
 	NetClientsMutex.Lock()

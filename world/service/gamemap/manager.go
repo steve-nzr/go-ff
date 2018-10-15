@@ -8,6 +8,7 @@ import (
 	"flyff/world/packets/out"
 	"flyff/world/service/messaging/channel"
 	"flyff/world/service/messaging/definitions"
+	"flyff/world/service/playerstate"
 	"fmt"
 	"log"
 
@@ -47,6 +48,7 @@ func (m *manager) Register(pe *entities.PlayerEntity) {
 	}
 
 	fmt.Println("New player on map", gameMap.ID)
+	go playerstate.Connection.Save(pe)
 
 	addObjPacket := out.MakeAddObj(pe)
 	m.SendFrom(pe, &addObjPacket)
@@ -66,6 +68,7 @@ func (m *manager) Unregister(pe *entities.PlayerEntity) {
 	}
 
 	fmt.Println("Removing player from map", gameMap.ID)
+
 	delObjPacket := out.MakeDeleteObj(pe)
 	m.SendFrom(pe, &delObjPacket)
 

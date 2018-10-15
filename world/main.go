@@ -5,6 +5,7 @@ import (
 	gametimer "flyff/world/service/gameTimer"
 	"flyff/world/service/messaging"
 	"flyff/world/service/messaging/channel"
+	"flyff/world/service/playerstate"
 
 	"flyff/core"
 )
@@ -15,6 +16,9 @@ func main() {
 
 	db := core.GetDbConnection()
 	db.AutoMigrate(&core.Character{})
+
+	playerstate.Initialize()
+	playerstate.AutoMigrate()
 
 	/////////////
 	conn := channel.Initialize()

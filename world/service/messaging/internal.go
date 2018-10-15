@@ -8,6 +8,7 @@ import (
 	"flyff/world/service/gamemap"
 	"flyff/world/service/messaging/channel"
 	"flyff/world/service/messaging/definitions"
+	"flyff/world/service/playerstate"
 	"fmt"
 
 	lock "github.com/bsm/redis-lock"
@@ -63,14 +64,10 @@ func HandleInternalPackets() {
 				var fullmsg definitions.InternalPacket
 				json.Unmarshal(msg.Body, &fullmsg)
 
-				var pe *entities.PlayerEntity
+				var pe = new(entities.PlayerEntity)
+				pe.NetClientID = fullmsg.ID
 				if fullmsg.Todo == definitions.AddTodo {
-					pe = new(entities.PlayerEntity)
-					pe.NetClientID = fullmsg.ID
-
-					WorldClientsMutex.Lock()
-					WorldClients[fullmsg.ID] = pe
-					WorldClientsMutex.Unlock()
+					go playerstate.Connection.Save(pe)
 
 					p := net.MakePacket(net.GREETINGS).
 						WriteUInt32(fullmsg.ID).
@@ -79,27 +76,20 @@ func HandleInternalPackets() {
 					pe.Send(p)
 					continue
 				} else if fullmsg.Todo == definitions.RemoveTodo {
-					WorldClientsMutex.RLock()
-					pe = WorldClients[fullmsg.ID]
-					WorldClientsMutex.RUnlock()
-
+					playerstate.Connection.First(pe)
 					gamemap.Manager.Unregister(pe)
-
-					WorldClientsMutex.Lock()
-					delete(WorldClients, fullmsg.ID)
-					WorldClientsMutex.Unlock()
+					go playerstate.Connection.Delete(pe)
 
 					NetClientsMutex.Lock()
 					delete(NetClients, fullmsg.ID)
 					NetClientsMutex.Unlock()
 					continue
 				} else {
-					WorldClientsMutex.RLock()
-					pe = WorldClients[fullmsg.ID]
-					WorldClientsMutex.RUnlock()
+					playerstate.Connection.First(pe)
 				}
 
 				if pe == nil {
+					fmt.Println("Null pe")
 					continue
 				}
 

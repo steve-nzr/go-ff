@@ -10,7 +10,7 @@ type Entity struct {
 	Name     string
 	Gender   uint8
 	ModelID  uint32
-	Position component.Position
+	Position component.Position `gorm:"embedded"`
 	Angle    float32
 	Size     uint8
 	Level    uint16

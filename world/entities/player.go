@@ -13,7 +13,7 @@ import (
 
 type PlayerEntity struct {
 	Entity
-	NetClientID uint32
+	NetClientID uint32 `gorm:"primary_key"`
 	PlayerID    uint32
 	Slot        uint8
 	JobID       uint8
