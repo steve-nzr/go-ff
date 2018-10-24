@@ -1,33 +1,68 @@
 package main
 
 import (
-	"fmt"
-
-	"flyff/core/net"
+	"flyff/common/service/dotenv"
+	"flyff/common/service/external"
+	"flyff/connectionserver/service/connectionmanager"
 )
 
-func main() {
-	server := net.Create("0.0.0.0:23000")
-	server.OnConnected(onConnectionInitiated)
-	server.OnDisconnected(onConnectionClosed)
-	server.OnMessage(onConnectionMessage)
-	server.Start()
+func onConnectedHandler(ch <-chan *external.Client) {
+	for {
+		c := <-ch
+		if c == nil {
+			continue
+		}
+
+		connectionmanager.Add(c)
+		c.SendGreetings()
+	}
 }
 
-func onConnectionInitiated(nc *net.Client) {
-	fmt.Println("Client", nc.ID, "connected")
-	nc.SendGreetings()
+func onDisconnectedHandler(ch <-chan *external.Client) {
+	for {
+		c := <-ch
+		if c == nil {
+			continue
+		}
+
+		connectionmanager.Remove(c)
+	}
 }
 
-func onConnectionClosed(nc *net.Client) {
-	fmt.Println("Client", nc.ID, "disconnected")
-}
+func onMessageHandler(ch <-chan *external.PacketHandler) {
+	for {
+		p := <-ch
+		if p == nil {
+			continue
+		}
 
-func onConnectionMessage(nc *net.Client, packet *net.Packet) {
-	switch packet.ReadUInt32() {
-	case 0xfc:
-		{
-			sendServerList(nc)
+		c := connectionmanager.Get(p.ClientID)
+		if c == nil {
+			continue
+		}
+
+		id := p.Packet.ReadUInt32()
+		if id == 0xfc {
+			sendServerList(c)
 		}
 	}
+}
+
+func main() {
+	dotenv.Initialize()
+
+	// External ----
+	onConnected := make(chan *external.Client)
+	onDisconnected := make(chan *external.Client)
+	onMessage := make(chan *external.PacketHandler)
+
+	go onConnectedHandler(onConnected)
+	go onDisconnectedHandler(onDisconnected)
+	go onMessageHandler(onMessage)
+
+	server := external.Create("0.0.0.0:23000")
+	server.OnConnected(onConnected)
+	server.OnDisconnected(onDisconnected)
+	server.OnMessage(onMessage)
+	server.Start()
 }

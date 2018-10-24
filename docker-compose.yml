@@ -1,5 +1,9 @@
 version: "3"
 services:
+  broker:
+    image: rabbitmq:3-alpine
+    ports:
+      - 5672:5672
   db:
     image: postgres:11-alpine
     environment:
@@ -9,6 +13,15 @@ services:
     ports:
       - 5432:5432
   adminer:
-    image: adminer:4
+    image: adminer:4-standalone
     ports:
-      - 8080:8080
+      - 80:8080
+  cache:
+    image: mariadb:10.3
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: db
+    ports:
+      - 3306:3306

@@ -1,6 +1,8 @@
 package packets
 
-import "flyff/core/net"
+import (
+	"flyff/common/service/external"
+)
 
 // CreatePlayer packet struct
 type CreatePlayer struct {
@@ -25,18 +27,18 @@ type DeletePlayer struct {
 	Username        string
 	Password        string
 	PasswordConfirm string
-	CharacterID     uint32
+	PlayerID        uint32
 }
 
 // PreJoin packet struct
 type PreJoin struct {
 	Username      string
-	CharacterID   uint32
+	PlayerID      uint32
 	CharacterName string
 }
 
 // Construct ...
-func (c *CreatePlayer) Construct(p *net.Packet) {
+func (c *CreatePlayer) Construct(p *external.Packet) {
 	c.Username = p.ReadString()
 	c.Password = p.ReadString()
 	c.Slot = p.ReadUInt8()
@@ -54,16 +56,16 @@ func (c *CreatePlayer) Construct(p *net.Packet) {
 }
 
 // Construct ...
-func (d *DeletePlayer) Construct(p *net.Packet) {
+func (d *DeletePlayer) Construct(p *external.Packet) {
 	d.Username = p.ReadString()
 	d.Password = p.ReadString()
 	d.PasswordConfirm = p.ReadString()
-	d.CharacterID = p.ReadUInt32()
+	d.PlayerID = p.ReadUInt32()
 }
 
 // Construct ...
-func (pj *PreJoin) Construct(p *net.Packet) {
+func (pj *PreJoin) Construct(p *external.Packet) {
 	pj.Username = p.ReadString()
-	pj.CharacterID = p.ReadUInt32()
+	pj.PlayerID = p.ReadUInt32()
 	pj.CharacterName = p.ReadString()
 }

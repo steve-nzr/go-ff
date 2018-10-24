@@ -1,85 +1,113 @@
 package main
 
 import (
-	"fmt"
+	"flyff/common/service/database"
+	"flyff/common/service/dotenv"
+	"flyff/common/service/external"
+	"flyff/connectionserver/service/connectionmanager"
 
 	"flyff/cluster/packets"
-	"flyff/core"
-	"flyff/core/net"
 )
 
-func main() {
-	core.InitiateDbConnection()
-	defer core.CloseDbConnection()
+func onConnectedHandler(ch <-chan *external.Client) {
+	for {
+		c := <-ch
+		if c == nil {
+			continue
+		}
 
-	db := core.GetDbConnection()
-	db.AutoMigrate(&core.Character{})
-
-	server := net.Create("0.0.0.0:28000")
-	server.OnConnected(onConnectionInitiated)
-	server.OnDisconnected(onConnectionInitiated)
-	server.OnMessage(onConnectionMessage)
-	server.Start()
-}
-
-func onConnectionInitiated(nc *net.Client) {
-	fmt.Println("Client", nc.ID, "connected")
-	nc.SendGreetings()
-}
-
-func onConnectionClosed(nc *net.Client) {
-	fmt.Println("Client", nc.ID, "disconnected")
-}
-
-func onConnectionMessage(nc *net.Client, packet *net.Packet) {
-	// Always FFFFFFF
-	packet.ReadUInt32()
-
-	protocol := packet.ReadUInt32()
-	fmt.Printf("New packet with id : 0x%02x\n", protocol)
-
-	if protocol == 0xf6 {
-		sendPlayerList(nc, 0)
-		sendWorldAddr(nc)
-	} else if protocol == 0xf4 {
-		var p packets.CreatePlayer
-		p.Construct(packet)
-
-		var c core.Character
-		c.Slot = p.Slot
-		c.Name = p.Name
-		c.Gender = p.Gender
-		c.MapID = 1
-		c.PosX = 6968.0
-		c.PosY = 100.0
-		c.PosZ = 3328.0
-		c.SkinSetID = uint32(p.SkinSet)
-		c.HairID = uint32(p.HairMeshID)
-		c.HairColor = p.HairColor
-		c.FaceID = uint32(p.FaceID)
-		c.JobID = p.Job
-		c.Level = 1
-		c.Strength = 15
-		c.Stamina = 15
-		c.Dexterity = 15
-		c.Intelligence = 15
-
-		db := core.GetDbConnection()
-		db.Save(&c)
-
-		sendPlayerList(nc, 0)
-	} else if protocol == 0xf5 {
-		var p packets.DeletePlayer
-		p.Construct(packet)
-
-		db := core.GetDbConnection()
-		db.Delete(&core.Character{}, p.CharacterID)
-
-		sendPlayerList(nc, 0)
-	} else if protocol == 0xff05 {
-		var p packets.PreJoin
-		p.Construct(packet)
-
-		nc.Send(net.MakePacket(net.PREJOIN))
+		connectionmanager.Add(c)
+		c.SendGreetings()
 	}
+}
+
+func onDisconnectedHandler(ch <-chan *external.Client) {
+	for {
+		c := <-ch
+		if c == nil {
+			continue
+		}
+
+		connectionmanager.Remove(c)
+	}
+}
+
+func onMessageHandler(ch <-chan *external.PacketHandler) {
+	for {
+		p := <-ch
+		if p == nil {
+			continue
+		}
+
+		c := connectionmanager.Get(p.ClientID)
+		if c == nil {
+			continue
+		}
+
+		// Always FFFFFFF
+		p.Packet.ReadUInt32()
+
+		protocol := p.Packet.ReadUInt32()
+
+		if protocol == 0xf6 {
+			sendPlayerList(c, 0)
+			sendWorldAddr(c)
+		} else if protocol == 0xf4 {
+			var createPlayerPacket packets.CreatePlayer
+			createPlayerPacket.Construct(p.Packet)
+
+			var player database.Player
+			player.Slot = createPlayerPacket.Slot
+			player.Name = createPlayerPacket.Name
+			player.Gender = createPlayerPacket.Gender
+			player.Position.MapID = 1
+			player.Position.Vec.X = 6968.0
+			player.Position.Vec.Y = 100.0
+			player.Position.Vec.Z = 3328.0
+			player.SkinSetID = uint32(createPlayerPacket.SkinSet)
+			player.HairID = uint32(createPlayerPacket.HairMeshID)
+			player.HairColor = createPlayerPacket.HairColor
+			player.FaceID = uint32(createPlayerPacket.FaceID)
+			player.JobID = createPlayerPacket.Job
+			player.Level = 1
+			player.Statistics.Strength = 15
+			player.Statistics.Stamina = 15
+			player.Statistics.Dexterity = 15
+			player.Statistics.Intelligence = 15
+
+			database.Connection.Save(&player)
+			sendPlayerList(c, 0)
+		} else if protocol == 0xf5 {
+			var deletePlayerPacket packets.DeletePlayer
+			deletePlayerPacket.Construct(p.Packet)
+
+			database.Connection.Delete(&database.Player{}, deletePlayerPacket.PlayerID)
+			sendPlayerList(c, 0)
+		} else if protocol == 0xff05 {
+			var preJoinPacket packets.PreJoin
+			preJoinPacket.Construct(p.Packet)
+
+			c.Send(external.MakePacket(external.PREJOIN))
+		}
+	}
+}
+
+func main() {
+	dotenv.Initialize()
+	database.Initialize()
+
+	// External ----
+	onConnected := make(chan *external.Client)
+	onDisconnected := make(chan *external.Client)
+	onMessage := make(chan *external.PacketHandler)
+
+	go onConnectedHandler(onConnected)
+	go onDisconnectedHandler(onDisconnected)
+	go onMessageHandler(onMessage)
+
+	server := external.Create("0.0.0.0:28000")
+	server.OnConnected(onConnected)
+	server.OnDisconnected(onDisconnected)
+	server.OnMessage(onMessage)
+	server.Start()
 }
