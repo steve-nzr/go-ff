@@ -14,12 +14,12 @@ func Subscribe(topic string, msgs chan<- []byte) {
 	}
 
 	q, err := ch.QueueDeclare(
-		"",    // name (random)
-		false, // durable
-		false, // delete when usused
-		true,  // exclusive
-		false, // no-wait
-		nil,   // arguments
+		"q_"+topic, // name (random)
+		true,       // durable
+		false,      // delete when usused
+		false,      // exclusive
+		false,      // no-wait
+		nil,        // arguments
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -27,7 +27,7 @@ func Subscribe(topic string, msgs chan<- []byte) {
 
 	err = ch.QueueBind(
 		q.Name, // queue name
-		"",     // routing key
+		"abc",  // routing key
 		topic,  // exchange
 		false,
 		nil)
@@ -38,7 +38,7 @@ func Subscribe(topic string, msgs chan<- []byte) {
 	consumeChan, err := ch.Consume(
 		q.Name, // queue
 		"",     // consumer
-		true,   // auto ack
+		false,  // auto ack
 		false,  // exclusive
 		false,  // no local
 		false,  // no wait
@@ -50,6 +50,7 @@ func Subscribe(topic string, msgs chan<- []byte) {
 
 	for {
 		msg := <-consumeChan
+		msg.Ack(true)
 		msgs <- msg.Body
 	}
 }

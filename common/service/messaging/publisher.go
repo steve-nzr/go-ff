@@ -20,7 +20,7 @@ func Publish(topic string, data interface{}) {
 		log.Fatal(err)
 	}
 
-	err = ch.Publish(topic, "", false, false, amqp.Publishing{
+	err = ch.Publish(topic, "abc", false, false, amqp.Publishing{
 		Body: bytes,
 	})
 	if err != nil {

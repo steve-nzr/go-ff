@@ -8,7 +8,7 @@ import (
 
 // Spawn packet
 func Spawn(pe *cache.Player) *external.Packet {
-	p := external.StartMergePacket(uint32(pe.EntityID), uint16(external.ENVIRONMENTALL), 0x0000FF00).
+	p := external.StartMergePacket(pe.EntityID, uint16(external.ENVIRONMENTALL), 0x0000FF00).
 		WriteUInt32(0)
 
 	p.AddMergePart(external.WORLDREADINFO, uint32(pe.EntityID)).
@@ -191,4 +191,67 @@ func Spawn(pe *cache.Player) *external.Packet {
 		WriteUInt32(0)
 
 	return p
+}
+
+// AddObj packet (make visible this object to others)
+func AddObj(p *cache.Player) *external.Packet {
+	packet := external.StartMergePacket(p.EntityID, uint16(external.ADDOBJ), 0xFFFFFF00)
+	packet.WriteUInt8(5).
+		WriteUInt32(11).
+		WriteUInt8(5).
+		WriteUInt32(11).
+		WriteUInt16(100).
+		WriteFloat32(float32(p.Position.Vec.X)).
+		WriteFloat32(float32(p.Position.Vec.Y)).
+		WriteFloat32(float32(p.Position.Vec.Z)).
+		WriteUInt16(360).
+		WriteUInt32(uint32(p.EntityID)).
+		WriteUInt16(0).
+		WriteUInt8(1).
+		WriteUInt32(230).
+		WriteUInt32(0).
+		WriteUInt32(0).
+		WriteUInt8(1).
+		WriteInt32(-1).
+		WriteString(p.Name).
+		WriteUInt8(p.Gender).
+		WriteUInt8(uint8(p.SkinSetID)).
+		WriteUInt8(uint8(p.HairID)).
+		WriteUInt32(p.HairColor).
+		WriteUInt8(uint8(p.FaceID)).
+		WriteUInt32(uint32(p.EntityID)).
+		WriteUInt8(1).
+		WriteUInt16(0).
+		WriteUInt16(0).
+		WriteUInt16(0).
+		WriteUInt16(0).
+		WriteUInt16(uint16(p.Level)).
+		WriteInt32(-1).
+		WriteUInt32(0).
+		WriteUInt8(0).
+		WriteUInt32(0).
+		WriteUInt8(0).
+		WriteUInt8(100).
+		WriteUInt32(0).
+		WriteUInt32(0x000001F6).
+		WriteUInt32(0).
+		WriteUInt32(0).
+		WriteUInt32(0).
+		WriteUInt32(0).
+		WriteUInt32(0).
+		WriteUInt8(0).
+		WriteInt32(-1)
+
+	for i := 0; i < 31; i++ {
+		packet.WriteInt32(-1)
+	}
+	for i := 0; i < 28; i++ {
+		packet.WriteUInt32(0)
+	}
+
+	packet.WriteUInt8(0).
+		WriteInt32(-1).
+		WriteUInt32(0)
+
+	return packet
 }

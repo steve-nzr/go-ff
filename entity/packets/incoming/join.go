@@ -53,13 +53,13 @@ func Join(p *external.PacketHandler) {
 	var player database.Player
 	player.ID = join.PlayerID
 
-	res := db.First(&player)
-	if res.Error != nil {
-		log.Print(res.Error)
+	err := db.First(&player).Error
+	if err != nil {
+		log.Print(err)
 		return
 	}
 
-	var entitiy cache.Player
+	entitiy := new(cache.Player)
 	entitiy.NetClientID = p.ClientID
 	entitiy.EntityID = external.GenerateID()
 	entitiy.PlayerID = uint32(player.ID)
@@ -85,18 +85,32 @@ func Join(p *external.PacketHandler) {
 
 	// Tx BEGIN ----
 	tx := cache.Connection.Begin()
-	res = tx.Save(&entitiy)
-	if res.Error != nil {
-		log.Print(res.Error)
+	err = tx.Save(entitiy).Error
+	if err != nil {
+		log.Print(err)
 		tx.Rollback()
 		return
 	}
-
 	tx.Commit()
 	// Tx END ----
 
 	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
-		Packet: outgoing.Spawn(&entitiy),
+		Packet: outgoing.Spawn(entitiy),
 		To:     []uint32{p.ClientID},
+	})
+
+	// Make others visible for him  ----
+	players := cache.FindAround(entitiy)
+	for _, aroundPlayer := range players {
+		messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
+			Packet: outgoing.AddObj(&aroundPlayer),
+			To:     []uint32{entitiy.NetClientID},
+		})
+	}
+
+	// Make Visible for Others ----
+	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
+		Packet: outgoing.AddObj(entitiy),
+		To:     cache.FindIDAround(entitiy),
 	})
 }
