@@ -48,10 +48,20 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 
 		id := p.Packet.ReadUInt32()
 		p.Packet.Offset -= (32 / 8)
-		if id == 0xff00 {
-			messaging.Publish(messaging.EntityTopic, p)
-		} else {
-			log.Printf("Unknown packet '0x%x'", id)
+
+		switch id {
+		case 0xFF00:
+			{
+				messaging.Publish(messaging.EntityTopic, p)
+			}
+		case 0x00FF0000:
+			{
+				messaging.Publish(messaging.ChatTopic, p)
+			}
+		default:
+			{
+				log.Printf("Unknown packet '0x%x'", id)
+			}
 		}
 	}
 }

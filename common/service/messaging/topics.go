@@ -7,11 +7,14 @@ const (
 	ConnectionTopic string = "connection"
 	// EntityTopic name
 	EntityTopic string = "entity"
+	// ChatTopic name
+	ChatTopic string = "chat"
 )
 
 var pubexchangesname = []string{
 	ConnectionTopic,
 	EntityTopic,
+	ChatTopic,
 }
 
 func initializePubTopics() {
