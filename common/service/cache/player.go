@@ -2,7 +2,6 @@ package cache
 
 import (
 	"flyff/common/def/component"
-	mc "flyff/world/feature/movement/component"
 )
 
 // Player structure representing it's State
@@ -25,5 +24,5 @@ type Player struct {
 	SkinSetID   uint32
 	FaceID      uint32
 	Statistics  component.Statistics `gorm:"embedded;EMBEDDED_PREFIX:stats_"`
-	Moving      mc.Moving            `gorm:"embedded;EMBEDDED_PREFIX:movin_"`
+	//Moving      mc.Moving            `gorm:"embedded;EMBEDDED_PREFIX:movin_"`
 }

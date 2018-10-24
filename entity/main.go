@@ -22,16 +22,13 @@ func main() {
 
 	for {
 		b := <-ch
-		fmt.Println("AH 1")
 		p := new(external.PacketHandler)
 		if err := json.Unmarshal(b, p); err != nil {
 			fmt.Print(err)
 			continue
 		}
-		fmt.Println("AH 2")
 
 		id := p.Packet.ReadUInt32()
-		fmt.Printf("AH 3 0x%x\n", id)
 		switch id {
 		case 0xff00:
 			{
