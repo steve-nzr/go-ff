@@ -24,5 +24,5 @@ type Player struct {
 	SkinSetID   uint32
 	FaceID      uint32
 	Statistics  component.Statistics `gorm:"embedded;EMBEDDED_PREFIX:stats_"`
-	//Moving      mc.Moving            `gorm:"embedded;EMBEDDED_PREFIX:movin_"`
+	Moving      component.Moving     `gorm:"embedded;EMBEDDED_PREFIX:movin_"`
 }

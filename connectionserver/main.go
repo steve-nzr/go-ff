@@ -50,6 +50,18 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 		p.Packet.Offset -= (32 / 8)
 
 		switch id {
+		case 0xffffff00:
+			{
+				p.Packet.Offset += (32 / 8)
+
+				// Snapshot
+				p.Packet.ReadUInt8()
+				snapshotProtocol := p.Packet.ReadUInt16()
+				p.Packet.Offset -= ((8 / 8) + (16 / 8) + (32 / 8))
+				if snapshotProtocol == 0x00C1 {
+					messaging.Publish(messaging.MovingTopic, p)
+				}
+			}
 		case 0xFF00:
 			{
 				messaging.Publish(messaging.EntityTopic, p)

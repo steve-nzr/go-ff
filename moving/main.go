@@ -2,11 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	"flyff/chat/packets/incoming"
 	"flyff/common/service/cache"
 	"flyff/common/service/dotenv"
 	"flyff/common/service/external"
 	"flyff/common/service/messaging"
+	"flyff/moving/packets/incoming"
 	"fmt"
 )
 
@@ -16,7 +16,7 @@ func main() {
 	messaging.Initialize()
 
 	ch := make(chan []byte)
-	go messaging.Subscribe(messaging.ChatTopic, ch)
+	go messaging.Subscribe(messaging.MovingTopic, ch)
 
 	for {
 		b := <-ch
@@ -28,10 +28,13 @@ func main() {
 
 		id := p.Packet.ReadUInt32()
 		switch id {
-		case 0x00FF0000:
+		case 0xffffff00:
 			{
-				incoming.Chat(p)
-				break
+				p.Packet.ReadUInt8()
+				snapshotProtocol := p.Packet.ReadUInt16()
+				if snapshotProtocol == 0x00C1 {
+					incoming.DestPos(p)
+				}
 			}
 		}
 	}
