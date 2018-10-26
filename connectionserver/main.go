@@ -62,6 +62,10 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 					messaging.Publish(messaging.MovingTopic, p)
 				}
 			}
+		case 0xffffff02:
+			{
+				messaging.Publish(messaging.MovingTopic, p)
+			}
 		case 0xFF00:
 			{
 				messaging.Publish(messaging.EntityTopic, p)

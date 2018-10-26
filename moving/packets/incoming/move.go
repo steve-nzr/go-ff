@@ -15,9 +15,7 @@ func DestPos(p *external.PacketHandler) {
 		return
 	}
 
-	player.Moving.Vec.X = float64(p.Packet.ReadFloat32())
-	player.Moving.Vec.Y = float64(p.Packet.ReadFloat32())
-	player.Moving.Vec.Z = float64(p.Packet.ReadFloat32())
+	player.Moving.Vec = *p.Packet.Read3DVector()
 	move.SaveMovingPosition(player)
 
 	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{

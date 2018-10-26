@@ -16,7 +16,19 @@ func FindByNetID(id uint32) *Player {
 	return player
 }
 
-// FindIDAround returns each player'ID around the given one
+// FindIDAroundOnly returns each player'ID around the given one
+func FindIDAroundOnly(p *Player) []uint32 {
+	var IDlist []uint32
+	err := Connection.Model(&Player{}).Where("posit_map_id = ? AND net_client_id != ?", p.Position.MapID, p.NetClientID).Pluck("net_client_id", &IDlist).Error
+	if err != nil {
+		log.Print(err)
+		return nil
+	}
+
+	return IDlist
+}
+
+// FindIDAround returns each player'ID around the given one including itself
 func FindIDAround(p *Player) []uint32 {
 	var IDlist []uint32
 	err := Connection.Model(&Player{}).Where("posit_map_id = ?", p.Position.MapID).Pluck("net_client_id", &IDlist).Error

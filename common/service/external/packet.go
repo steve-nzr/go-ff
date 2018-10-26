@@ -4,6 +4,8 @@ import (
 	"encoding/binary"
 	"math"
 	"strings"
+
+	"github.com/golang/geo/r3"
 )
 
 // Packet stores Data & Offset for a in/out message
@@ -169,6 +171,13 @@ func (p *Packet) WriteUInt8(i uint8) *Packet {
 	return p
 }
 
+// Write3DVector at the current Offset
+func (p *Packet) Write3DVector(vec *r3.Vector) *Packet {
+	return p.WriteFloat32(float32(vec.X)).
+		WriteFloat32(float32(vec.Y)).
+		WriteFloat32(float32(vec.Z))
+}
+
 // WriteString (size+string) at the current Offset
 func (p *Packet) WriteString(s string) *Packet {
 	length := len(s)
@@ -197,6 +206,20 @@ func (p *Packet) ReadFloat32() float32 {
 	i := binary.LittleEndian.Uint32(p.Data[p.Offset:])
 	p.Offset += (32 / 8)
 	return math.Float32frombits(i)
+}
+
+// ReadInt64 at the current Offset
+func (p *Packet) ReadInt64() int64 {
+	i := binary.LittleEndian.Uint64(p.Data[p.Offset:])
+	p.Offset += (64 / 8)
+	return int64(i)
+}
+
+// ReadUInt64 at the current Offset
+func (p *Packet) ReadUInt64() uint64 {
+	i := binary.LittleEndian.Uint64(p.Data[p.Offset:])
+	p.Offset += (64 / 8)
+	return i
 }
 
 // ReadInt32 at the current Offset
@@ -239,6 +262,15 @@ func (p *Packet) ReadUInt8() uint8 {
 	i := p.Data[p.Offset]
 	p.Offset += (8 / 8)
 	return i
+}
+
+// Read3DVector at the current Offset
+func (p *Packet) Read3DVector() *r3.Vector {
+	vec := new(r3.Vector)
+	vec.X = float64(p.ReadFloat32())
+	vec.Y = float64(p.ReadFloat32())
+	vec.Z = float64(p.ReadFloat32())
+	return vec
 }
 
 // ReadString (size+string) at the current Offset
