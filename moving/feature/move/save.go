@@ -4,12 +4,14 @@ import (
 	"flyff/common/service/cache"
 )
 
-// SaveMovingPosition saves only movin_ fields
-func SaveMovingPosition(p *cache.Player) {
+// SaveMovingComponent saves only movin_ fields
+func SaveMovingComponent(p *cache.Player) {
 	cache.Connection.Model(p).Where("net_client_id = ?", p.NetClientID).Updates(map[string]interface{}{
-		"movin_x": p.Moving.Vec.X,
-		"movin_y": p.Moving.Vec.Y,
-		"movin_z": p.Moving.Vec.Z,
+		"movin_x":      p.Moving.Destination.X,
+		"movin_y":      p.Moving.Destination.Y,
+		"movin_z":      p.Moving.Destination.Z,
+		"movin_motion": p.Moving.Motion,
+		"movin_angle":  p.Moving.Angle,
 	})
 }
 

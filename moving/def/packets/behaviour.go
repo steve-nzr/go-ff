@@ -10,7 +10,7 @@ import (
 type Behaviour struct {
 	V             *r3.Vector
 	Vd            *r3.Vector
-	F             float32
+	Angle         float32
 	State         uint32
 	StateFlag     uint32
 	Motion        uint32
@@ -24,7 +24,7 @@ type Behaviour struct {
 func (b *Behaviour) Construct(p *external.Packet) {
 	b.V = p.Read3DVector()
 	b.Vd = p.Read3DVector()
-	b.F = p.ReadFloat32()
+	b.Angle = p.ReadFloat32()
 	b.State = p.ReadUInt32()
 	b.StateFlag = p.ReadUInt32()
 	b.Motion = p.ReadUInt32()
