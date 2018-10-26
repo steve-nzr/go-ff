@@ -45,18 +45,13 @@ func movePlayer(p *cache.Player, t int) {
 
 // ProcessDestPosMove for the given (NetClientID) player
 func ProcessDestPosMove(id uint32, destPos r3.Vector) {
-	p := cache.FindByNetID(id)
-	if p == nil {
-		return
-	}
-
 	done := make(chan timetick.Cancellation)
 	tick := make(chan int)
 	go timetick.BeginTick(done, tick, 150*time.Millisecond)
 
 	for {
 		t := <-tick
-		p = cache.FindByNetID(id)
+		p := cache.FindByNetID(id)
 		if p == nil {
 			return
 		}

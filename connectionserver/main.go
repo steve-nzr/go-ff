@@ -50,7 +50,7 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 		p.Packet.Offset -= (32 / 8)
 
 		switch id {
-		case 0xffffff00:
+		case 0xFFFFFF00:
 			{
 				p.Packet.Offset += (32 / 8)
 
@@ -62,7 +62,7 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 					messaging.Publish(messaging.MovingTopic, p)
 				}
 			}
-		case 0xffffff02:
+		case 0xFFFFFF01, 0xFFFFFF02:
 			{
 				messaging.Publish(messaging.MovingTopic, p)
 			}

@@ -3,7 +3,7 @@ package outgoing
 import (
 	"flyff/common/service/cache"
 	"flyff/common/service/external"
-	"flyff/entity/def/packets"
+	"flyff/moving/def/packets"
 )
 
 // Behaviour packet emitter

@@ -36,6 +36,10 @@ func main() {
 					incoming.DestPos(p)
 				}
 			}
+		case 0xFFFFFF01:
+			{
+				incoming.Move(p)
+			}
 		case 0xffffff02:
 			{
 				incoming.Behaviour(p)
