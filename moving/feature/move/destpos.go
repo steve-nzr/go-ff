@@ -3,7 +3,6 @@ package move
 import (
 	"flyff/common/service/cache"
 	"flyff/common/service/timetick"
-	"fmt"
 	"math"
 	"time"
 
@@ -18,7 +17,6 @@ func movePlayer(p *cache.Player, t int) {
 	if p.Moving.Vec.Distance(p.Position.Vec) < 0.1 {
 		p.Moving.Vec = r3.Vector{}
 		SaveMovingPosition(p)
-		fmt.Println("Arrived")
 		return
 	}
 

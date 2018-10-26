@@ -25,5 +25,5 @@ func DestPos(p *external.PacketHandler) {
 		To:     cache.FindIDAround(player),
 	})
 
-	move.ProcessDestPosMove(player.NetClientID, player.Moving.Vec)
+	go move.ProcessDestPosMove(player.NetClientID, player.Moving.Vec)
 }
