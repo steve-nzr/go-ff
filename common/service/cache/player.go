@@ -3,6 +3,8 @@ package cache
 import (
 	"flyff/common/def/component"
 	"flyff/common/feature/inventory"
+
+	"github.com/jinzhu/gorm"
 )
 
 // Player structure representing it's State
@@ -27,4 +29,10 @@ type Player struct {
 	Statistics  component.Statistics    `gorm:"embedded;EMBEDDED_PREFIX:stats_"`
 	Moving      component.Moving        `gorm:"embedded;EMBEDDED_PREFIX:movin_"`
 	Inventory   inventory.ItemContainer `gorm:"foreignkey:PlayerID;association_foreignkey:NetClientID"`
+}
+
+// BeforeDelete the player
+func (p *Player) BeforeDelete(scope *gorm.Scope) error {
+	Connection.Delete(&p.Inventory)
+	return nil
 }

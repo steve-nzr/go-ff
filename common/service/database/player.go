@@ -2,6 +2,8 @@ package database
 
 import (
 	"flyff/common/def/component"
+
+	"github.com/jinzhu/gorm"
 )
 
 // Player holds a complete account's character/player
@@ -19,4 +21,10 @@ type Player struct {
 	Position   component.Position   `gorm:"embedded;EMBEDDED_PREFIX:posit_"`
 	Statistics component.Statistics `gorm:"embedded;EMBEDDED_PREFIX:stats_"`
 	Items      []Item
+}
+
+// BeforeDelete the player
+func (p *Player) BeforeDelete(scope *gorm.Scope) error {
+	Connection.Delete(&p.Items)
+	return nil
 }
