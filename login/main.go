@@ -4,6 +4,7 @@ import (
 	"flyff/common/service/dotenv"
 	"flyff/common/service/external"
 	"flyff/connectionserver/service/connectionmanager"
+	"log"
 )
 
 func onConnectedHandler(ch <-chan *external.Client) {
@@ -49,6 +50,7 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 }
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	dotenv.Initialize()
 
 	// External ----

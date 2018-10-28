@@ -9,9 +9,11 @@ import (
 	"flyff/common/service/messaging"
 	"flyff/entity/packets/incoming"
 	"fmt"
+	"log"
 )
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	dotenv.Initialize()
 	database.Initialize()
 	cache.Initialize()

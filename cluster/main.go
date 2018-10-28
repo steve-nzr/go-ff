@@ -7,6 +7,7 @@ import (
 	"flyff/common/service/dotenv"
 	"flyff/common/service/external"
 	"flyff/connectionserver/service/connectionmanager"
+	"log"
 
 	"flyff/cluster/packets"
 )
@@ -125,6 +126,7 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 }
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	dotenv.Initialize()
 	database.Initialize()
 
