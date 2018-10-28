@@ -76,11 +76,34 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 			player.Statistics.Stamina = 15
 			player.Statistics.Dexterity = 15
 			player.Statistics.Intelligence = 15
+
+			// Start items
 			player.Items = append(player.Items, database.Item{
 				ItemBase: def.ItemBase{
 					Count:    1,
-					ItemID:   resources.ItemsByName["II_WEA_HAN_HAND"],
-					Position: 35,
+					ItemID:   resources.ItemsByName["II_WEA_SWO_WOODEN"],
+					Position: 52,
+				},
+			})
+			player.Items = append(player.Items, database.Item{
+				ItemBase: def.ItemBase{
+					Count:    1,
+					ItemID:   resources.ItemsByName["II_ARM_M_VAG_SUIT01"],
+					Position: 44,
+				},
+			})
+			player.Items = append(player.Items, database.Item{
+				ItemBase: def.ItemBase{
+					Count:    1,
+					ItemID:   resources.ItemsByName["II_ARM_M_VAG_GAUNTLET01"],
+					Position: 46,
+				},
+			})
+			player.Items = append(player.Items, database.Item{
+				ItemBase: def.ItemBase{
+					Count:    1,
+					ItemID:   resources.ItemsByName["II_ARM_M_VAG_BOOTS01"],
+					Position: 47,
 				},
 			})
 

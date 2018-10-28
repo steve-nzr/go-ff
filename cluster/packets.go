@@ -1,8 +1,11 @@
 package main
 
 import (
+	"flyff/common/feature/inventory"
 	"flyff/common/service/database"
 	"flyff/common/service/external"
+
+	. "github.com/ahmetb/go-linq"
 )
 
 func sendWorldAddr(c *external.Client) {
@@ -14,7 +17,7 @@ func sendWorldAddr(c *external.Client) {
 
 func sendPlayerList(c *external.Client, authKey int32) {
 	var characters []database.Player
-	database.Connection.Limit(3).Find(&characters)
+	database.Connection.Limit(3).Preload("Items").Find(&characters)
 
 	packet := external.MakePacket(external.PLAYERLIST).
 		WriteInt32(0).
@@ -45,8 +48,23 @@ func sendPlayerList(c *external.Client, authKey int32) {
 			WriteUInt32(uint32(c.Statistics.Stamina)).
 			WriteUInt32(uint32(c.Statistics.Dexterity)).
 			WriteUInt32(uint32(c.Statistics.Intelligence)).
-			WriteUInt32(0).
 			WriteUInt32(0)
+
+		var equipedItems []database.Item
+		From(c.Items).
+			Where(func(i interface{}) bool {
+				item := i.(database.Item)
+				return item.Position > inventory.EquipOffset
+			}).
+			Select(func(i interface{}) interface{} {
+				return i.(database.Item)
+			}).
+			ToSlice(&equipedItems)
+
+		packet.WriteUInt32(uint32(len(equipedItems)))
+		for _, item := range equipedItems {
+			packet.WriteInt32(item.ItemID)
+		}
 	}
 
 	packet.WriteInt32(0)

@@ -124,11 +124,7 @@ func Spawn(pe *cache.Player) *external.Packet {
 		WriteUInt16(0)
 
 	for _, i := range items {
-		if i.ID > 0 {
-			p.WriteUInt32(i.ID)
-		} else {
-			p.WriteInt32(-1)
-		}
+		p.WriteInt32(i.ItemID)
 	}
 
 	for i := 0; i < 45; i++ {

@@ -1,6 +1,6 @@
 package resources
 
-var itemsByID = map[uint32]string{
+var itemsByID = map[int32]string{
 	10:  "II_DEFAULT",
 	11:  "II_WEA_HAN_HAND",
 	12:  "II_GOLD_SEED1",

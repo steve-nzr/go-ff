@@ -6,7 +6,6 @@ import (
 	"flyff/common/service/external"
 	"flyff/common/service/messaging"
 	"flyff/entity/packets/outgoing"
-	"fmt"
 	"log"
 )
 
@@ -83,7 +82,6 @@ func Join(p *external.PacketHandler) {
 		entitiy.ModelID = 12
 	}
 	entitiy.Statistics = player.Statistics
-	fmt.Println("Items loaded in DB:", len(player.Items))
 	entitiy.Inventory = entitiy.Inventory.InitializeWith(player.Items)
 
 	// Tx BEGIN ----

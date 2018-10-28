@@ -25,6 +25,7 @@ func (container ItemContainer) InitializeWith(items []database.Item) ItemContain
 				UniqueID: int32(i),
 				Position: -1,
 				Count:    -1,
+				ItemID:   -1,
 			},
 		})
 	}
@@ -34,13 +35,14 @@ func (container ItemContainer) InitializeWith(items []database.Item) ItemContain
 			continue
 		}
 
+		item.UniqueID = container[item.Position].UniqueID
 		container[item.Position] = def.Item{
 			ItemBase: item.ItemBase,
 		}
 	}
 
 	for i := EquipOffset; i < MaxItems; i++ {
-		if container[i].ItemID == 0 {
+		if container[i].ItemID == -1 {
 			container[i].UniqueID = -1
 		}
 	}
@@ -50,24 +52,24 @@ func (container ItemContainer) InitializeWith(items []database.Item) ItemContain
 
 func (i ItemContainer) Serialize(p *external.Packet) {
 	var size uint8
-	for _, item := range i {
-		p.WriteInt32(item.UniqueID)
-		if item.ItemID != 0 {
+	for index := 0; index < MaxItems; index++ {
+		p.WriteInt32(i[index].UniqueID)
+		if i[index].ItemID != -1 {
 			size++
 		}
 	}
 
 	p.WriteUInt8(size)
 
-	for _, item := range i {
-		if item.ItemID > 0 {
-			p.WriteUInt8(uint8(item.UniqueID))
-			p.WriteInt32(item.UniqueID)
-			item.Serialize(p)
+	for index := 0; index < MaxItems; index++ {
+		if i[index].ItemID > 0 {
+			p.WriteUInt8(uint8(i[index].UniqueID)).
+				WriteInt32(i[index].UniqueID)
+			i[index].Serialize(p)
 		}
 	}
 
-	for _, item := range i {
-		p.WriteInt32(item.UniqueID)
+	for index := 0; index < MaxItems; index++ {
+		p.WriteInt32(i[index].UniqueID)
 	}
 }
