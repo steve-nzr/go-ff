@@ -45,7 +45,7 @@ type SnapshotPacket uint16
 // MakePacket constructs a new packet with the given protocol
 func MakePacket(protocol OutPacketType) *Packet {
 	packet := new(Packet)
-	packet.Data = make([]byte, 4096)
+	packet.Data = make([]byte, 10240)
 	packet.MergePacketCount = 0
 
 	return packet.
@@ -57,7 +57,7 @@ func MakePacket(protocol OutPacketType) *Packet {
 // StartMergePacket create a simple packet without protocol & Data
 func StartMergePacket(moverID uint32, cmd uint16, mainCmd uint32) *Packet {
 	packet := new(Packet)
-	packet.Data = make([]byte, 4096)
+	packet.Data = make([]byte, 10240)
 	packet.MergePacketCount = 1
 
 	return packet.

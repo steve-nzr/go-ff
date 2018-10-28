@@ -3,7 +3,6 @@ package move
 import (
 	"flyff/common/service/cache"
 	"flyff/common/service/timetick"
-	"fmt"
 	"math"
 	"time"
 
@@ -18,7 +17,6 @@ func movePlayerByDest(p *cache.Player, t int) {
 	if p.Moving.Destination.Distance(p.Position.Vec) < 0.1 {
 		p.Moving.Destination = r3.Vector{}
 		p.Moving.Motion = 0
-		fmt.Println("Arrive")
 		SaveMovingComponent(p)
 		return
 	}
@@ -50,7 +48,7 @@ func movePlayerByDest(p *cache.Player, t int) {
 func ProcessDestPosMove(id uint32, destPos r3.Vector) {
 	done := make(chan timetick.Cancellation)
 	tick := make(chan int)
-	go timetick.BeginTick(done, tick, 150*time.Millisecond)
+	go timetick.BeginTick(done, tick, 100*time.Millisecond)
 
 	for {
 		t := <-tick

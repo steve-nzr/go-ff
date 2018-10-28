@@ -1,6 +1,7 @@
 package database
 
 import (
+	"flyff/common/feature/inventory/def"
 	"log"
 	"os"
 
@@ -25,4 +26,5 @@ func Initialize() {
 
 func autoMigrate() {
 	Connection.AutoMigrate(&Player{})
+	Connection.AutoMigrate(&def.Item{})
 }

@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"flyff/common/feature/inventory/def"
 	"log"
 	"os"
 
@@ -25,4 +26,5 @@ func Initialize() {
 
 func autoMigrate() {
 	Connection.Set("gorm:table_options", "ENGINE=Memory").AutoMigrate(&Player{})
+	Connection.Set("gorm:table_options", "ENGINE=Memory").AutoMigrate(&def.Item{})
 }

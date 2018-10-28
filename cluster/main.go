@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flyff/common/def/resources"
+	"flyff/common/feature/inventory/def"
 	"flyff/common/service/database"
 	"flyff/common/service/dotenv"
 	"flyff/common/service/external"
@@ -74,6 +76,13 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 			player.Statistics.Stamina = 15
 			player.Statistics.Dexterity = 15
 			player.Statistics.Intelligence = 15
+			player.Items = append(player.Items, database.Item{
+				ItemBase: def.ItemBase{
+					Count:    1,
+					ItemID:   resources.ItemsByName["II_WEA_HAN_HAND"],
+					Position: 35,
+				},
+			})
 
 			database.Connection.Save(&player)
 			sendPlayerList(c, 0)

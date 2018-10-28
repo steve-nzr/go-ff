@@ -2,6 +2,7 @@ package cache
 
 import (
 	"flyff/common/def/component"
+	"flyff/common/feature/inventory"
 )
 
 // Player structure representing it's State
@@ -23,6 +24,7 @@ type Player struct {
 	HairID      uint32
 	SkinSetID   uint32
 	FaceID      uint32
-	Statistics  component.Statistics `gorm:"embedded;EMBEDDED_PREFIX:stats_"`
-	Moving      component.Moving     `gorm:"embedded;EMBEDDED_PREFIX:movin_"`
+	Statistics  component.Statistics    `gorm:"embedded;EMBEDDED_PREFIX:stats_"`
+	Moving      component.Moving        `gorm:"embedded;EMBEDDED_PREFIX:movin_"`
+	Inventory   inventory.ItemContainer `gorm:"foreignkey:PlayerID;association_foreignkey:NetClientID"`
 }

@@ -6,6 +6,7 @@ import (
 	"flyff/common/service/external"
 	"flyff/common/service/messaging"
 	"flyff/entity/packets/outgoing"
+	"fmt"
 	"log"
 )
 
@@ -53,7 +54,7 @@ func Join(p *external.PacketHandler) {
 	var player database.Player
 	player.ID = join.PlayerID
 
-	err := db.First(&player).Error
+	err := db.Preload("Items").First(&player).Error
 	if err != nil {
 		log.Print(err)
 		return
@@ -82,16 +83,15 @@ func Join(p *external.PacketHandler) {
 		entitiy.ModelID = 12
 	}
 	entitiy.Statistics = player.Statistics
+	fmt.Println("Items loaded in DB:", len(player.Items))
+	entitiy.Inventory = entitiy.Inventory.InitializeWith(player.Items)
 
 	// Tx BEGIN ----
-	tx := cache.Connection.Begin()
-	err = tx.Save(entitiy).Error
+	err = cache.Connection.Create(entitiy).Error
 	if err != nil {
 		log.Print(err)
-		tx.Rollback()
 		return
 	}
-	tx.Commit()
 	// Tx END ----
 
 	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{

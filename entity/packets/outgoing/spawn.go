@@ -1,6 +1,7 @@
 package outgoing
 
 import (
+	"flyff/common/feature/inventory"
 	"flyff/common/service/cache"
 	"flyff/common/service/external"
 	"math"
@@ -82,7 +83,8 @@ func Spawn(pe *cache.Player) *external.Packet {
 		WriteInt32(-1) // titles
 
 	// 31 = MaxItems - EquipOffset
-	for i := 0; i < 31; i++ {
+	items := pe.Inventory[inventory.EquipOffset:]
+	for i := 0; i < len(items); i++ {
 		p.WriteUInt32(0)
 	}
 
@@ -121,8 +123,12 @@ func Spawn(pe *cache.Player) *external.Packet {
 		WriteUInt16(0). // Stats points
 		WriteUInt16(0)
 
-	for i := 0; i < 31; i++ {
-		p.WriteInt32(-1)
+	for _, i := range items {
+		if i.ID > 0 {
+			p.WriteUInt32(i.ID)
+		} else {
+			p.WriteInt32(-1)
+		}
 	}
 
 	for i := 0; i < 45; i++ {
@@ -146,14 +152,7 @@ func Spawn(pe *cache.Player) *external.Packet {
 		WriteUInt64(0).
 		WriteUInt32(0)
 
-	// Serialize inventory
-	for i := 0; i < 73; i++ {
-		p.WriteInt32(-1)
-	}
-	p.WriteUInt8(0) // Item count
-	for i := 0; i < 73; i++ {
-		p.WriteInt32(-1)
-	}
+	pe.Inventory.Serialize(p)
 
 	for i := 0; i < 3; i++ {
 		for j := 0; j < 42; j++ {

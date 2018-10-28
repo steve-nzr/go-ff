@@ -1,6 +1,8 @@
 package database
 
-import "flyff/common/def/component"
+import (
+	"flyff/common/def/component"
+)
 
 // Player holds a complete account's character/player
 type Player struct {
@@ -16,4 +18,5 @@ type Player struct {
 	Level      uint16
 	Position   component.Position   `gorm:"embedded;EMBEDDED_PREFIX:posit_"`
 	Statistics component.Statistics `gorm:"embedded;EMBEDDED_PREFIX:stats_"`
+	Items      []Item
 }
