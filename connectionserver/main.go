@@ -110,6 +110,7 @@ func onInternalMessageHandler(ch <-chan []byte) {
 
 func main() {
 	// Initializers ----
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	dotenv.Initialize()
 	messaging.Initialize()
 

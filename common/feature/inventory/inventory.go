@@ -50,26 +50,43 @@ func (container ItemContainer) InitializeWith(items []database.Item) ItemContain
 	return container
 }
 
-func (i ItemContainer) Serialize(p *external.Packet) {
+// ConvertToDatabaseSlice creates a slice to be savec to the persistent database
+func (container ItemContainer) ConvertToDatabaseSlice() []database.Item {
+	var items []database.Item
+	for _, item := range container {
+		if item.ItemID < 1 {
+			continue
+		}
+
+		items = append(items, database.Item{
+			ItemBase: item.ItemBase,
+		})
+	}
+
+	return items
+}
+
+// Serialize the entire inventory to the given packet
+func (container ItemContainer) Serialize(p *external.Packet) {
 	var size uint8
-	for index := 0; index < MaxItems; index++ {
-		p.WriteInt32(i[index].UniqueID)
-		if i[index].ItemID != -1 {
+	for i := 0; i < MaxItems; i++ {
+		p.WriteInt32(container[i].UniqueID)
+		if container[i].ItemID != -1 {
 			size++
 		}
 	}
 
 	p.WriteUInt8(size)
 
-	for index := 0; index < MaxItems; index++ {
-		if i[index].ItemID > 0 {
-			p.WriteUInt8(uint8(i[index].UniqueID)).
-				WriteInt32(i[index].UniqueID)
-			i[index].Serialize(p)
+	for i := 0; i < MaxItems; i++ {
+		if container[i].ItemID > 0 {
+			p.WriteUInt8(uint8(container[i].UniqueID)).
+				WriteInt32(container[i].UniqueID)
+			container[i].Serialize(p)
 		}
 	}
 
-	for index := 0; index < MaxItems; index++ {
-		p.WriteInt32(i[index].UniqueID)
+	for i := 0; i < MaxItems; i++ {
+		p.WriteInt32(container[i].UniqueID)
 	}
 }

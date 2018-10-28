@@ -33,6 +33,6 @@ type Player struct {
 
 // BeforeDelete the player
 func (p *Player) BeforeDelete(scope *gorm.Scope) error {
-	Connection.Delete(&p.Inventory)
+	Connection.Where("player_id = ?", p.NetClientID).Delete(&p.Inventory)
 	return nil
 }
