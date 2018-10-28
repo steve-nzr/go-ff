@@ -11,8 +11,8 @@ type ItemContainer []def.Item
 
 const (
 	RightWeaponSlot = 52
-	EquipOffset     = 42
 	MaxItems        = 73
+	EquipOffset     = MaxItems - 31
 	InventorySize   = EquipOffset
 	MaxHumanParts   = MaxItems - EquipOffset
 )

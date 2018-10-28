@@ -98,7 +98,7 @@ func Join(p *external.PacketHandler) {
 	})
 
 	// Make others visible for him  ----
-	players := cache.FindAround(entitiy)
+	players := cache.FindAroundOnly(entitiy)
 	for _, aroundPlayer := range players {
 		messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
 			Packet: outgoing.AddObj(&aroundPlayer),
@@ -106,9 +106,14 @@ func Join(p *external.PacketHandler) {
 		})
 	}
 
+	toList := cache.FindIDAroundOnly(entitiy)
+	if len(toList) < 1 {
+		return
+	}
+
 	// Make Visible for Others ----
 	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
 		Packet: outgoing.AddObj(entitiy),
-		To:     cache.FindIDAround(entitiy),
+		To:     toList,
 	})
 }

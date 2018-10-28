@@ -40,10 +40,22 @@ func FindIDAround(p *Player) []uint32 {
 	return IDlist
 }
 
-// FindAround returns each player structure around the given one
+// FindAround returns each player structure around the given one including itself
 func FindAround(p *Player) []Player {
 	var playerList []Player
-	err := Connection.Where("posit_map_id = ?", p.Position.MapID).Find(&playerList).Error
+	err := Connection.Preload("Inventory").Where("posit_map_id = ?", p.Position.MapID).Find(&playerList).Error
+	if err != nil {
+		log.Print(err)
+		return nil
+	}
+
+	return playerList
+}
+
+// FindAroundOnly returns each player structure around the given one excluding itself
+func FindAroundOnly(p *Player) []Player {
+	var playerList []Player
+	err := Connection.Preload("Inventory").Where("posit_map_id = ? AND net_client_id != ?", p.Position.MapID, p.NetClientID).Find(&playerList).Error
 	if err != nil {
 		log.Print(err)
 		return nil

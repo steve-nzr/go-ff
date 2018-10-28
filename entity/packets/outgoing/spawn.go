@@ -2,9 +2,12 @@ package outgoing
 
 import (
 	"flyff/common/feature/inventory"
+	"flyff/common/feature/inventory/def"
 	"flyff/common/service/cache"
 	"flyff/common/service/external"
 	"math"
+
+	. "github.com/ahmetb/go-linq"
 )
 
 // Spawn packet
@@ -82,7 +85,6 @@ func Spawn(pe *cache.Player) *external.Packet {
 		WriteUInt8(0). // duel
 		WriteInt32(-1) // titles
 
-	// 31 = MaxItems - EquipOffset
 	items := pe.Inventory[inventory.EquipOffset:]
 	for i := 0; i < len(items); i++ {
 		p.WriteUInt32(0)
@@ -191,11 +193,19 @@ func Spawn(pe *cache.Player) *external.Packet {
 // AddObj packet (make visible this object to others)
 func AddObj(p *cache.Player) *external.Packet {
 	packet := external.StartMergePacket(p.EntityID, uint16(external.ADDOBJ), 0xFFFFFF00)
-	packet.WriteUInt8(5).
-		WriteUInt32(11).
-		WriteUInt8(5).
-		WriteUInt32(11).
-		WriteUInt16(100).
+	packet.WriteUInt8(5)
+	if p.Gender == 0 {
+		packet.WriteUInt32(11)
+	} else if p.Gender == 1 {
+		packet.WriteUInt32(12)
+	}
+	packet.WriteUInt8(5)
+	if p.Gender == 0 {
+		packet.WriteUInt32(11)
+	} else if p.Gender == 1 {
+		packet.WriteUInt32(12)
+	}
+	packet.WriteUInt16(100).
 		WriteFloat32(float32(p.Position.Vec.X)).
 		WriteFloat32(float32(p.Position.Vec.Y)).
 		WriteFloat32(float32(p.Position.Vec.Z)).
@@ -215,11 +225,11 @@ func AddObj(p *cache.Player) *external.Packet {
 		WriteUInt32(p.HairColor).
 		WriteUInt8(uint8(p.FaceID)).
 		WriteUInt32(uint32(p.EntityID)).
-		WriteUInt8(1).
-		WriteUInt16(0).
-		WriteUInt16(0).
-		WriteUInt16(0).
-		WriteUInt16(0).
+		WriteUInt8(p.JobID).
+		WriteUInt16(p.Statistics.Strength).
+		WriteUInt16(p.Statistics.Stamina).
+		WriteUInt16(p.Statistics.Dexterity).
+		WriteUInt16(p.Statistics.Intelligence).
 		WriteUInt16(uint16(p.Level)).
 		WriteInt32(-1).
 		WriteUInt32(0).
@@ -228,7 +238,8 @@ func AddObj(p *cache.Player) *external.Packet {
 		WriteUInt8(0).
 		WriteUInt8(100).
 		WriteUInt32(0).
-		WriteUInt32(0x000001F6).
+		WriteUInt32(0).
+		WriteUInt32(0).
 		WriteUInt32(0).
 		WriteUInt32(0).
 		WriteUInt32(0).
@@ -237,15 +248,33 @@ func AddObj(p *cache.Player) *external.Packet {
 		WriteUInt8(0).
 		WriteInt32(-1)
 
-	for i := 0; i < 31; i++ {
-		packet.WriteInt32(-1)
+	items := p.Inventory[inventory.EquipOffset:]
+	for i := 0; i < len(items); i++ {
+		packet.WriteInt32(0)
 	}
+
 	for i := 0; i < 28; i++ {
 		packet.WriteUInt32(0)
 	}
 
-	packet.WriteUInt8(0).
-		WriteInt32(-1).
+	var equipedItems []def.Item
+	From(items).
+		WhereT(func(item def.Item) bool {
+			return item.ItemID > 0
+		}).
+		SelectT(func(item def.Item) def.Item {
+			return item
+		}).
+		ToSlice(&equipedItems)
+
+	packet.WriteUInt8(uint8(len(equipedItems)))
+	for _, item := range equipedItems {
+		packet.WriteUInt8(uint8(item.Position - inventory.EquipOffset)).
+			WriteUInt16(uint16(item.ItemID)).
+			WriteUInt8(0)
+	}
+
+	packet.WriteInt32(-1).
 		WriteUInt32(0)
 
 	return packet
