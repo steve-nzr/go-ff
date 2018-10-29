@@ -88,7 +88,32 @@ func (ns *Server) handleClient(c net.Conn) {
 		}
 
 		go func() {
-			if packet := ns.parseMessage(uint32(readLength), buf); packet != nil {
+			var i uint32
+
+			for {
+				if i >= uint32(readLength) {
+					break
+				}
+
+				packet := ReadPacket(buf[i:])
+				if packet.ReadUInt8() != 0x5E {
+					fmt.Println("Invalid header")
+					break
+				}
+
+				// CHECKSUM SKIP
+				packet.ReadUInt32()
+
+				packetLen := packet.ReadUInt32()
+				i += packetLen + 13
+				nextBuf := buf[i:]
+				if i < uint32(readLength) && len(nextBuf) > 0 && nextBuf[0] != 0x5E {
+					fmt.Println("Invalid size")
+					break
+				}
+
+				// CHECKSUM SKIP
+				packet.ReadUInt32()
 				packetHandler := new(PacketHandler)
 				packetHandler.ClientID = netClient.ID
 				packetHandler.Packet = packet
@@ -96,7 +121,7 @@ func (ns *Server) handleClient(c net.Conn) {
 			}
 		}()
 
-		time.Sleep(1 * time.Millisecond)
+		time.Sleep(5 * time.Millisecond)
 
 		if netClient.Conn == nil {
 			return
@@ -114,8 +139,11 @@ func (ns *Server) parseMessage(readLen uint32, buf []byte) *Packet {
 	// CHECKSUM SKIP
 	packet.ReadUInt32()
 
-	length := packet.ReadUInt32()
-	if length != uint32(len(buf[:readLen]))-13 {
+	len := packet.ReadUInt32()
+	fmt.Println(len, readLen-13)
+	// Check packet length
+	if len != readLen-13 {
+		fmt.Println(buf[:readLen])
 		fmt.Println("Invalid size")
 		return nil
 	}

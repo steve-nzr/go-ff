@@ -25,3 +25,50 @@ services:
       MYSQL_DATABASE: db
     ports:
       - 3306:3306
+  deps:
+    image: flyff-deps
+    build:
+      context: .
+      dockerfile: deps.Dockerfile
+  login:
+    image: flyff
+    depends_on:
+      - deps
+    build: .
+    entrypoint: ./login
+    ports:
+      - 23000:23000
+  cluster:
+    image: flyff
+    depends_on:
+      - deps
+    build: .
+    entrypoint: ./cluster
+    ports:
+      - 28000:28000
+  connection:
+    image: flyff
+    depends_on:
+      - deps
+    build: .
+    entrypoint: ./connectionserver
+    ports:
+      - 5400:5400
+  entity:
+    image: flyff
+    depends_on:
+      - deps
+    build: .
+    entrypoint: ./entity
+  chat:
+    image: flyff
+    depends_on:
+      - deps
+    build: .
+    entrypoint: ./chat
+  moving:
+    image: flyff
+    depends_on:
+      - deps
+    build: .
+    entrypoint: ./moving

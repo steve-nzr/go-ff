@@ -4,6 +4,7 @@ import (
 	"flyff/common/feature/inventory"
 	"flyff/common/service/database"
 	"flyff/common/service/external"
+	"fmt"
 
 	. "github.com/ahmetb/go-linq"
 )
@@ -16,6 +17,7 @@ func sendWorldAddr(c *external.Client) {
 }
 
 func sendPlayerList(c *external.Client, authKey int32) {
+	fmt.Println("SENT PLAYERLIST")
 	var characters []database.Player
 	database.Connection.Limit(3).Preload("Items").Find(&characters)
 
