@@ -12,6 +12,8 @@ services:
       POSTGRES_DB: db
     ports:
       - 5432:5432
+    volumes:
+      - db-data:/var/lib/mysql
   adminer:
     image: adminer:4-standalone
     ports:
@@ -32,43 +34,58 @@ services:
       dockerfile: deps.Dockerfile
   login:
     image: flyff
+    build: .
     depends_on:
       - deps
-    build: .
+      - db
     entrypoint: ./login
     ports:
       - 23000:23000
   cluster:
     image: flyff
+    build: .
     depends_on:
       - deps
-    build: .
+      - db
     entrypoint: ./cluster
     ports:
       - 28000:28000
   connection:
     image: flyff
+    build: .
     depends_on:
       - deps
-    build: .
+      - db
+      - broker
     entrypoint: ./connectionserver
     ports:
       - 5400:5400
   entity:
     image: flyff
+    build: .
     depends_on:
       - deps
-    build: .
+      - db
+      - cache
+      - broker
     entrypoint: ./entity
   chat:
     image: flyff
+    build: .
     depends_on:
       - deps
-    build: .
+      - db
+      - cache
+      - broker
     entrypoint: ./chat
   moving:
     image: flyff
+    build: .
     depends_on:
       - deps
-    build: .
+      - db
+      - cache
+      - broker
     entrypoint: ./moving
+volumes:
+  db-data:

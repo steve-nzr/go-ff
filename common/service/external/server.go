@@ -128,27 +128,3 @@ func (ns *Server) handleClient(c net.Conn) {
 		}
 	}
 }
-
-func (ns *Server) parseMessage(readLen uint32, buf []byte) *Packet {
-	packet := ReadPacket(buf)
-	if packet.ReadUInt8() != 0x5E {
-		fmt.Println("Invalid header")
-		return nil
-	}
-
-	// CHECKSUM SKIP
-	packet.ReadUInt32()
-
-	len := packet.ReadUInt32()
-	fmt.Println(len, readLen-13)
-	// Check packet length
-	if len != readLen-13 {
-		fmt.Println(buf[:readLen])
-		fmt.Println("Invalid size")
-		return nil
-	}
-
-	// CHECKSUM SKIP
-	packet.ReadUInt32()
-	return packet
-}
