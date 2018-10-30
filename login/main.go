@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flyff/common/def/packet/packettype"
 	"flyff/common/service/dotenv"
 	"flyff/common/service/external"
 	"flyff/connectionserver/service/connectionmanager"
@@ -43,7 +44,7 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 		}
 
 		id := p.Packet.ReadUInt32()
-		if id == 0xfc {
+		if id == packettype.Certify {
 			sendServerList(c)
 		}
 	}

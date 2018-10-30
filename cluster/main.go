@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flyff/common/def/packet/packettype"
 	"flyff/common/def/resources"
 	"flyff/common/feature/inventory/def"
 	"flyff/common/service/database"
@@ -52,10 +53,10 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 
 		protocol := p.Packet.ReadUInt32()
 
-		if protocol == 0xf6 {
+		if protocol == packettype.Getplayerlist {
 			sendPlayerList(c, 0)
 			sendWorldAddr(c)
-		} else if protocol == 0xf4 {
+		} else if protocol == packettype.Create_player {
 			var createPlayerPacket packets.CreatePlayer
 			createPlayerPacket.Construct(p.Packet)
 
@@ -110,17 +111,17 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 
 			database.Connection.Save(&player)
 			sendPlayerList(c, 0)
-		} else if protocol == 0xf5 {
+		} else if protocol == packettype.Del_player {
 			var deletePlayerPacket packets.DeletePlayer
 			deletePlayerPacket.Construct(p.Packet)
 
 			database.Connection.Delete(&database.Player{}, deletePlayerPacket.PlayerID)
 			sendPlayerList(c, 0)
-		} else if protocol == 0xff05 {
+		} else if protocol == packettype.Pre_join {
 			var preJoinPacket packets.PreJoin
 			preJoinPacket.Construct(p.Packet)
 
-			c.Send(external.MakePacket(external.PREJOIN))
+			c.Send(external.MakePacket(packettype.Pre_join))
 		}
 	}
 }

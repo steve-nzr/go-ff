@@ -1,6 +1,7 @@
 package outgoing
 
 import (
+	"flyff/common/def/packet/snapshottype"
 	"flyff/common/service/cache"
 	"flyff/common/service/external"
 	"flyff/moving/def/packets"
@@ -8,7 +9,7 @@ import (
 
 // DestPos packet
 func DestPos(p *cache.Player) *external.Packet {
-	packet := external.StartMergePacket(p.EntityID, uint16(0x00C1), 0x0000FF00).
+	packet := external.StartMergePacket(p.EntityID, snapshottype.Destpos, 0x0000FF00).
 		WriteFloat32(float32(p.Moving.Destination.X)).
 		WriteFloat32(float32(p.Moving.Destination.Y)).
 		WriteFloat32(float32(p.Moving.Destination.Z)).
@@ -19,7 +20,7 @@ func DestPos(p *cache.Player) *external.Packet {
 
 // Move packet emitter
 func Move(p *cache.Player, b *packets.Behaviour) *external.Packet {
-	return external.StartMergePacket(p.EntityID, uint16(0x00ca), 0x0000FF00).
+	return external.StartMergePacket(p.EntityID, snapshottype.Movermoved, 0x0000FF00).
 		Write3DVector(b.V).
 		Write3DVector(b.Vd).
 		WriteFloat32(b.Angle).

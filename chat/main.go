@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flyff/chat/packets/incoming"
+	"flyff/common/def/packet/packettype"
 	"flyff/common/service/cache"
 	"flyff/common/service/dotenv"
 	"flyff/common/service/external"
@@ -30,7 +31,7 @@ func main() {
 
 		id := p.Packet.ReadUInt32()
 		switch id {
-		case 0x00FF0000:
+		case packettype.Chat:
 			{
 				incoming.Chat(p)
 				break

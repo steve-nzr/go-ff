@@ -11,13 +11,13 @@ services:
       POSTGRES_USER: user
       POSTGRES_DB: db
     ports:
-      - 5432:5432
+      - 127.0.0.1:5432:5432
     volumes:
       - db-data:/var/lib/mysql
   adminer:
     image: adminer:4-standalone
     ports:
-      - 80:8080
+      - 127.0.0.1:80:8080
   cache:
     image: mariadb:10.3
     environment:
@@ -26,7 +26,7 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: db
     ports:
-      - 3306:3306
+      - 127.0.0.1:3306:3306
   deps:
     image: flyff-deps
     build:
@@ -40,7 +40,7 @@ services:
       - db
     entrypoint: ./login
     ports:
-      - 23000:23000
+      - 127.0.0.1:23000:23000
   cluster:
     image: flyff
     build: .
@@ -49,7 +49,7 @@ services:
       - db
     entrypoint: ./cluster
     ports:
-      - 28000:28000
+      - 127.0.0.1:28000:28000
   connection:
     image: flyff
     build: .
@@ -59,7 +59,7 @@ services:
       - broker
     entrypoint: ./connectionserver
     ports:
-      - 5400:5400
+      - 127.0.0.1:5400:5400
   entity:
     image: flyff
     build: .

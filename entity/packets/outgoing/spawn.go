@@ -1,6 +1,7 @@
 package outgoing
 
 import (
+	"flyff/common/def/packet/snapshottype"
 	"flyff/common/feature/inventory"
 	"flyff/common/feature/inventory/def"
 	"flyff/common/service/cache"
@@ -12,16 +13,16 @@ import (
 
 // Spawn packet
 func Spawn(pe *cache.Player) *external.Packet {
-	p := external.StartMergePacket(pe.EntityID, uint16(external.ENVIRONMENTALL), 0x0000FF00).
+	p := external.StartMergePacket(pe.EntityID, snapshottype.Environmentall, 0x0000FF00).
 		WriteUInt32(0)
 
-	p.AddMergePart(external.WORLDREADINFO, uint32(pe.EntityID)).
+	p.AddMergePart(snapshottype.World_readinfo, uint32(pe.EntityID)).
 		WriteUInt32(pe.Position.MapID).
 		WriteFloat32(float32(pe.Position.Vec.X)).
 		WriteFloat32(float32(pe.Position.Vec.Y)).
 		WriteFloat32(float32(pe.Position.Vec.Z))
 
-	p.AddMergePart(external.ADDOBJ, uint32(pe.EntityID))
+	p.AddMergePart(snapshottype.Add_obj, uint32(pe.EntityID))
 
 	p.WriteUInt8(5)
 	if pe.Gender == 0 {
@@ -192,7 +193,7 @@ func Spawn(pe *cache.Player) *external.Packet {
 
 // AddObj packet (make visible this object to others)
 func AddObj(p *cache.Player) *external.Packet {
-	packet := external.StartMergePacket(p.EntityID, uint16(external.ADDOBJ), 0xFFFFFF00)
+	packet := external.StartMergePacket(p.EntityID, snapshottype.Add_obj, 0xFFFFFF00)
 	packet.WriteUInt8(5)
 	if p.Gender == 0 {
 		packet.WriteUInt32(11)

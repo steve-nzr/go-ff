@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flyff/common/def/packet/packettype"
 	"flyff/common/feature/inventory"
 	"flyff/common/service/database"
 	"flyff/common/service/external"
@@ -9,7 +10,7 @@ import (
 )
 
 func sendWorldAddr(c *external.Client) {
-	packet := external.MakePacket(external.WORLDADDR).
+	packet := external.MakePacket(packettype.Cache_addr).
 		WriteString("127.0.0.1")
 
 	c.Send(packet)
@@ -19,7 +20,7 @@ func sendPlayerList(c *external.Client, authKey int32) {
 	var characters []database.Player
 	database.Connection.Limit(3).Preload("Items").Find(&characters)
 
-	packet := external.MakePacket(external.PLAYERLIST).
+	packet := external.MakePacket(packettype.Player_list).
 		WriteInt32(0).
 		WriteInt32(int32(len(characters)))
 

@@ -1,13 +1,14 @@
 package main
 
 import (
+	"flyff/common/def/packet/packettype"
 	"math"
 
 	"flyff/common/service/external"
 )
 
 func sendServerList(c *external.Client) {
-	p := external.MakePacket(external.SERVERLIST).
+	p := external.MakePacket(packettype.Srvr_list).
 		WriteUInt32(0).
 		WriteUInt8(1).
 		WriteString("test").

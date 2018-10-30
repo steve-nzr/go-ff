@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flyff/common/def/packet/packettype"
 	"flyff/common/service/dotenv"
 	"flyff/common/service/external"
 	"flyff/common/service/messaging"
@@ -31,7 +32,7 @@ func onDisconnectedHandler(ch <-chan *external.Client) {
 		connectionmanager.Remove(c)
 		messaging.Publish(messaging.EntityTopic, &external.PacketHandler{
 			ClientID: c.ID,
-			Packet:   external.MakePacket(external.Disconnect).FinalizeForInternal(),
+			Packet:   external.MakePacket(packettype.Disconnect).FinalizeForInternal(),
 		})
 	}
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flyff/common/def/packet/packettype"
 	"flyff/common/service/cache"
 	"flyff/common/service/database"
 	"flyff/common/service/dotenv"
@@ -32,12 +33,12 @@ func main() {
 
 		id := p.Packet.ReadUInt32()
 		switch id {
-		case 0xff00:
+		case packettype.Join:
 			{
 				incoming.Join(p)
 				break
 			}
-		case uint32(external.Disconnect):
+		case packettype.Disconnect:
 			{
 				incoming.Disconnect(p)
 				break

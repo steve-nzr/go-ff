@@ -15,35 +15,8 @@ type Packet struct {
 	MergePacketCount uint16
 }
 
-const (
-	// GREETINGS is the Welcome packet
-	GREETINGS OutPacketType = 0x00
-	// SERVERLIST contains all informations to list servers & channels
-	SERVERLIST OutPacketType = 0xFD
-	// WORLDADDR contains the address of the selected worldserver
-	WORLDADDR OutPacketType = 0xF2
-	// PLAYERLIST contains all informations to list servers & channels
-	PLAYERLIST OutPacketType = 0xF3
-	// PREJOIN is the authorization to connect to WorldServer
-	PREJOIN OutPacketType = 0xFF05
-	// Disconnect from the server (Custom Packet)
-	Disconnect OutPacketType = 0xFFFFFF00
-)
-
-const (
-	ENVIRONMENTALL SnapshotPacket = 0x0063
-	WORLDREADINFO  SnapshotPacket = 0x9910
-	ADDOBJ         SnapshotPacket = 0x00F0
-)
-
-// OutPacketType is an outgoing type of packet
-type OutPacketType uint32
-
-// SnapshotPacket is an outgoing type of packet from world
-type SnapshotPacket uint16
-
 // MakePacket constructs a new packet with the given protocol
-func MakePacket(protocol OutPacketType) *Packet {
+func MakePacket(protocol uint32) *Packet {
 	packet := new(Packet)
 	packet.Data = make([]byte, 10240)
 	packet.MergePacketCount = 0
@@ -51,7 +24,7 @@ func MakePacket(protocol OutPacketType) *Packet {
 	return packet.
 		WriteUInt8(0x5E).
 		WriteUInt32(0).
-		WriteUInt32(uint32(protocol))
+		WriteUInt32(protocol)
 }
 
 // StartMergePacket create a simple packet without protocol & Data
@@ -71,7 +44,7 @@ func StartMergePacket(moverID uint32, cmd uint16, mainCmd uint32) *Packet {
 }
 
 // AddMergePart add a new entry to the packet
-func (p *Packet) AddMergePart(protocol SnapshotPacket, moverID uint32) *Packet {
+func (p *Packet) AddMergePart(protocol uint16, moverID uint32) *Packet {
 	p.MergePacketCount++
 
 	lastOffset := p.Offset

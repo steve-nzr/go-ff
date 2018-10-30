@@ -1,6 +1,7 @@
 package external
 
 import (
+	"flyff/common/def/packet/packettype"
 	"fmt"
 	"math/rand"
 	"net"
@@ -51,7 +52,7 @@ func GenerateID() uint32 {
 
 // SendGreetings to the client
 func (nc *Client) SendGreetings() *Client {
-	p := MakePacket(GREETINGS).
+	p := MakePacket(packettype.Welcome).
 		WriteUInt32(nc.ID)
 
 	nc.Send(p)
