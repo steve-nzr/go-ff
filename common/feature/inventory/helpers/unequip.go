@@ -6,12 +6,10 @@ import (
 	"flyff/common/service/cache"
 	"flyff/common/service/external"
 	"flyff/common/service/messaging"
-	"fmt"
 	"math"
 )
 
 func Equip(player *cache.Player, uniqueID uint8, part int8) {
-	fmt.Println(uniqueID)
 	index := player.Inventory.GetItemIndex(uniqueID)
 	if index < 0 {
 		return
@@ -20,7 +18,6 @@ func Equip(player *cache.Player, uniqueID uint8, part int8) {
 	//item := player.Inventory[index]
 
 	toEquip := part == -1
-	fmt.Println(toEquip)
 	if toEquip {
 		/*if item.Position >= 0 {
 			Unequip(player, uint8(item.UniqueID))
@@ -62,4 +59,17 @@ func Unequip(player *cache.Player, uniqueID uint8) bool {
 	})
 
 	return true
+}
+
+func Move(player *cache.Player, sourceSlot uint8, destSlot uint8) {
+	if sourceSlot > inventory.EquipOffset ||
+		destSlot > inventory.EquipOffset {
+		return
+	}
+
+	player.Inventory[sourceSlot], player.Inventory[destSlot] = player.Inventory[destSlot], player.Inventory[sourceSlot]
+	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
+		Packet: outgoing.Move(player, sourceSlot, destSlot).Finalize(),
+		To:     cache.FindIDAround(player),
+	})
 }

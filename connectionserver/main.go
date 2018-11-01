@@ -7,7 +7,6 @@ import (
 	"flyff/common/service/external"
 	"flyff/common/service/messaging"
 	"flyff/connectionserver/service/connectionmanager"
-	"fmt"
 	"log"
 )
 
@@ -76,9 +75,8 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 			{
 				messaging.Publish(messaging.ChatTopic, p)
 			}
-		case packettype.Doequip:
+		case packettype.Doequip, packettype.Moveitem:
 			{
-				fmt.Println("AHHH")
 				messaging.Publish(messaging.ActionTopic, p)
 			}
 		default:

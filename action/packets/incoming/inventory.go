@@ -18,3 +18,17 @@ func EquipItem(p *external.PacketHandler) {
 
 	helpers.Equip(player, uniqueID, part)
 }
+
+// MoveItem packet
+func MoveItem(p *external.PacketHandler) {
+	player := cache.FindByNetID(p.ClientID)
+	if player == nil {
+		return
+	}
+
+	p.Packet.ReadUInt8() // skipped
+	sourceSlot := p.Packet.ReadUInt8()
+	destSlot := p.Packet.ReadUInt8()
+
+	helpers.Move(player, sourceSlot, destSlot)
+}

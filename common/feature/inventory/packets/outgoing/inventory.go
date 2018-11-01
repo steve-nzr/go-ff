@@ -27,3 +27,10 @@ func Equip(player *cache.Player, item *def.Item, equip bool, targetSlot int32) *
 
 	return p
 }
+
+func Move(player *cache.Player, sourceSlot uint8, destSlot uint8) *external.Packet {
+	return external.StartMergePacket(player.EntityID, snapshottype.Moveitem, 0xFFFFFF00).
+		WriteUInt8(0).
+		WriteUInt8(sourceSlot).
+		WriteUInt8(destSlot)
+}

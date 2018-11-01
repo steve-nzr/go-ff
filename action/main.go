@@ -36,6 +36,11 @@ func main() {
 				incoming.EquipItem(p)
 				break
 			}
+		case packettype.Moveitem:
+			{
+				incoming.MoveItem(p)
+				break
+			}
 		}
 	}
 }
