@@ -4,3 +4,4 @@ go build -o bin/cluster.exe cluster/main.go cluster/packets.go
 go build -o bin/chat.exe chat/main.go 
 go build -o bin/moving.exe moving/main.go 
 go build -o bin/entity.exe entity/main.go 
+go build -o bin/action.exe action/main.go 

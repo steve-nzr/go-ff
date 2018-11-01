@@ -87,5 +87,14 @@ services:
       - cache
       - broker
     entrypoint: ./moving
+  action:
+    image: flyff
+    build: .
+    depends_on:
+      - deps
+      - db
+      - cache
+      - broker
+    entrypoint: ./action
 volumes:
   db-data:

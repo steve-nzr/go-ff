@@ -11,6 +11,8 @@ const (
 	ChatTopic string = "chat"
 	// MovingTopic name
 	MovingTopic string = "moving"
+	// ActionTopic name
+	ActionTopic string = "action"
 )
 
 var pubexchangesname = []string{
@@ -18,6 +20,7 @@ var pubexchangesname = []string{
 	EntityTopic,
 	ChatTopic,
 	MovingTopic,
+	ActionTopic,
 }
 
 func initializePubTopics() {

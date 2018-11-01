@@ -17,6 +17,26 @@ const (
 	MaxHumanParts   = MaxItems - EquipOffset
 )
 
+func (container ItemContainer) GetItemIndex(uniqueID uint8) int32 {
+	for i, item := range container {
+		if item.UniqueID == int32(uniqueID) {
+			return int32(i)
+		}
+	}
+
+	return -1
+}
+
+func (container ItemContainer) GetAvailableSlot() int32 {
+	for i, item := range container {
+		if item.Position == -1 {
+			return int32(i)
+		}
+	}
+
+	return -1
+}
+
 // InitializeWith database Item list
 func (container ItemContainer) InitializeWith(items []database.Item) ItemContainer {
 	for i := 0; i < MaxItems; i++ {

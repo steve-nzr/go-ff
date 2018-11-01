@@ -7,7 +7,7 @@ import (
 // FindByNetID return the player who has this clientID
 func FindByNetID(id uint32) *Player {
 	player := new(Player)
-	err := Connection.Where("net_client_id = ?", id).First(player).Error
+	err := Connection.Preload("Inventory").Where("net_client_id = ?", id).First(player).Error
 	if err != nil {
 		log.Print(err)
 		return nil
