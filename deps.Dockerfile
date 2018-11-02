@@ -6,3 +6,4 @@ ADD Gopkg.lock .
 ADD Gopkg.toml .
 
 RUN dep ensure -vendor-only
+RUN go get github.com/codegangsta/gin

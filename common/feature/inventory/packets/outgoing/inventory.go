@@ -34,3 +34,12 @@ func Move(player *cache.Player, sourceSlot uint8, destSlot uint8) *external.Pack
 		WriteUInt8(sourceSlot).
 		WriteUInt8(destSlot)
 }
+
+func Update(player *cache.Player, item *def.Item, updatetype uint8, data int16, card uint16) *external.Packet {
+	return external.StartMergePacket(player.EntityID, snapshottype.Moveitem, 0xFFFFFF00).
+		WriteUInt8(0).
+		WriteUInt8(uint8(item.UniqueID)).
+		WriteUInt8(updatetype).
+		WriteInt16(data).
+		WriteUInt16(card)
+}

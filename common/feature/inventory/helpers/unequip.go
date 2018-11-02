@@ -2,10 +2,12 @@ package helpers
 
 import (
 	"flyff/common/feature/inventory"
+	"flyff/common/feature/inventory/def"
 	"flyff/common/feature/inventory/packets/outgoing"
 	"flyff/common/service/cache"
 	"flyff/common/service/external"
 	"flyff/common/service/messaging"
+	"fmt"
 	"math"
 )
 
@@ -26,6 +28,8 @@ func Equip(player *cache.Player, uniqueID uint8, part int8) {
 	} else {
 		Unequip(player, uniqueID)
 	}
+
+	cache.Connection.Model(&player).Association("Inventory").Replace(player.Inventory)
 }
 
 func Unequip(player *cache.Player, uniqueID uint8) bool {
@@ -67,9 +71,53 @@ func Move(player *cache.Player, sourceSlot uint8, destSlot uint8) {
 		return
 	}
 
-	player.Inventory[sourceSlot], player.Inventory[destSlot] = player.Inventory[destSlot], player.Inventory[sourceSlot]
+	sourceItem := &player.Inventory[sourceSlot]
+	sourceItem.Position = int16(destSlot)
+
+	destItem := &player.Inventory[destSlot]
+	if destItem.Position != -1 {
+		destItem.Position = int16(sourceSlot)
+	}
+
+	player.Inventory[sourceSlot], player.Inventory[destSlot] = *destItem, *sourceItem
+
 	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
 		Packet: outgoing.Move(player, sourceSlot, destSlot).Finalize(),
+		To:     cache.FindIDAround(player),
+	})
+
+	cache.Connection.Model(&player).Association("Inventory").Replace(player.Inventory)
+}
+
+func Drop(player *cache.Player, uniqueID uint32, count int16) {
+	if uniqueID > inventory.MaxItems ||
+		count < 1 {
+		return
+	}
+
+	index := player.Inventory.GetItemIndex(uint8(uniqueID))
+	if index < 0 {
+		return
+	}
+
+	item := player.Inventory[index]
+	fmt.Println(item)
+	if count >= item.Count {
+		player.Inventory[index] = def.Item{
+			ItemBase: def.ItemBase{
+				UniqueID: int32(index),
+				Position: -1,
+				Count:    -1,
+				ItemID:   -1,
+			},
+		}
+	} else {
+		item.Count -= count
+		player.Inventory[index] = item
+	}
+
+	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
+		Packet: outgoing.Update(player, &item, def.ItmUpdateCount, item.Count, 0).Finalize(),
 		To:     cache.FindIDAround(player),
 	})
 }

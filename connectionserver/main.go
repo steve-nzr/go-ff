@@ -75,7 +75,7 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 			{
 				messaging.Publish(messaging.ChatTopic, p)
 			}
-		case packettype.Doequip, packettype.Moveitem:
+		case packettype.Doequip, packettype.Moveitem, packettype.Dropitem:
 			{
 				messaging.Publish(messaging.ActionTopic, p)
 			}
