@@ -2,8 +2,6 @@ version: "3"
 services:
   broker:
     image: rabbitmq:3-alpine
-    ports:
-      - 5672:5672
   db:
     image: postgres:11-alpine
     environment:
@@ -25,8 +23,6 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: db
-    ports:
-      - 3306:3306
   deps:
     image: flyff-deps
     build:
