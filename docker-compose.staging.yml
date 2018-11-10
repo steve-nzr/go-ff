@@ -1,0 +1,111 @@
+version: "3"
+services:
+  broker:
+    image: rabbitmq:3-alpine
+  db:
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: user
+      POSTGRES_DB: db
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/mysql
+  adminer:
+    image: adminer:4-standalone
+    ports:
+      - 80:8080
+  cache:
+    image: mariadb:10.3
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: db
+  deps:
+    image: flyff-deps-staging
+    build:
+      context: .
+      dockerfile: deps.staging.Dockerfile
+  login:
+    image: flyff-deps-staging
+    depends_on:
+      - deps
+    environment:
+      ENV_FILE: docker.env
+    entrypoint: go
+    command:
+      - "run"
+      - "login/main.go"
+      - "login/packet.go"
+      - "login/servers.go"
+    ports:
+      - 23000:23000
+  cluster:
+    image: flyff-deps-staging
+    depends_on:
+      - deps
+    environment:
+      ENV_FILE: docker.env
+    entrypoint: go
+    command:
+      - "run"
+      - "cluster/main.go"
+      - "cluster/packets.go"
+    ports:
+      - 28000:28000
+  connection:
+    image: flyff-deps-staging
+    depends_on:
+      - deps
+    environment:
+      ENV_FILE: docker.env
+    entrypoint: go
+    command:
+      - "run"
+      - "connectionserver/main.go"
+    ports:
+      - 5400:5400
+  entity:
+    image: flyff-deps-staging
+    depends_on:
+      - deps
+    environment:
+      ENV_FILE: docker.env
+    entrypoint: go
+    command:
+      - "run"
+      - "entity/main.go"
+  chat:
+    image: flyff-deps-staging
+    depends_on:
+      - deps
+    environment:
+      ENV_FILE: docker.env
+    entrypoint: go
+    command:
+      - "run"
+      - "chat/main.go"
+  moving:
+    image: flyff-deps-staging
+    depends_on:
+      - deps
+    environment:
+      ENV_FILE: docker.env
+    entrypoint: go
+    command:
+      - "run"
+      - "moving/main.go"
+  action:
+    image: flyff-deps-staging
+    depends_on:
+      - deps
+    environment:
+      ENV_FILE: docker.env
+    entrypoint: go
+    command:
+      - "run"
+      - "action/main.go"
+volumes:
+  db-data:
