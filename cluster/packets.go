@@ -11,7 +11,7 @@ import (
 
 func sendWorldAddr(c *external.Client) {
 	packet := external.MakePacket(packettype.Cache_addr).
-		WriteString("127.0.0.1")
+		WriteString("192.168.99.101")
 
 	c.Send(packet)
 }
