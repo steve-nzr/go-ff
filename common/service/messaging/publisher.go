@@ -21,8 +21,7 @@ func Publish(topic string, data interface{}) {
 	}
 
 	err = ch.Publish(topic, "abc", false, false, amqp.Publishing{
-		Expiration: messageExpiration,
-		Body:       bytes,
+		Body: bytes,
 	})
 	if err != nil {
 		log.Fatal(err)

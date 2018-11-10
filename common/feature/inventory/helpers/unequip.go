@@ -62,6 +62,8 @@ func Unequip(player *cache.Player, uniqueID uint8) bool {
 		To:     cache.FindIDAround(player),
 	})
 
+	cache.Connection.Save(&player.Inventory[index])
+	cache.Connection.Save(&player.Inventory[availableSlot])
 	return true
 }
 
@@ -71,22 +73,21 @@ func Move(player *cache.Player, sourceSlot uint8, destSlot uint8) {
 		return
 	}
 
-	sourceItem := &player.Inventory[sourceSlot]
-	sourceItem.Position = int16(destSlot)
+	player.Inventory[sourceSlot].Position = int16(destSlot)
 
-	destItem := &player.Inventory[destSlot]
-	if destItem.Position != -1 {
-		destItem.Position = int16(sourceSlot)
+	if player.Inventory[destSlot].Position != -1 {
+		player.Inventory[destSlot].Position = int16(sourceSlot)
 	}
 
-	player.Inventory[sourceSlot], player.Inventory[destSlot] = *destItem, *sourceItem
+	player.Inventory[sourceSlot].ItemBase, player.Inventory[destSlot].ItemBase = player.Inventory[destSlot].ItemBase, player.Inventory[sourceSlot].ItemBase
 
 	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
 		Packet: outgoing.Move(player, sourceSlot, destSlot).Finalize(),
 		To:     cache.FindIDAround(player),
 	})
 
-	cache.Connection.Model(&player).Association("Inventory").Replace(player.Inventory)
+	cache.Connection.Save(&player.Inventory[sourceSlot])
+	cache.Connection.Save(&player.Inventory[destSlot])
 }
 
 func Drop(player *cache.Player, uniqueID uint32, count int16) {

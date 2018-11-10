@@ -51,7 +51,7 @@ func (container ItemContainer) InitializeWith(items []database.Item) ItemContain
 	}
 
 	for _, item := range items {
-		if item.Position >= 73 {
+		if item.Position >= MaxItems || item.Position < 0 {
 			continue
 		}
 
@@ -79,6 +79,7 @@ func (container ItemContainer) ConvertToDatabaseSlice() []database.Item {
 		}
 
 		items = append(items, database.Item{
+			PlayerID: item.PlayerID,
 			ItemBase: item.ItemBase,
 		})
 	}

@@ -19,11 +19,14 @@ func Disconnect(p *external.PacketHandler) {
 	cache.Connection.Where("net_client_id = ?", p.ClientID).Delete(player)
 
 	var dbPlayer database.Player
-	err := database.Connection.Where("id = ?", player.PlayerID).First(&dbPlayer).Error
+	err := database.Connection.Model(&dbPlayer).Preload("Items").Where("id = ?", player.PlayerID).First(&dbPlayer).Error
 	if err != nil {
 		log.Print(err)
 		return
 	}
+
+	// Clear previous inventory (Pretty bad yeah...)
+	database.Connection.Model(&database.Item{}).Where("player_id = ?", player.PlayerID).Delete(database.Item{})
 
 	dbPlayer.FaceID = player.FaceID
 	dbPlayer.Gender = player.Gender
