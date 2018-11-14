@@ -27,7 +27,7 @@ services:
     image: flyff-deps-staging
     build:
       context: .
-      dockerfile: deps.staging.Dockerfile
+      dockerfile: deps.Dockerfile
   login:
     image: flyff-deps-staging
     depends_on:

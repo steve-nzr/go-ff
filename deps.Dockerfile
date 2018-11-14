@@ -1,9 +1,7 @@
-FROM golang:1.11-alpine as builder
+FROM golang:1.11-alpine
 RUN apk add git gcc g++ make dep
 
 WORKDIR /go/src/flyff
-ADD Gopkg.lock .
-ADD Gopkg.toml .
+ADD . .
 
-RUN dep ensure -vendor-only
-RUN go get github.com/codegangsta/gin
+RUN go get -v ./...
