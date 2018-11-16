@@ -83,7 +83,7 @@ func Move(player *cache.Player, sourceSlot uint8, destSlot uint8) {
 
 	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
 		Packet: outgoing.Move(player, sourceSlot, destSlot).Finalize(),
-		To:     cache.FindIDAround(player),
+		To:     []uint32{player.NetClientID},
 	})
 
 	cache.Connection.Save(&player.Inventory[sourceSlot])
@@ -119,6 +119,6 @@ func Drop(player *cache.Player, uniqueID uint32, count int16) {
 
 	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
 		Packet: outgoing.Update(player, &item, def.ItmUpdateCount, item.Count, 0).Finalize(),
-		To:     cache.FindIDAround(player),
+		To:     []uint32{player.NetClientID},
 	})
 }
