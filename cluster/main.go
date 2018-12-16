@@ -1,16 +1,16 @@
 package main
 
 import (
-	"flyff/common/def/packet/packettype"
-	"flyff/common/def/resources"
-	"flyff/common/feature/inventory/def"
-	"flyff/common/service/database"
-	"flyff/common/service/dotenv"
-	"flyff/common/service/external"
-	"flyff/connectionserver/service/connectionmanager"
+	"go-ff/common/def/packet/packettype"
+	"go-ff/common/def/resources"
+	"go-ff/common/feature/inventory/def"
+	"go-ff/common/service/database"
+	"go-ff/common/service/dotenv"
+	"go-ff/common/service/external"
+	"go-ff/connectionserver/service/connectionmanager"
 	"log"
 
-	"flyff/cluster/packets"
+	"go-ff/cluster/packets"
 )
 
 func onConnectedHandler(ch <-chan *external.Client) {

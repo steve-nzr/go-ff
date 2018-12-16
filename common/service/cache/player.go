@@ -1,8 +1,8 @@
 package cache
 
 import (
-	"flyff/common/def/component"
-	"flyff/common/feature/inventory"
+	"go-ff/common/def/component"
+	"go-ff/common/feature/inventory"
 
 	"github.com/jinzhu/gorm"
 )

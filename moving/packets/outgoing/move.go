@@ -1,10 +1,10 @@
 package outgoing
 
 import (
-	"flyff/common/def/packet/snapshottype"
-	"flyff/common/service/cache"
-	"flyff/common/service/external"
-	"flyff/moving/def/packets"
+	"go-ff/common/def/packet/snapshottype"
+	"go-ff/common/service/cache"
+	"go-ff/common/service/external"
+	"go-ff/moving/def/packets"
 )
 
 // DestPos packet

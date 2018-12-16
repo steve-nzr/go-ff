@@ -1,9 +1,9 @@
 package incoming
 
 import (
-	"flyff/common/feature/inventory/helpers"
-	"flyff/common/service/cache"
-	"flyff/common/service/external"
+	"go-ff/common/feature/inventory/helpers"
+	"go-ff/common/service/cache"
+	"go-ff/common/service/external"
 )
 
 // EquipItem packet

@@ -1,11 +1,11 @@
 package incoming
 
 import (
-	"flyff/common/service/cache"
-	"flyff/common/service/database"
-	"flyff/common/service/external"
-	"flyff/common/service/messaging"
-	"flyff/entity/packets/outgoing"
+	"go-ff/common/service/cache"
+	"go-ff/common/service/database"
+	"go-ff/common/service/external"
+	"go-ff/common/service/messaging"
+	"go-ff/entity/packets/outgoing"
 	"log"
 )
 

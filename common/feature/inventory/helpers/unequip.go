@@ -1,12 +1,12 @@
 package helpers
 
 import (
-	"flyff/common/feature/inventory"
-	"flyff/common/feature/inventory/def"
-	"flyff/common/feature/inventory/packets/outgoing"
-	"flyff/common/service/cache"
-	"flyff/common/service/external"
-	"flyff/common/service/messaging"
+	"go-ff/common/feature/inventory"
+	"go-ff/common/feature/inventory/def"
+	"go-ff/common/feature/inventory/packets/outgoing"
+	"go-ff/common/service/cache"
+	"go-ff/common/service/external"
+	"go-ff/common/service/messaging"
 	"fmt"
 	"math"
 )

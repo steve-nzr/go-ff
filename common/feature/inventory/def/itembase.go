@@ -1,7 +1,7 @@
 package def
 
 import (
-	"flyff/common/service/external"
+	"go-ff/common/service/external"
 )
 
 // Item holds in-game item data (not itemprops, not reference to a player)

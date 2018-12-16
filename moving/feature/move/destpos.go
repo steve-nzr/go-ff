@@ -1,8 +1,8 @@
 package move
 
 import (
-	"flyff/common/service/cache"
-	"flyff/common/service/timetick"
+	"go-ff/common/service/cache"
+	"go-ff/common/service/timetick"
 	"math"
 	"time"
 
