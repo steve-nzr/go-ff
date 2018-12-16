@@ -15,7 +15,7 @@ services:
   adminer:
     image: adminer:4-standalone
     ports:
-      - 80:8080
+      - 8080:8080
   cache:
     image: mariadb:10.3
     environment:
@@ -43,7 +43,7 @@ services:
     ports:
       - 23000:23000
     volumes:
-      - .:/go/src/flyff/
+      - .:/go/src/go-ff/
   cluster:
     image: flyff-deps
     depends_on:
@@ -58,7 +58,7 @@ services:
     ports:
       - 28000:28000
     volumes:
-      - .:/go/src/flyff/
+      - .:/go/src/go-ff/
   connection:
     image: flyff-deps
     depends_on:
@@ -72,7 +72,7 @@ services:
     ports:
       - 5400:5400
     volumes:
-      - .:/go/src/flyff/
+      - .:/go/src/go-ff/
   entity:
     image: flyff-deps
     depends_on:
@@ -84,7 +84,7 @@ services:
       - "run"
       - "entity/main.go"
     volumes:
-      - .:/go/src/flyff/
+      - .:/go/src/go-ff/
   chat:
     image: flyff-deps
     depends_on:
@@ -96,7 +96,7 @@ services:
       - "run"
       - "chat/main.go"
     volumes:
-      - .:/go/src/flyff/
+      - .:/go/src/go-ff/
   moving:
     image: flyff-deps
     depends_on:
@@ -108,7 +108,7 @@ services:
       - "run"
       - "moving/main.go"
     volumes:
-      - .:/go/src/flyff/
+      - .:/go/src/go-ff/
   action:
     image: flyff-deps
     depends_on:
@@ -120,6 +120,6 @@ services:
       - "run"
       - "action/main.go"
     volumes:
-      - .:/go/src/flyff/
+      - .:/go/src/go-ff/
 volumes:
   db-data:

@@ -1,7 +1,7 @@
 package cache
 
 import (
-	"flyff/common/feature/inventory/def"
+	"go-ff/common/feature/inventory/def"
 	"log"
 	"os"
 

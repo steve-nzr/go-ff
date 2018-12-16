@@ -1,7 +1,7 @@
 package move
 
 import (
-	"flyff/common/service/cache"
+	"go-ff/common/service/cache"
 )
 
 // SaveMovingComponent saves only movin_ fields

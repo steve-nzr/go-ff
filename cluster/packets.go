@@ -1,17 +1,17 @@
 package main
 
 import (
-	"flyff/common/def/packet/packettype"
-	"flyff/common/feature/inventory"
-	"flyff/common/service/database"
-	"flyff/common/service/external"
+	"go-ff/common/def/packet/packettype"
+	"go-ff/common/feature/inventory"
+	"go-ff/common/service/database"
+	"go-ff/common/service/external"
 
 	. "github.com/ahmetb/go-linq"
 )
 
 func sendWorldAddr(c *external.Client) {
 	packet := external.MakePacket(packettype.Cache_addr).
-		WriteString("192.168.99.101")
+		WriteString("192.168.99.100")
 
 	c.Send(packet)
 }

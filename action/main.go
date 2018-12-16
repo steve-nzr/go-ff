@@ -2,12 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"flyff/action/packets/incoming"
-	"flyff/common/def/packet/packettype"
-	"flyff/common/service/cache"
-	"flyff/common/service/dotenv"
-	"flyff/common/service/external"
-	"flyff/common/service/messaging"
+	"go-ff/action/packets/incoming"
+	"go-ff/common/def/packet/packettype"
+	"go-ff/common/service/cache"
+	"go-ff/common/service/dotenv"
+	"go-ff/common/service/external"
+	"go-ff/common/service/messaging"
 	"fmt"
 	"log"
 )

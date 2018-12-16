@@ -1,7 +1,7 @@
 package packets
 
 import (
-	"flyff/common/service/external"
+	"go-ff/common/service/external"
 )
 
 // CreatePlayer packet struct

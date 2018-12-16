@@ -1,12 +1,12 @@
 package incoming
 
 import (
-	"flyff/common/service/cache"
-	"flyff/common/service/external"
-	"flyff/common/service/messaging"
-	"flyff/moving/def/packets"
-	"flyff/moving/feature/move"
-	"flyff/moving/packets/outgoing"
+	"go-ff/common/service/cache"
+	"go-ff/common/service/external"
+	"go-ff/common/service/messaging"
+	"go-ff/moving/def/packets"
+	"go-ff/moving/feature/move"
+	"go-ff/moving/packets/outgoing"
 
 	"github.com/golang/geo/r3"
 )

@@ -1,6 +1,6 @@
 package database
 
-import "flyff/common/feature/inventory/def"
+import "go-ff/common/feature/inventory/def"
 
 // Item database structure & table
 type Item struct {

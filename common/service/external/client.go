@@ -1,7 +1,7 @@
 package external
 
 import (
-	"flyff/common/def/packet/packettype"
+	"go-ff/common/def/packet/packettype"
 	"fmt"
 	"math/rand"
 	"net"

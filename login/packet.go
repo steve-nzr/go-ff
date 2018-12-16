@@ -1,10 +1,10 @@
 package main
 
 import (
-	"flyff/common/def/packet/packettype"
+	"go-ff/common/def/packet/packettype"
 	"math"
 
-	"flyff/common/service/external"
+	"go-ff/common/service/external"
 )
 
 func sendServerList(c *external.Client) {
