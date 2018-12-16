@@ -1,9 +1,9 @@
 package outgoing
 
 import (
-	"go-ff/common/def/packet/snapshottype"
-	"go-ff/common/service/cache"
-	"go-ff/common/service/external"
+	"flyff/common/def/packet/snapshottype"
+	"flyff/common/service/cache"
+	"flyff/common/service/external"
 )
 
 // DeleteObj from the world

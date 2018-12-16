@@ -1,10 +1,10 @@
 package outgoing
 
 import (
-	"go-ff/common/def/packet/snapshottype"
-	"go-ff/common/feature/inventory/def"
-	"go-ff/common/service/cache"
-	"go-ff/common/service/external"
+	"flyff/common/def/packet/snapshottype"
+	"flyff/common/feature/inventory/def"
+	"flyff/common/service/cache"
+	"flyff/common/service/external"
 )
 
 func Equip(player *cache.Player, item *def.Item, equip bool, targetSlot int32) *external.Packet {

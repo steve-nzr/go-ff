@@ -2,13 +2,13 @@ package main
 
 import (
 	"encoding/json"
-	"go-ff/common/def/packet/packettype"
-	"go-ff/common/service/cache"
-	"go-ff/common/service/database"
-	"go-ff/common/service/dotenv"
-	"go-ff/common/service/external"
-	"go-ff/common/service/messaging"
-	"go-ff/entity/packets/incoming"
+	"flyff/common/def/packet/packettype"
+	"flyff/common/service/cache"
+	"flyff/common/service/database"
+	"flyff/common/service/dotenv"
+	"flyff/common/service/external"
+	"flyff/common/service/messaging"
+	"flyff/entity/packets/incoming"
 	"fmt"
 	"log"
 )

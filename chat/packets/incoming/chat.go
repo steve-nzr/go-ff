@@ -1,10 +1,10 @@
 package incoming
 
 import (
-	"go-ff/chat/packets/outgoing"
-	"go-ff/common/service/cache"
-	"go-ff/common/service/external"
-	"go-ff/common/service/messaging"
+	"flyff/chat/packets/outgoing"
+	"flyff/common/service/cache"
+	"flyff/common/service/external"
+	"flyff/common/service/messaging"
 )
 
 // Chat packet (Basic chat & commands)

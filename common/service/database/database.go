@@ -1,7 +1,7 @@
 package database
 
 import (
-	"go-ff/common/feature/inventory/def"
+	"flyff/common/feature/inventory/def"
 	"log"
 	"os"
 

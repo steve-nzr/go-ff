@@ -1,9 +1,9 @@
 package inventory
 
 import (
-	"go-ff/common/feature/inventory/def"
-	"go-ff/common/service/database"
-	"go-ff/common/service/external"
+	"flyff/common/feature/inventory/def"
+	"flyff/common/service/database"
+	"flyff/common/service/external"
 )
 
 // ItemContainer represents a list of items with the fixed size of an inventory

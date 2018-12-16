@@ -1,10 +1,10 @@
 package main
 
 import (
-	"go-ff/common/def/packet/packettype"
-	"go-ff/common/service/dotenv"
-	"go-ff/common/service/external"
-	"go-ff/connectionserver/service/connectionmanager"
+	"flyff/common/def/packet/packettype"
+	"flyff/common/service/dotenv"
+	"flyff/common/service/external"
+	"flyff/connectionserver/service/connectionmanager"
 	"log"
 )
 

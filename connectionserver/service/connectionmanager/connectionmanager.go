@@ -1,7 +1,7 @@
 package connectionmanager
 
 import (
-	"go-ff/common/service/external"
+	"flyff/common/service/external"
 	"sync"
 )
 

@@ -1,7 +1,7 @@
 package database
 
 import (
-	"go-ff/common/def/component"
+	"flyff/common/def/component"
 
 	"github.com/jinzhu/gorm"
 )
