@@ -10,14 +10,14 @@ type CreatePlayer struct {
 	Password          string
 	Slot              uint8
 	Name              string
-	FaceID            int8
-	CostumeID         int8
-	SkinSet           int8
-	HairMeshID        int8
+	FaceID            uint8
+	CostumeID         uint8
+	SkinSet           uint8
+	HairMeshID        uint8
 	HairColor         uint32
 	Gender            uint8
 	Job               uint8
-	HeadMesh          int8
+	HeadMesh          uint8
 	BankPassword      int32
 	AuthenticationKey int32
 }
@@ -43,14 +43,14 @@ func (c *CreatePlayer) Construct(p *external.Packet) {
 	c.Password = p.ReadString()
 	c.Slot = p.ReadUInt8()
 	c.Name = p.ReadString()
-	c.FaceID = p.ReadInt8()
-	c.CostumeID = p.ReadInt8()
-	c.SkinSet = p.ReadInt8()
-	c.HairMeshID = p.ReadInt8()
+	c.FaceID = p.ReadUInt8()
+	c.CostumeID = p.ReadUInt8()
+	c.SkinSet = p.ReadUInt8()
+	c.HairMeshID = p.ReadUInt8()
 	c.HairColor = p.ReadUInt32()
 	c.Gender = p.ReadUInt8()
 	c.Job = p.ReadUInt8()
-	c.HeadMesh = p.ReadInt8()
+	c.HeadMesh = p.ReadUInt8()
 	c.BankPassword = p.ReadInt32()
 	c.AuthenticationKey = p.ReadInt32()
 }

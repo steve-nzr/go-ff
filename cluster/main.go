@@ -71,7 +71,7 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 			player.SkinSetID = uint32(createPlayerPacket.SkinSet)
 			player.HairID = uint32(createPlayerPacket.HairMeshID)
 			player.HairColor = createPlayerPacket.HairColor
-			player.FaceID = uint32(createPlayerPacket.FaceID)
+			player.FaceID = uint32(createPlayerPacket.HeadMesh)
 			player.JobID = createPlayerPacket.Job
 			player.Level = 1
 			player.Statistics.Strength = 15
