@@ -2,6 +2,7 @@ version: "3"
 services:
   broker:
     image: rabbitmq:3-alpine
+    restart: on-failure
   db:
     image: postgres:11-alpine
     environment:
@@ -10,12 +11,14 @@ services:
       POSTGRES_DB: db
     ports:
       - 5432:5432
+    restart: on-failure
     volumes:
       - db-data:/var/lib/mysql
   adminer:
     image: adminer:4-standalone
     ports:
       - 8080:8080
+    restart: on-failure
   cache:
     image: mariadb:10.3
     environment:
@@ -23,6 +26,7 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: db
+    restart: on-failure
   deps:
     image: flyff-deps
     build:
@@ -42,6 +46,7 @@ services:
       - "login/servers.go"
     ports:
       - 23000:23000
+    restart: on-failure
     volumes:
       - .:/go/src/go-ff/
   cluster:
@@ -57,6 +62,7 @@ services:
       - "cluster/packets.go"
     ports:
       - 28000:28000
+    restart: on-failure
     volumes:
       - .:/go/src/go-ff/
   connection:
@@ -71,6 +77,7 @@ services:
       - "connectionserver/main.go"
     ports:
       - 5400:5400
+    restart: on-failure
     volumes:
       - .:/go/src/go-ff/
   entity:
@@ -83,6 +90,7 @@ services:
     command:
       - "run"
       - "entity/main.go"
+    restart: on-failure
     volumes:
       - .:/go/src/go-ff/
   chat:
@@ -95,6 +103,7 @@ services:
     command:
       - "run"
       - "chat/main.go"
+    restart: on-failure
     volumes:
       - .:/go/src/go-ff/
   moving:
@@ -107,6 +116,7 @@ services:
     command:
       - "run"
       - "moving/main.go"
+    restart: on-failure
     volumes:
       - .:/go/src/go-ff/
   action:
@@ -119,6 +129,7 @@ services:
     command:
       - "run"
       - "action/main.go"
+    restart: on-failure
     volumes:
       - .:/go/src/go-ff/
 volumes:
