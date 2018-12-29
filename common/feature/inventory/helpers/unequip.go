@@ -1,13 +1,13 @@
 package helpers
 
 import (
+	"fmt"
 	"go-ff/common/feature/inventory"
 	"go-ff/common/feature/inventory/def"
 	"go-ff/common/feature/inventory/packets/outgoing"
 	"go-ff/common/service/cache"
 	"go-ff/common/service/external"
 	"go-ff/common/service/messaging"
-	"fmt"
 	"math"
 )
 
@@ -37,7 +37,8 @@ func Unequip(player *cache.Player, uniqueID uint8) bool {
 	if index < 0 {
 		return false
 	}
-	item := player.Inventory[index]
+
+	item := &player.Inventory[index]
 	if item.Position <= inventory.EquipOffset {
 		return false
 	}
@@ -51,19 +52,19 @@ func Unequip(player *cache.Player, uniqueID uint8) bool {
 		return false
 	}
 
-	parts := int32(math.Abs(float64(item.Position - inventory.EquipOffset)))
+	availableItem := &player.Inventory[availableSlot]
 
-	availableItem := player.Inventory[availableSlot]
 	item.Position = int16(availableSlot)
-	player.Inventory[index], player.Inventory[availableSlot] = availableItem, item
+	item.ItemBase, availableItem.ItemBase = availableItem.ItemBase, item.ItemBase
 
+	parts := int32(math.Abs(float64(item.Position - inventory.EquipOffset)))
 	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
-		Packet: outgoing.Equip(player, &item, false, parts).Finalize(),
+		Packet: outgoing.Equip(player, availableItem, false, parts).Finalize(),
 		To:     cache.FindIDAround(player),
 	})
 
-	cache.Connection.Save(&player.Inventory[index])
-	cache.Connection.Save(&player.Inventory[availableSlot])
+	cache.Connection.Save(item)
+	cache.Connection.Save(availableItem)
 	return true
 }
 
@@ -73,21 +74,24 @@ func Move(player *cache.Player, sourceSlot uint8, destSlot uint8) {
 		return
 	}
 
-	player.Inventory[sourceSlot].Position = int16(destSlot)
+	fmt.Println(sourceSlot, destSlot)
+	sourceItem := &player.Inventory[sourceSlot]
+	destinationItem := &player.Inventory[destSlot]
 
-	if player.Inventory[destSlot].Position != -1 {
-		player.Inventory[destSlot].Position = int16(sourceSlot)
+	sourceItem.Position = int16(destSlot)
+	if destinationItem.Position != -1 {
+		destinationItem.Position = int16(sourceSlot)
 	}
 
-	player.Inventory[sourceSlot].ItemBase, player.Inventory[destSlot].ItemBase = player.Inventory[destSlot].ItemBase, player.Inventory[sourceSlot].ItemBase
+	sourceItem.ItemBase, destinationItem.ItemBase = destinationItem.ItemBase, sourceItem.ItemBase
 
 	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
 		Packet: outgoing.Move(player, sourceSlot, destSlot).Finalize(),
 		To:     []uint32{player.NetClientID},
 	})
 
-	cache.Connection.Save(&player.Inventory[sourceSlot])
-	cache.Connection.Save(&player.Inventory[destSlot])
+	cache.Connection.Save(sourceItem)
+	cache.Connection.Save(destinationItem)
 }
 
 func Drop(player *cache.Player, uniqueID uint32, count int16) {
