@@ -125,10 +125,10 @@ services:
       - deps
     environment:
       ENV_FILE: docker.env
-    entrypoint: go
+    entrypoint: modd
     command:
-      - "run"
-      - "action/main.go"
+      - "-f"
+      - "config/modd/action.conf"
     restart: on-failure
     volumes:
       - .:/go/src/go-ff/
