@@ -1,7 +1,6 @@
 package helpers
 
 import (
-	"fmt"
 	"go-ff/common/feature/inventory"
 	"go-ff/common/feature/inventory/def"
 	"go-ff/common/feature/inventory/packets/outgoing"
@@ -74,7 +73,6 @@ func Move(player *cache.Player, sourceSlot uint8, destSlot uint8) {
 		return
 	}
 
-	fmt.Println(sourceSlot, destSlot)
 	sourceItem := &player.Inventory[sourceSlot]
 	destinationItem := &player.Inventory[destSlot]
 
@@ -105,24 +103,22 @@ func Drop(player *cache.Player, uniqueID uint32, count int16) {
 		return
 	}
 
-	item := player.Inventory[index]
-	fmt.Println(item)
+	item := &player.Inventory[index]
 	if count >= item.Count {
-		player.Inventory[index] = def.Item{
-			ItemBase: def.ItemBase{
-				UniqueID: int32(index),
-				Position: -1,
-				Count:    -1,
-				ItemID:   -1,
-			},
+		item.ItemBase = def.ItemBase{
+			ItemID:   -1,
+			UniqueID: item.UniqueID,
+			Count:    -1,
+			Position: -1,
 		}
 	} else {
 		item.Count -= count
-		player.Inventory[index] = item
 	}
 
 	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
-		Packet: outgoing.Update(player, &item, def.ItmUpdateCount, item.Count, 0).Finalize(),
+		Packet: outgoing.Update(player, item.UniqueID, def.ItmUpdateCount, (int32)(item.Count)).Finalize(),
 		To:     []uint32{player.NetClientID},
 	})
+
+	cache.Connection.Save(item)
 }

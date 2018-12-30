@@ -7,7 +7,6 @@ import (
 	"go-ff/common/service/external"
 	"go-ff/common/service/messaging"
 	"go-ff/moving/packets/incoming"
-	"fmt"
 	"log"
 )
 
@@ -24,7 +23,7 @@ func main() {
 		b := <-ch
 		p := new(external.PacketHandler)
 		if err := json.Unmarshal(b, p); err != nil {
-			fmt.Print(err)
+			log.Print(err)
 			continue
 		}
 

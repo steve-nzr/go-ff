@@ -2,7 +2,7 @@ package external
 
 import (
 	"go-ff/common/def/packet/packettype"
-	"fmt"
+	"log"
 	"math/rand"
 	"net"
 	"time"
@@ -29,7 +29,7 @@ func (nc *Client) Send(p *Packet) {
 
 	_, err := nc.Write(p.Data[:p.Offset])
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		nc.Close()
 	}
 }
@@ -38,7 +38,7 @@ func (nc *Client) Send(p *Packet) {
 func (nc *Client) SendFinalized(p *Packet) {
 	_, err := nc.Write(p.Data[:p.Offset])
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		nc.Close()
 	}
 }

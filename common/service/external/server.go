@@ -1,7 +1,7 @@
 package external
 
 import (
-	"fmt"
+	"log"
 	"net"
 	"time"
 )
@@ -63,7 +63,7 @@ func (ns *Server) Start() {
 	for {
 		conn, err := l.Accept()
 		if err != nil {
-			fmt.Println("Error accepting: ", err.Error())
+			log.Println("Error accepting: ", err.Error())
 			continue
 		}
 
@@ -97,7 +97,6 @@ func (ns *Server) handleClient(c net.Conn) {
 
 				packet := ReadPacket(buf[i:])
 				if packet.ReadUInt8() != 0x5E {
-					fmt.Println("Invalid header")
 					break
 				}
 
@@ -108,7 +107,6 @@ func (ns *Server) handleClient(c net.Conn) {
 				i += packetLen + 13
 				nextBuf := buf[i:]
 				if i < uint32(readLength) && len(nextBuf) > 0 && nextBuf[0] != 0x5E {
-					fmt.Println("Invalid size")
 					break
 				}
 
