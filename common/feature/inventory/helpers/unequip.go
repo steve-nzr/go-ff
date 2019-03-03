@@ -51,19 +51,20 @@ func Unequip(player *cache.Player, uniqueID uint8) bool {
 		return false
 	}
 
-	availableItem := &player.Inventory[availableSlot]
+	parts := int32(math.Abs(float64(item.Position - inventory.EquipOffset)))
 
-	item.Position = int16(availableSlot)
+	availableItem := &player.Inventory[availableSlot]
 	item.ItemBase, availableItem.ItemBase = availableItem.ItemBase, item.ItemBase
 
-	parts := int32(math.Abs(float64(item.Position - inventory.EquipOffset)))
+	availableItem.Position = int16(availableSlot)
+	item.UniqueID = -1
+	item.Position = -1
+
 	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
 		Packet: outgoing.Equip(player, availableItem, false, parts).Finalize(),
 		To:     cache.FindIDAround(player),
 	})
 
-	cache.Connection.Save(item)
-	cache.Connection.Save(availableItem)
 	return true
 }
 
@@ -75,6 +76,9 @@ func Move(player *cache.Player, sourceSlot uint8, destSlot uint8) {
 
 	sourceItem := &player.Inventory[sourceSlot]
 	destinationItem := &player.Inventory[destSlot]
+	if sourceItem.Count < 1 {
+		return
+	}
 
 	sourceItem.Position = int16(destSlot)
 	if destinationItem.Position != -1 {
