@@ -6,7 +6,7 @@ go_library(
         "behaviour.go",
         "move.go",
     ],
-    importpath = "go-ff/cmd/moving/packets/outgoing",
+    importpath = "github.com/Steve-Nzr/go-ff/cmd/moving/packets/outgoing",
     visibility = ["//visibility:public"],
     deps = [
         "//cmd/moving/def/packets:go_default_library",

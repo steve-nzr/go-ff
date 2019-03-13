@@ -3,7 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "go_default_library",
     srcs = ["dotenv.go"],
-    importpath = "go-ff/pkg/service/dotenv",
+    importpath = "github.com/Steve-Nzr/go-ff/pkg/service/dotenv",
     visibility = ["//visibility:public"],
     deps = ["@com_github_joho_godotenv//:go_default_library"],
 )

@@ -7,7 +7,7 @@ go_library(
         "item.go",
         "player.go",
     ],
-    importpath = "go-ff/pkg/service/database",
+    importpath = "github.com/Steve-Nzr/go-ff/pkg/service/database",
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/def/component:go_default_library",

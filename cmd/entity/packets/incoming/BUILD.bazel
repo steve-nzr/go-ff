@@ -6,7 +6,7 @@ go_library(
         "disconnect.go",
         "join.go",
     ],
-    importpath = "go-ff/cmd/entity/packets/incoming",
+    importpath = "github.com/Steve-Nzr/go-ff/cmd/entity/packets/incoming",
     visibility = ["//visibility:public"],
     deps = [
         "//cmd/entity/packets/outgoing:go_default_library",

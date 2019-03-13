@@ -1,10 +1,10 @@
 package main
 
 import (
-	"go-ff/pkg/def/packet/packettype"
-	"go-ff/pkg/feature/inventory"
-	"go-ff/pkg/service/database"
-	"go-ff/pkg/service/external"
+	"github.com/Steve-Nzr/go-ff/pkg/def/packet/packettype"
+	"github.com/Steve-Nzr/go-ff/pkg/feature/inventory"
+	"github.com/Steve-Nzr/go-ff/pkg/service/database"
+	"github.com/Steve-Nzr/go-ff/pkg/service/external"
 
 	. "github.com/ahmetb/go-linq"
 )

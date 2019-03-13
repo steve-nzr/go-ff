@@ -3,7 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "go_default_library",
     srcs = ["chat.go"],
-    importpath = "go-ff/cmd/chat/packets/incoming",
+    importpath = "github.com/Steve-Nzr/go-ff/cmd/chat/packets/incoming",
     visibility = ["//visibility:public"],
     deps = [
         "//cmd/chat/packets/outgoing:go_default_library",

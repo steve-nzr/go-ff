@@ -1,12 +1,12 @@
 package incoming
 
 import (
-	"go-ff/pkg/service/cache"
-	"go-ff/pkg/service/external"
-	"go-ff/pkg/service/messaging"
-	"go-ff/cmd/moving/def/packets"
-	"go-ff/cmd/moving/feature/move"
-	"go-ff/cmd/moving/packets/outgoing"
+	"github.com/Steve-Nzr/go-ff/pkg/service/cache"
+	"github.com/Steve-Nzr/go-ff/pkg/service/external"
+	"github.com/Steve-Nzr/go-ff/pkg/service/messaging"
+	"github.com/Steve-Nzr/go-ff/cmd/moving/def/packets"
+	"github.com/Steve-Nzr/go-ff/cmd/moving/feature/move"
+	"github.com/Steve-Nzr/go-ff/cmd/moving/packets/outgoing"
 
 	"github.com/golang/geo/r3"
 )

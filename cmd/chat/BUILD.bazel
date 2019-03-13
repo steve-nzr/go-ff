@@ -4,7 +4,7 @@ load("@io_bazel_rules_docker//go:image.bzl", "go_image")
 go_library(
     name = "go_default_library",
     srcs = ["main.go"],
-    importpath = "go-ff/cmd/chat",
+    importpath = "github.com/Steve-Nzr/go-ff/cmd/chat",
     visibility = ["//visibility:private"],
     deps = [
         "//cmd/chat/packets/incoming:go_default_library",

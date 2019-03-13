@@ -1,9 +1,9 @@
 package inventory
 
 import (
-	"go-ff/pkg/feature/inventory/def"
-	"go-ff/pkg/service/database"
-	"go-ff/pkg/service/external"
+	"github.com/Steve-Nzr/go-ff/pkg/feature/inventory/def"
+	"github.com/Steve-Nzr/go-ff/pkg/service/database"
+	"github.com/Steve-Nzr/go-ff/pkg/service/external"
 )
 
 // ItemContainer represents a list of items with the fixed size of an inventory

@@ -6,7 +6,7 @@ go_library(
         "despawn.go",
         "spawn.go",
     ],
-    importpath = "go-ff/cmd/entity/packets/outgoing",
+    importpath = "github.com/Steve-Nzr/go-ff/cmd/entity/packets/outgoing",
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/def/packet/snapshottype:go_default_library",

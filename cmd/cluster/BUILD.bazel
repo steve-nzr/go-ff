@@ -7,7 +7,7 @@ go_library(
         "main.go",
         "packets.go",
     ],
-    importpath = "go-ff/cmd/cluster",
+    importpath = "github.com/Steve-Nzr/go-ff/cmd/cluster",
     visibility = ["//visibility:private"],
     deps = [
         "//cmd/cluster/packets:go_default_library",

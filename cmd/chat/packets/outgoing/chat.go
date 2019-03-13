@@ -1,9 +1,9 @@
 package outgoing
 
 import (
-	"go-ff/pkg/def/packet/snapshottype"
-	"go-ff/pkg/service/cache"
-	"go-ff/pkg/service/external"
+	"github.com/Steve-Nzr/go-ff/pkg/def/packet/snapshottype"
+	"github.com/Steve-Nzr/go-ff/pkg/service/cache"
+	"github.com/Steve-Nzr/go-ff/pkg/service/external"
 )
 
 func Chat(p *cache.Player, msg string) *external.Packet {

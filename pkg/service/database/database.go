@@ -1,7 +1,7 @@
 package database
 
 import (
-	"go-ff/pkg/feature/inventory/def"
+	"github.com/Steve-Nzr/go-ff/pkg/feature/inventory/def"
 	"log"
 	"os"
 

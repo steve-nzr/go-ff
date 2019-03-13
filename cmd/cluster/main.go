@@ -1,16 +1,16 @@
 package main
 
 import (
-	"go-ff/pkg/def/packet/packettype"
-	"go-ff/pkg/def/resources"
-	"go-ff/pkg/feature/inventory/def"
-	"go-ff/pkg/service/database"
-	"go-ff/pkg/service/dotenv"
-	"go-ff/pkg/service/external"
-	"go-ff/cmd/connectionserver/service/connectionmanager"
+	"github.com/Steve-Nzr/go-ff/pkg/def/packet/packettype"
+	"github.com/Steve-Nzr/go-ff/pkg/def/resources"
+	"github.com/Steve-Nzr/go-ff/pkg/feature/inventory/def"
+	"github.com/Steve-Nzr/go-ff/pkg/service/database"
+	"github.com/Steve-Nzr/go-ff/pkg/service/dotenv"
+	"github.com/Steve-Nzr/go-ff/pkg/service/external"
+	"github.com/Steve-Nzr/go-ff/cmd/connectionserver/service/connectionmanager"
 	"log"
 
-	"go-ff/cmd/cluster/packets"
+	"github.com/Steve-Nzr/go-ff/cmd/cluster/packets"
 )
 
 func onConnectedHandler(ch <-chan *external.Client) {

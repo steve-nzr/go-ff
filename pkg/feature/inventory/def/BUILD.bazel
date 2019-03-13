@@ -7,7 +7,7 @@ go_library(
         "itembase.go",
         "updatetype.go",
     ],
-    importpath = "go-ff/pkg/feature/inventory/def",
+    importpath = "github.com/Steve-Nzr/go-ff/pkg/feature/inventory/def",
     visibility = ["//visibility:public"],
     deps = ["//pkg/service/external:go_default_library"],
 )

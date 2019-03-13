@@ -7,7 +7,7 @@ go_library(
         "move.go",
         "save.go",
     ],
-    importpath = "go-ff/cmd/moving/feature/move",
+    importpath = "github.com/Steve-Nzr/go-ff/cmd/moving/feature/move",
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/service/cache:go_default_library",

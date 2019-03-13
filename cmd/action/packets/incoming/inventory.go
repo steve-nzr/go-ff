@@ -1,9 +1,9 @@
 package incoming
 
 import (
-	"go-ff/pkg/feature/inventory/helpers"
-	"go-ff/pkg/service/cache"
-	"go-ff/pkg/service/external"
+	"github.com/Steve-Nzr/go-ff/pkg/feature/inventory/helpers"
+	"github.com/Steve-Nzr/go-ff/pkg/service/cache"
+	"github.com/Steve-Nzr/go-ff/pkg/service/external"
 )
 
 // EquipItem packet

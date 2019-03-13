@@ -1,6 +1,6 @@
 package database
 
-import "go-ff/pkg/feature/inventory/def"
+import "github.com/Steve-Nzr/go-ff/pkg/feature/inventory/def"
 
 // Item database structure & table
 type Item struct {

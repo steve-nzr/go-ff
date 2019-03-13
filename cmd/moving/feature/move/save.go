@@ -1,7 +1,7 @@
 package move
 
 import (
-	"go-ff/pkg/service/cache"
+	"github.com/Steve-Nzr/go-ff/pkg/service/cache"
 )
 
 // SaveMovingComponent saves only movin_ fields

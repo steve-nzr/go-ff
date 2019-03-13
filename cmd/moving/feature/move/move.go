@@ -1,8 +1,8 @@
 package move
 
 import (
-	"go-ff/pkg/service/cache"
-	"go-ff/pkg/service/timetick"
+	"github.com/Steve-Nzr/go-ff/pkg/service/cache"
+	"github.com/Steve-Nzr/go-ff/pkg/service/timetick"
 	"math"
 	"time"
 )

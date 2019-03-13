@@ -7,7 +7,7 @@ go_library(
         "position.go",
         "statistics.go",
     ],
-    importpath = "go-ff/pkg/def/component",
+    importpath = "github.com/Steve-Nzr/go-ff/pkg/def/component",
     visibility = ["//visibility:public"],
     deps = ["@com_github_golang_geo//r3:go_default_library"],
 )

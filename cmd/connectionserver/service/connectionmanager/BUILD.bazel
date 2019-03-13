@@ -3,7 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "go_default_library",
     srcs = ["connectionmanager.go"],
-    importpath = "go-ff/cmd/connectionserver/service/connectionmanager",
+    importpath = "github.com/Steve-Nzr/go-ff/cmd/connectionserver/service/connectionmanager",
     visibility = ["//visibility:public"],
     deps = ["//pkg/service/external:go_default_library"],
 )

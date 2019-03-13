@@ -1,7 +1,7 @@
 package def
 
 import (
-	"go-ff/pkg/service/external"
+	"github.com/Steve-Nzr/go-ff/pkg/service/external"
 )
 
 // Item holds in-game item data (not itemprops, not reference to a player)

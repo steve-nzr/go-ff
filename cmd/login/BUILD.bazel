@@ -8,7 +8,7 @@ go_library(
         "packet.go",
         "servers.go",
     ],
-    importpath = "go-ff/cmd/login",
+    importpath = "github.com/Steve-Nzr/go-ff/cmd/login",
     visibility = ["//visibility:private"],
     deps = [
         "//cmd/connectionserver/service/connectionmanager:go_default_library",

@@ -1,8 +1,8 @@
 package cache
 
 import (
-	"go-ff/pkg/def/component"
-	"go-ff/pkg/feature/inventory"
+	"github.com/Steve-Nzr/go-ff/pkg/def/component"
+	"github.com/Steve-Nzr/go-ff/pkg/feature/inventory"
 
 	"github.com/jinzhu/gorm"
 )

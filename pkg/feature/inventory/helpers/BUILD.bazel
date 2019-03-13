@@ -3,7 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "go_default_library",
     srcs = ["unequip.go"],
-    importpath = "go-ff/pkg/feature/inventory/helpers",
+    importpath = "github.com/Steve-Nzr/go-ff/pkg/feature/inventory/helpers",
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/feature/inventory:go_default_library",

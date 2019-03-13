@@ -1,10 +1,10 @@
 package incoming
 
 import (
-	"go-ff/cmd/chat/packets/outgoing"
-	"go-ff/pkg/service/cache"
-	"go-ff/pkg/service/external"
-	"go-ff/pkg/service/messaging"
+	"github.com/Steve-Nzr/go-ff/cmd/chat/packets/outgoing"
+	"github.com/Steve-Nzr/go-ff/pkg/service/cache"
+	"github.com/Steve-Nzr/go-ff/pkg/service/external"
+	"github.com/Steve-Nzr/go-ff/pkg/service/messaging"
 )
 
 // Chat packet (Basic chat & commands)

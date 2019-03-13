@@ -3,7 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "go_default_library",
     srcs = ["incoming.go"],
-    importpath = "go-ff/cmd/cluster/packets",
+    importpath = "github.com/Steve-Nzr/go-ff/cmd/cluster/packets",
     visibility = ["//visibility:public"],
     deps = ["//pkg/service/external:go_default_library"],
 )

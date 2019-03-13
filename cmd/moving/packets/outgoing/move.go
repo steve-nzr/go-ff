@@ -1,10 +1,10 @@
 package outgoing
 
 import (
-	"go-ff/pkg/def/packet/snapshottype"
-	"go-ff/pkg/service/cache"
-	"go-ff/pkg/service/external"
-	"go-ff/cmd/moving/def/packets"
+	"github.com/Steve-Nzr/go-ff/pkg/def/packet/snapshottype"
+	"github.com/Steve-Nzr/go-ff/pkg/service/cache"
+	"github.com/Steve-Nzr/go-ff/pkg/service/external"
+	"github.com/Steve-Nzr/go-ff/cmd/moving/def/packets"
 )
 
 // DestPos packet

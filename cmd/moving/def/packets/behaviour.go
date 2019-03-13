@@ -1,7 +1,7 @@
 package packets
 
 import (
-	"go-ff/pkg/service/external"
+	"github.com/Steve-Nzr/go-ff/pkg/service/external"
 
 	"github.com/golang/geo/r3"
 )

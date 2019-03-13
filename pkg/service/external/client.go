@@ -1,7 +1,7 @@
 package external
 
 import (
-	"go-ff/pkg/def/packet/packettype"
+	"github.com/Steve-Nzr/go-ff/pkg/def/packet/packettype"
 	"log"
 	"math/rand"
 	"net"

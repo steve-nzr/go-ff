@@ -8,7 +8,7 @@ go_library(
         "subscriber.go",
         "topics.go",
     ],
-    importpath = "go-ff/pkg/service/messaging",
+    importpath = "github.com/Steve-Nzr/go-ff/pkg/service/messaging",
     visibility = ["//visibility:public"],
     deps = ["@com_github_streadway_amqp//:go_default_library"],
 )

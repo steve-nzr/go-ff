@@ -1,7 +1,7 @@
 package database
 
 import (
-	"go-ff/pkg/def/component"
+	"github.com/Steve-Nzr/go-ff/pkg/def/component"
 
 	"github.com/jinzhu/gorm"
 )

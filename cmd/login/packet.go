@@ -1,10 +1,10 @@
 package main
 
 import (
-	"go-ff/pkg/def/packet/packettype"
+	"github.com/Steve-Nzr/go-ff/pkg/def/packet/packettype"
 	"math"
 
-	"go-ff/pkg/service/external"
+	"github.com/Steve-Nzr/go-ff/pkg/service/external"
 )
 
 func sendServerList(c *external.Client) {

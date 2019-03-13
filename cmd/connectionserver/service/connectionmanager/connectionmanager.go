@@ -1,7 +1,7 @@
 package connectionmanager
 
 import (
-	"go-ff/pkg/service/external"
+	"github.com/Steve-Nzr/go-ff/pkg/service/external"
 	"sync"
 )
 

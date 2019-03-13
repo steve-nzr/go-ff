@@ -6,6 +6,6 @@ go_library(
         "defineItem.go",
         "defineItemId.go",
     ],
-    importpath = "go-ff/pkg/def/resources",
+    importpath = "github.com/Steve-Nzr/go-ff/pkg/def/resources",
     visibility = ["//visibility:public"],
 )

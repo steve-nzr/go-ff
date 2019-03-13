@@ -1,12 +1,12 @@
 package helpers
 
 import (
-	"go-ff/pkg/feature/inventory"
-	"go-ff/pkg/feature/inventory/def"
-	"go-ff/pkg/feature/inventory/packets/outgoing"
-	"go-ff/pkg/service/cache"
-	"go-ff/pkg/service/external"
-	"go-ff/pkg/service/messaging"
+	"github.com/Steve-Nzr/go-ff/pkg/feature/inventory"
+	"github.com/Steve-Nzr/go-ff/pkg/feature/inventory/def"
+	"github.com/Steve-Nzr/go-ff/pkg/feature/inventory/packets/outgoing"
+	"github.com/Steve-Nzr/go-ff/pkg/service/cache"
+	"github.com/Steve-Nzr/go-ff/pkg/service/external"
+	"github.com/Steve-Nzr/go-ff/pkg/service/messaging"
 	"math"
 )
 
