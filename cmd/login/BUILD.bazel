@@ -1,0 +1,34 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@io_bazel_rules_docker//go:image.bzl", "go_image")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "main.go",
+        "packet.go",
+        "servers.go",
+    ],
+    importpath = "go-ff/cmd/login",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//cmd/connectionserver/service/connectionmanager:go_default_library",
+        "//pkg/def/packet/packettype:go_default_library",
+        "//pkg/service/dotenv:go_default_library",
+        "//pkg/service/external:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "binary",
+    embed = [":go_default_library"],
+    visibility = ["//visibility:public"],
+)
+
+go_image(
+    name = "image",
+    binary = ":binary",
+    goarch = "amd64",
+    goos = "linux",
+    pure = "on",
+    visibility = ["//visibility:public"],
+)

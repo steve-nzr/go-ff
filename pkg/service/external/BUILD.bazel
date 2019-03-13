@@ -1,0 +1,16 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "client.go",
+        "packet.go",
+        "server.go",
+    ],
+    importpath = "go-ff/pkg/service/external",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/def/packet/packettype:go_default_library",
+        "@com_github_golang_geo//r3:go_default_library",
+    ],
+)

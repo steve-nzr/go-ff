@@ -1,0 +1,17 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "destpos.go",
+        "move.go",
+        "save.go",
+    ],
+    importpath = "go-ff/cmd/moving/feature/move",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/service/cache:go_default_library",
+        "//pkg/service/timetick:go_default_library",
+        "@com_github_golang_geo//r3:go_default_library",
+    ],
+)

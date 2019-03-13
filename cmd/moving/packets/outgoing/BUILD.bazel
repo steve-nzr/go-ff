@@ -1,0 +1,17 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "behaviour.go",
+        "move.go",
+    ],
+    importpath = "go-ff/cmd/moving/packets/outgoing",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//cmd/moving/def/packets:go_default_library",
+        "//pkg/def/packet/snapshottype:go_default_library",
+        "//pkg/service/cache:go_default_library",
+        "//pkg/service/external:go_default_library",
+    ],
+)

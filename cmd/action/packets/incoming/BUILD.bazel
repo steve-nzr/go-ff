@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["inventory.go"],
+    importpath = "go-ff/cmd/action/packets/incoming",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/feature/inventory/helpers:go_default_library",
+        "//pkg/service/cache:go_default_library",
+        "//pkg/service/external:go_default_library",
+    ],
+)

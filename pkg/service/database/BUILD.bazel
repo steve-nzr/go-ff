@@ -1,0 +1,18 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "database.go",
+        "item.go",
+        "player.go",
+    ],
+    importpath = "go-ff/pkg/service/database",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/def/component:go_default_library",
+        "//pkg/feature/inventory/def:go_default_library",
+        "@com_github_jinzhu_gorm//:go_default_library",
+        "@com_github_jinzhu_gorm//dialects/postgres:go_default_library",
+    ],
+)

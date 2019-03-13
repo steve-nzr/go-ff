@@ -16,10 +16,12 @@
 !pkg/
 !pkg/**/
 !pkg/**/*.go
+!pkg/**/*.bazel
 
 !cmd/
 !cmd/**/
 !cmd/**/*.go
+!cmd/**/*.bazel
 
 !api/
 !api/**/
