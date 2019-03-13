@@ -27,108 +27,58 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: db
     restart: on-failure
-  deps:
-    image: flyff-deps
-    build:
-      context: .
-      dockerfile: deps.Dockerfile
   login:
-    image: flyff-deps
-    depends_on:
-      - deps
+    image: bazel/cmd/login:image
     environment:
       ENV_FILE: docker.env
-    entrypoint: go
-    command:
-      - "run"
-      - "login/main.go"
-      - "login/packet.go"
-      - "login/servers.go"
     ports:
       - 23000:23000
     restart: on-failure
     volumes:
       - .:/go/src/go-ff/
   cluster:
-    image: flyff-deps
-    depends_on:
-      - deps
+    image: bazel/cmd/cluster:image
     environment:
       ENV_FILE: docker.env
-    entrypoint: go
-    command:
-      - "run"
-      - "cluster/main.go"
-      - "cluster/packets.go"
     ports:
       - 28000:28000
     restart: on-failure
     volumes:
       - .:/go/src/go-ff/
-  connection:
-    image: flyff-deps
-    depends_on:
-      - deps
+  connectionserver:
+    image: bazel/cmd/connectionserver:image
     environment:
       ENV_FILE: docker.env
-    entrypoint: go
-    command:
-      - "run"
-      - "connectionserver/main.go"
     ports:
       - 5400:5400
     restart: on-failure
     volumes:
       - .:/go/src/go-ff/
   entity:
-    image: flyff-deps
-    depends_on:
-      - deps
+    image: bazel/cmd/entity:image
     environment:
       ENV_FILE: docker.env
-    entrypoint: go
-    command:
-      - "run"
-      - "entity/main.go"
     restart: on-failure
     volumes:
       - .:/go/src/go-ff/
   chat:
-    image: flyff-deps
-    depends_on:
-      - deps
+    image: bazel/cmd/chat:image
     environment:
       ENV_FILE: docker.env
-    entrypoint: go
-    command:
-      - "run"
-      - "chat/main.go"
     restart: on-failure
     volumes:
       - .:/go/src/go-ff/
   moving:
-    image: flyff-deps
-    depends_on:
-      - deps
+    image: bazel/cmd/moving:image
     environment:
       ENV_FILE: docker.env
-    entrypoint: go
-    command:
-      - "run"
-      - "moving/main.go"
     restart: on-failure
     volumes:
       - .:/go/src/go-ff/
   action:
-    image: flyff-deps
-    depends_on:
-      - deps
+    image: bazel/cmd/action:image
     environment:
       ENV_FILE: docker.env
-    entrypoint: modd
-    command:
-      - "-f"
-      - "config/modd/action.conf"
     restart: on-failure
     volumes:
       - .:/go/src/go-ff/
