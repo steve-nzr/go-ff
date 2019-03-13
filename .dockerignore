@@ -1,6 +1,0 @@
-*.exe
-.vscode/
-debug
-parser
-vendor
-bin
