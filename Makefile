@@ -43,3 +43,31 @@ build-login-image:
 .PHONY: build-moving-image
 build-moving-image:
 	bazel run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 //cmd/moving:image -- --norun
+
+.PHONY: run-action
+run-action:
+	ibazel run //cmd/action:binary
+
+.PHONY: run-chat
+run-chat:
+	ibazel run //cmd/chat:binary
+
+.PHONY: run-cluster
+run-cluster:
+	ibazel run //cmd/cluster:binary
+
+.PHONY: run-connectionserver
+run-connectionserver:
+	ibazel run //cmd/connectionserver:binary
+
+.PHONY: run-entity
+run-entity:
+	ibazel run //cmd/entity:binary
+
+.PHONY: run-login
+run-login:
+	ibazel run //cmd/login:binary
+
+.PHONY: run-moving
+build-moving-image:
+	ibazel run //cmd/moving:binary
