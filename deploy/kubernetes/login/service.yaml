@@ -1,0 +1,24 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: go-ff-login
+  namespace: default
+spec:
+  runLatest:
+    configuration:
+      # TODO(shikanime): create a BuildTemplate for Bazel
+      # build:
+      #   apiVersion: build.knative.dev/v1alpha1
+      #   kind: Build
+      #   spec:
+      #     template:
+      #       name: bazel
+      #       arguments:
+      #       - name: IMAGE
+      #         value: go-ff/login:latest
+      #     timeout: 10m
+      revisionTemplate:
+        spec:
+          container:
+            image: go-ff/login:latest
+            imagePullPolicy: Always

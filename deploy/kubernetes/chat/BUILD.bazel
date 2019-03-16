@@ -1,0 +1,9 @@
+load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
+
+k8s_deploy(
+    name = "chat",
+    images = {
+        "go-ff/chat:latest": "//cmd/chat:go_default_image",
+    },
+    template = ":service.yaml",
+)

@@ -1,0 +1,9 @@
+load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
+
+k8s_deploy(
+    name = "cluster",
+    images = {
+        "go-ff/cluster:latest": "//cmd/cluster:go_default_image",
+    },
+    template = ":service.yaml",
+)

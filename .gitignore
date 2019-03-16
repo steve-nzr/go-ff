@@ -26,3 +26,8 @@
 !api/
 !api/**/
 !api/**/*
+
+!deploy/
+!deploy/**/
+!deploy/**/*.yaml
+!deploy/**/*.bazel
