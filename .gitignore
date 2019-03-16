@@ -31,3 +31,7 @@
 !deployments/**/
 !deployments/**/*.yaml
 !deployments/**/*.bazel
+
+!scripts/
+!scripts/**/
+!scripts/**/*.sh
