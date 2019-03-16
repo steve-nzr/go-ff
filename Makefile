@@ -11,4 +11,4 @@ deploy:
 
 .PHONY: clear
 clear:
-	ibazel run //deployments/kubernetes:go-ff.delete
+	bazel run //deployments/kubernetes:go-ff.delete
