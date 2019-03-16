@@ -8,3 +8,7 @@ update:
 .PHONY: deploy
 deploy:
 	ibazel run //deployments/kubernetes:go-ff.apply
+
+.PHONY: clear
+clear:
+	ibazel run //deployments/kubernetes:go-ff.delete
