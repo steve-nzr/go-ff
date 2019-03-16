@@ -32,6 +32,38 @@ load(
 
 _go_image_repos()
 
+# Load K8s rules
+
+http_archive(
+    name = "io_bazel_rules_k8s",
+    sha256 = "91fef3e6054096a8947289ba0b6da3cba559ecb11c851d7bdfc9ca395b46d8d8",
+    strip_prefix = "rules_k8s-0.1",
+    urls = ["https://github.com/bazelbuild/rules_k8s/archive/v0.1.tar.gz"],
+)
+
+load("@io_bazel_rules_k8s//k8s:k8s.bzl", "k8s_repositories", "k8s_defaults")
+
+k8s_repositories()
+
+_CLUSTER = "docker-desktop"
+
+_CONTEXT = _CLUSTER
+
+k8s_defaults(
+    name = "k8s_object",
+    cluster = _CLUSTER,
+    context = _CONTEXT,
+    image_chroot = "localhost:5000/go-ff",
+)
+
+k8s_defaults(
+    name = "k8s_deploy",
+    cluster = _CLUSTER,
+    context = _CONTEXT,
+    image_chroot = "localhost:5000/go-ff",
+    kind = "deployment",
+)
+
 # Load Go package discovery
 
 http_archive(
@@ -216,18 +248,6 @@ go_repository(
     name = "com_github_google_pprof",
     commit = "3ea8567a2e57",
     importpath = "github.com/google/pprof",
-)
-
-go_repository(
-    name = "com_github_googleapis_gax_go",
-    importpath = "github.com/googleapis/gax-go",
-    tag = "v2.0.0",
-)
-
-go_repository(
-    name = "com_github_googleapis_gax_go_v2",
-    importpath = "github.com/googleapis/gax-go/v2",
-    tag = "v2.0.3",
 )
 
 go_repository(
