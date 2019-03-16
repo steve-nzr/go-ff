@@ -1,5 +1,9 @@
 all: update deploy
 
+.PHONY: install
+install:
+	sh ./scripts/boostrap-env.sh
+
 .PHONY: update
 update:
 	@go mod tidy
