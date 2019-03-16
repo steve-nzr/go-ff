@@ -23,5 +23,5 @@ k8s_objects(
         "//deployments/kubernetes/entity:entity",
         "//deployments/kubernetes/login:login",
         "//deployments/kubernetes/moving:moving",
-    ]
+    ],
 )

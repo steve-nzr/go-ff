@@ -747,3 +747,15 @@ go_repository(
     commit = "f727befe758c",
     importpath = "golang.org/x/tools",
 )
+
+go_repository(
+    name = "com_github_googleapis_gax_go",
+    importpath = "github.com/googleapis/gax-go",
+    tag = "v2.0.0",
+)
+
+go_repository(
+    name = "com_github_googleapis_gax_go_v2",
+    importpath = "github.com/googleapis/gax-go/v2",
+    tag = "v2.0.3",
+)
