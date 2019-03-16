@@ -18,56 +18,56 @@ build: build-action build-chat build-cluster build-connectionserver build-entity
 
 .PHONY: build-action
 build-action:
-	bazel run //cmd/action:go_default_image -- --norun
+	bazel run //deployments/kubernetes/action:action.apply
 
 .PHONY: build-chat
 build-chat:
-	bazel run //cmd/chat:go_default_image -- --norun
+	bazel run //deployments/kubernetes/chat:chat.apply
 
 .PHONY: build-cluster
 build-cluster:
-	bazel run //cmd/cluster:go_default_image -- --norun
+	bazel run //deployments/kubernetes/cluster:cluster.apply
 
 .PHONY: build-connectionserver
 build-connectionserver:
-	bazel run //cmd/connectionserver:go_default_image -- --norun
+	bazel run //deployments/kubernetes/connectionserver:connectionserver.apply
 
 .PHONY: build-entity
 build-entity:
-	bazel run //cmd/entity:go_default_image -- --norun
+	bazel run //deployments/kubernetes/entity:entity.apply
 
 .PHONY: build-login
 build-login:
-	bazel run //cmd/login:go_default_image -- --norun
+	bazel run //deployments/kubernetes/login:login.apply
 
 .PHONY: build-moving
 build-moving:
-	bazel run //cmd/moving:go_default_image -- --norun
+	bazel run //deployments/kubernetes/moving:moving.apply
 
 .PHONY: run-action
 run-action:
-	ibazel run //cmd/action:go_default_image
+	ibazel run //deployments/kubernetes/action:action.apply
 
 .PHONY: run-chat
 run-chat:
-	ibazel run //cmd/chat:go_default_image
+	ibazel run //deployments/kubernetes/chat:chat.apply
 
 .PHONY: run-cluster
 run-cluster:
-	ibazel run //cmd/cluster:go_default_image
+	ibazel run //deployments/kubernetes/cluster:cluster.apply
 
 .PHONY: run-connectionserver
 run-connectionserver:
-	ibazel run //cmd/connectionserver:go_default_image
+	ibazel run //deployments/kubernetes/connectionserver:connectionserver.apply
 
 .PHONY: run-entity
 run-entity:
-	ibazel run //cmd/entity:go_default_image
+	ibazel run //deployments/kubernetes/entity:entity.apply
 
 .PHONY: run-login
 run-login:
-	ibazel run //cmd/login:go_default_image
+	ibazel run //deployments/kubernetes/login:login.apply
 
 .PHONY: run-moving
-build-moving:
-	ibazel run //cmd/moving:go_default_image
+run-moving:
+	ibazel run //deployments/kubernetes/moving:moving.apply
