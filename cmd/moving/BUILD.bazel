@@ -15,15 +15,9 @@ go_library(
     ],
 )
 
-go_binary(
-    name = "binary",
-    embed = [":go_default_library"],
-    visibility = ["//visibility:public"],
-)
-
 go_image(
-    name = "image",
-    binary = ":binary",
+    name = "go_default_image",
+    embed = [":go_default_library"],
     goarch = "amd64",
     goos = "linux",
     pure = "on",

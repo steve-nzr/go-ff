@@ -14,60 +14,60 @@ refresh-app:
 	bazel run //:gazelle
 
 .PHONY: build
-build: build-action-image build-chat-image build-cluster-image build-connectionserver-image build-entity-image build-login-image build-moving-image
+build: build-action build-chat build-cluster build-connectionserver build-entity build-login build-moving
 
-.PHONY: build-action-image
-build-action-image:
-	bazel run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 //cmd/action:image -- --norun
+.PHONY: build-action
+build-action:
+	bazel run //cmd/action:go_default_image -- --norun
 
-.PHONY: build-chat-image
-build-chat-image:
-	bazel run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 //cmd/chat:image -- --norun
+.PHONY: build-chat
+build-chat:
+	bazel run //cmd/chat:go_default_image -- --norun
 
-.PHONY: build-cluster-image
-build-cluster-image:
-	bazel run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 //cmd/cluster:image -- --norun
+.PHONY: build-cluster
+build-cluster:
+	bazel run //cmd/cluster:go_default_image -- --norun
 
-.PHONY: build-connectionserver-image
-build-connectionserver-image:
-	bazel run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 //cmd/connectionserver:image -- --norun
+.PHONY: build-connectionserver
+build-connectionserver:
+	bazel run //cmd/connectionserver:go_default_image -- --norun
 
-.PHONY: build-entity-image
-build-entity-image:
-	bazel run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 //cmd/entity:image -- --norun
+.PHONY: build-entity
+build-entity:
+	bazel run //cmd/entity:go_default_image -- --norun
 
-.PHONY: build-login-image
-build-login-image:
-	bazel run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 //cmd/login:image -- --norun
+.PHONY: build-login
+build-login:
+	bazel run //cmd/login:go_default_image -- --norun
 
-.PHONY: build-moving-image
-build-moving-image:
-	bazel run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 //cmd/moving:image -- --norun
+.PHONY: build-moving
+build-moving:
+	bazel run //cmd/moving:go_default_image -- --norun
 
 .PHONY: run-action
 run-action:
-	ibazel run //cmd/action:binary
+	ibazel run //cmd/action:go_default_image
 
 .PHONY: run-chat
 run-chat:
-	ibazel run //cmd/chat:binary
+	ibazel run //cmd/chat:go_default_image
 
 .PHONY: run-cluster
 run-cluster:
-	ibazel run //cmd/cluster:binary
+	ibazel run //cmd/cluster:go_default_image
 
 .PHONY: run-connectionserver
 run-connectionserver:
-	ibazel run //cmd/connectionserver:binary
+	ibazel run //cmd/connectionserver:go_default_image
 
 .PHONY: run-entity
 run-entity:
-	ibazel run //cmd/entity:binary
+	ibazel run //cmd/entity:go_default_image
 
 .PHONY: run-login
 run-login:
-	ibazel run //cmd/login:binary
+	ibazel run //cmd/login:go_default_image
 
 .PHONY: run-moving
-build-moving-image:
-	ibazel run //cmd/moving:binary
+build-moving:
+	ibazel run //cmd/moving:go_default_image
