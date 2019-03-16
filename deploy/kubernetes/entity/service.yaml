@@ -15,10 +15,10 @@ spec:
       #       name: bazel
       #       arguments:
       #       - name: IMAGE
-      #         value: go-ff/entity:latest
+      #         value: entity:latest
       #     timeout: 10m
       revisionTemplate:
         spec:
           container:
-            image: go-ff/entity:latest
+            image: entity:latest
             imagePullPolicy: Always

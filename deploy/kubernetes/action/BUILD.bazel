@@ -3,7 +3,7 @@ load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
 k8s_deploy(
     name = "action",
     images = {
-        "go-ff/action:latest": "//cmd/action:go_default_image",
+        "action:latest": "//cmd/action:go_default_image",
     },
     template = ":service.yaml",
 )

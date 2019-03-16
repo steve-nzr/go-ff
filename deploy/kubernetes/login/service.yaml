@@ -15,10 +15,10 @@ spec:
       #       name: bazel
       #       arguments:
       #       - name: IMAGE
-      #         value: go-ff/login:latest
+      #         value: login:latest
       #     timeout: 10m
       revisionTemplate:
         spec:
           container:
-            image: go-ff/login:latest
+            image: login:latest
             imagePullPolicy: Always

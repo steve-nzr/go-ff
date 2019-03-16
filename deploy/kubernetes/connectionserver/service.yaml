@@ -15,10 +15,10 @@ spec:
       #       name: bazel
       #       arguments:
       #       - name: IMAGE
-      #         value: go-ff/connectionserver:latest
+      #         value: connectionserver:latest
       #     timeout: 10m
       revisionTemplate:
         spec:
           container:
-            image: go-ff/connectionserver:latest
+            image: connectionserver:latest
             imagePullPolicy: Always
