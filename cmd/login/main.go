@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/Steve-Nzr/go-ff/pkg/def/packet/packettype"
-	"github.com/Steve-Nzr/go-ff/pkg/service/dotenv"
-	"github.com/Steve-Nzr/go-ff/pkg/service/external"
-	"github.com/Steve-Nzr/go-ff/cmd/connectionserver/service/connectionmanager"
 	"log"
+
+	"github.com/Steve-Nzr/go-ff/cmd/connectionserver/service/connectionmanager"
+	"github.com/Steve-Nzr/go-ff/pkg/def/packet/packettype"
+	"github.com/Steve-Nzr/go-ff/pkg/service/external"
 )
 
 func onConnectedHandler(ch <-chan *external.Client) {
@@ -52,7 +52,6 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	dotenv.Initialize()
 
 	// External ----
 	onConnected := make(chan *external.Client)

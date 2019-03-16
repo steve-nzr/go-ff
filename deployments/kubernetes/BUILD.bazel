@@ -1,0 +1,27 @@
+load("@io_bazel_rules_k8s//k8s:objects.bzl", "k8s_objects")
+load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
+
+k8s_deploy(
+    name = "broker-config",
+    template = ":broker.yaml",
+)
+
+k8s_deploy(
+    name = "database-config",
+    template = ":database.yaml",
+)
+
+k8s_objects(
+    name = "go-ff",
+    objects = [
+        ":broker-config",
+        ":database-config",
+        "//deployments/kubernetes/action:action",
+        "//deployments/kubernetes/chat:chat",
+        "//deployments/kubernetes/cluster:cluster",
+        "//deployments/kubernetes/connectionserver:connectionserver",
+        "//deployments/kubernetes/entity:entity",
+        "//deployments/kubernetes/login:login",
+        "//deployments/kubernetes/moving:moving",
+    ]
+)

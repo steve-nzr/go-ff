@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-credentials
+type: Opaque
+data:
+  endpoint: aG9zdD1kYiBwb3J0PTU0MzIgdXNlcj11c2VyIGRibmFtZT1kYiBwYXNzd29yZD1wYXNzd29yZCBzc2xtb2RlPWRpc2FibGU=
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-credentials
+type: Opaque
+data:
+  endpoint: dXNlcjpwYXNzd29yZEB0Y3AoY2FjaGU6MzMwNikvZGI/Y2hhcnNldD11dGY4JnBhcnNlVGltZT1UcnVlJmxvYz1Mb2NhbA==

@@ -10,14 +10,13 @@ go_library(
         "//cmd/chat/packets/incoming:go_default_library",
         "//pkg/def/packet/packettype:go_default_library",
         "//pkg/service/cache:go_default_library",
-        "//pkg/service/dotenv:go_default_library",
         "//pkg/service/external:go_default_library",
         "//pkg/service/messaging:go_default_library",
     ],
 )
 
 go_image(
-    name = "go_default_image",
+    name = "chat",
     embed = [":go_default_library"],
     goarch = "amd64",
     goos = "linux",

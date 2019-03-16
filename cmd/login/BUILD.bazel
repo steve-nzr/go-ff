@@ -13,13 +13,12 @@ go_library(
     deps = [
         "//cmd/connectionserver/service/connectionmanager:go_default_library",
         "//pkg/def/packet/packettype:go_default_library",
-        "//pkg/service/dotenv:go_default_library",
         "//pkg/service/external:go_default_library",
     ],
 )
 
 go_image(
-    name = "go_default_image",
+    name = "login",
     embed = [":go_default_library"],
     goarch = "amd64",
     goos = "linux",

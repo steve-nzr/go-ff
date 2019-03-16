@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: broker-config
+data:
+  messageExpiration: "5000"
+  endpoint: amqp://guest:guest@broker:5672

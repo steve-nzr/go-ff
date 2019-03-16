@@ -3,7 +3,8 @@ load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
 k8s_deploy(
     name = "entity",
     images = {
-        "entity:latest": "//cmd/entity:go_default_image",
+        "entity:latest": "//cmd/entity",
     },
     template = ":service.yaml",
+    visibility = ["//visibility:public"],
 )

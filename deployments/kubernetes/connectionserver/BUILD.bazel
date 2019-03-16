@@ -3,7 +3,8 @@ load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
 k8s_deploy(
     name = "connectionserver",
     images = {
-        "connectionserver:latest": "//cmd/connectionserver:go_default_image",
+        "connectionserver:latest": "//cmd/connectionserver",
     },
     template = ":service.yaml",
+    visibility = ["//visibility:public"],
 )

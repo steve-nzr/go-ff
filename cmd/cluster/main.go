@@ -1,14 +1,14 @@
 package main
 
 import (
+	"log"
+
+	"github.com/Steve-Nzr/go-ff/cmd/connectionserver/service/connectionmanager"
 	"github.com/Steve-Nzr/go-ff/pkg/def/packet/packettype"
 	"github.com/Steve-Nzr/go-ff/pkg/def/resources"
 	"github.com/Steve-Nzr/go-ff/pkg/feature/inventory/def"
 	"github.com/Steve-Nzr/go-ff/pkg/service/database"
-	"github.com/Steve-Nzr/go-ff/pkg/service/dotenv"
 	"github.com/Steve-Nzr/go-ff/pkg/service/external"
-	"github.com/Steve-Nzr/go-ff/cmd/connectionserver/service/connectionmanager"
-	"log"
 
 	"github.com/Steve-Nzr/go-ff/cmd/cluster/packets"
 )
@@ -128,7 +128,6 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	dotenv.Initialize()
 	database.Initialize()
 
 	// External ----

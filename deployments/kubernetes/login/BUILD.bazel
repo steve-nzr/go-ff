@@ -3,7 +3,8 @@ load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
 k8s_deploy(
     name = "login",
     images = {
-        "login:latest": "//cmd/login:go_default_image",
+        "login:latest": "//cmd/login",
     },
     template = ":service.yaml",
+    visibility = ["//visibility:public"],
 )

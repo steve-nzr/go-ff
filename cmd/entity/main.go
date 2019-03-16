@@ -2,19 +2,18 @@ package main
 
 import (
 	"encoding/json"
+	"log"
+
+	"github.com/Steve-Nzr/go-ff/cmd/entity/packets/incoming"
 	"github.com/Steve-Nzr/go-ff/pkg/def/packet/packettype"
 	"github.com/Steve-Nzr/go-ff/pkg/service/cache"
 	"github.com/Steve-Nzr/go-ff/pkg/service/database"
-	"github.com/Steve-Nzr/go-ff/pkg/service/dotenv"
 	"github.com/Steve-Nzr/go-ff/pkg/service/external"
 	"github.com/Steve-Nzr/go-ff/pkg/service/messaging"
-	"github.com/Steve-Nzr/go-ff/cmd/entity/packets/incoming"
-	"log"
 )
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	dotenv.Initialize()
 	database.Initialize()
 	cache.Initialize()
 	messaging.Initialize()

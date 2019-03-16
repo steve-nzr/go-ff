@@ -3,7 +3,8 @@ load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
 k8s_deploy(
     name = "cluster",
     images = {
-        "cluster:latest": "//cmd/cluster:go_default_image",
+        "cluster:latest": "//cmd/cluster",
     },
     template = ":service.yaml",
+    visibility = ["//visibility:public"],
 )

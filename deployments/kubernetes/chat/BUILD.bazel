@@ -3,7 +3,8 @@ load("@k8s_deploy//:defaults.bzl", "k8s_deploy")
 k8s_deploy(
     name = "chat",
     images = {
-        "chat:latest": "//cmd/chat:go_default_image",
+        "chat:latest": "//cmd/chat",
     },
     template = ":service.yaml",
+    visibility = ["//visibility:public"],
 )

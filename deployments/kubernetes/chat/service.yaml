@@ -22,3 +22,25 @@ spec:
           container:
             image: chat:latest
             imagePullPolicy: Always
+            env:
+            - name: POSTGRES_DB_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: endpoint
+            - name: MYSQL_CACHE_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials
+                  key: endpoint
+            - name: AMQP_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: broker-config
+                  key: endpoint
+            - name: MESSAGE_EXPIRAITON
+              valueFrom:
+                configMapKeyRef:
+                  name: broker-config
+                  key: messageExpiration
+
