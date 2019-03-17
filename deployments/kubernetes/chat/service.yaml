@@ -43,4 +43,3 @@ spec:
                 configMapKeyRef:
                   name: broker-config
                   key: messageExpiration
-

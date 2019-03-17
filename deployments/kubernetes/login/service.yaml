@@ -43,4 +43,5 @@ spec:
                 configMapKeyRef:
                   name: broker-config
                   key: messageExpiration
-
+            ports:
+              - containerPort: 23000
