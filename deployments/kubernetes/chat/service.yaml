@@ -35,8 +35,8 @@ spec:
                   key: endpoint
             - name: AMQP_ENDPOINT
               valueFrom:
-                configMapKeyRef:
-                  name: broker-config
+                secretKeyRef:
+                  name: broker-credentials
                   key: endpoint
             - name: MESSAGE_EXPIRAITON
               valueFrom:

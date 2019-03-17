@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -euo pipefail
-
 # Local registery
 docker run -d -p 5000:5000 --restart=always --name registry registry:2
 
@@ -19,3 +17,9 @@ curl -L https://github.com/knative/serving/releases/download/v0.4.0/serving.yaml
 # Install Knative Build
 curl -L https://github.com/knative/build/releases/download/v0.4.0/build.yaml \
   | kubectl apply --filename -
+
+# Add Helm repo
+helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com/
+
+# Install Helm tiller
+helm init

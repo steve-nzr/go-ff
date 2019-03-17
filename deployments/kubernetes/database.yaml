@@ -4,7 +4,7 @@ metadata:
   name: postgres-credentials
 type: Opaque
 data:
-  endpoint: aG9zdD1kYiBwb3J0PTU0MzIgdXNlcj11c2VyIGRibmFtZT1kYiBwYXNzd29yZD1wYXNzd29yZCBzc2xtb2RlPWRpc2FibGU=
+  endpoint: aG9zdD1nby1mZi1zdG9yYWdlLXBvc3RncmVzIHBvcnQ9NTQzMiB1c2VyPXBvc3RncmVzIGRibmFtZT1nby1mZiBwYXNzd29yZD0wTXZwUmFFYUlPdVVlcDR4RjVsRjcyejBPV0RTUEZobEZERUlrS3BYQzFUblJDNWFEUTEyUnQ1Q2pqVWcgc3NsbW9kZT1kaXNhYmxl
 ---
 apiVersion: v1
 kind: Secret
@@ -12,4 +12,4 @@ metadata:
   name: mysql-credentials
 type: Opaque
 data:
-  endpoint: dXNlcjpwYXNzd29yZEB0Y3AoY2FjaGU6MzMwNikvZGI/Y2hhcnNldD11dGY4JnBhcnNlVGltZT1UcnVlJmxvYz1Mb2NhbA==
+  endpoint: cm9vdDpvR0JxRXRncENDbE1yTFpxcEtqVnBINUkyV25IaTM5VEJ1dDF0YmN2VGJvU1JJa2ZuUWkzMlpodzQ1THZAdGNwKGdvLWZmLWNhY2hlLW15c3FsOjMzMDYpL2dvLWZmP2NoYXJzZXQ9dXRmOCZwYXJzZVRpbWU9VHJ1ZSZsb2M9TG9jYWw=
