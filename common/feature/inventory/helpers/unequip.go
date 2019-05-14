@@ -10,19 +10,18 @@ import (
 	"math"
 )
 
-func Equip(player *cache.Player, uniqueID uint8, part int8) {
+func Equip(player *cache.Player, uniqueID uint8, part int32) {
 	index := player.Inventory.GetItemIndex(uniqueID)
 	if index < 0 {
 		return
 	}
 
-	//item := player.Inventory[index]
-
 	toEquip := part == -1
 	if toEquip {
-		/*if item.Position >= 0 {
-			Unequip(player, uint8(item.UniqueID))
-		}*/
+		// fmt.Println(player.Inventory[index].ItemID)
+		// prop := resources.ItemsProp[player.Inventory[index].ItemID]
+
+		// fmt.Println(prop.Parts)
 
 	} else {
 		Unequip(player, uniqueID)
@@ -38,9 +37,6 @@ func Unequip(player *cache.Player, uniqueID uint8) bool {
 	}
 
 	item := &player.Inventory[index]
-	if item.Position <= inventory.EquipOffset {
-		return false
-	}
 	if item.Position <= inventory.EquipOffset {
 		return false
 	}

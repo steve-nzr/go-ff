@@ -13,10 +13,10 @@ func EquipItem(p *external.PacketHandler) {
 		return
 	}
 
-	uniqueID := p.Packet.ReadUInt8()
-	part := p.Packet.ReadInt8()
+	uniqueID := p.Packet.ReadUInt32()
+	part := p.Packet.ReadInt32()
 
-	helpers.Equip(player, uniqueID, part)
+	helpers.Equip(player, (uint8)(uniqueID), part)
 }
 
 // MoveItem packet
