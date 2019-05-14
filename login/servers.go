@@ -15,11 +15,11 @@ type server struct {
 var servers = []server{
 	server{
 		"Server 1",
-		"127.0.0.1",
+		"192.168.1.38",
 		[]channel{
 			channel{
 				"Channel 1",
-				"127.0.0.1",
+				"192.168.1.38",
 				500,
 			},
 		},

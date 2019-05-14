@@ -4,3 +4,5 @@ debug
 parser
 vendor
 bin
+resources/*
+!resources/*.json

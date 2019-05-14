@@ -7,7 +7,7 @@ import (
 	"go-ff/common/service/cache"
 	"go-ff/common/service/external"
 	"go-ff/common/service/messaging"
-	"math"
+	"go-ff/common/service/resources"
 )
 
 func Equip(player *cache.Player, uniqueID uint8, part int32) {
@@ -18,10 +18,24 @@ func Equip(player *cache.Player, uniqueID uint8, part int32) {
 
 	toEquip := part == -1
 	if toEquip {
-		// fmt.Println(player.Inventory[index].ItemID)
-		// prop := resources.ItemsProp[player.Inventory[index].ItemID]
+		prop := resources.ItemsProp[player.Inventory[index].ItemID]
 
-		// fmt.Println(prop.Parts)
+		equipedItemSlot := prop.Parts + inventory.EquipOffset
+		equipedItem := &player.Inventory[equipedItemSlot]
+		if equipedItem.ItemID != -1 {
+			Unequip(player, (uint8)(equipedItem.UniqueID))
+		}
+
+		index := player.Inventory.GetItemIndex(uniqueID) // add check
+		item := &player.Inventory[index]
+
+		item.ItemBase, equipedItem.ItemBase = equipedItem.ItemBase, item.ItemBase
+		equipedItem.Position = (int16)(equipedItemSlot)
+
+		messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
+			Packet: outgoing.Equip(player, equipedItem, true, (int32)(prop.Parts)).Finalize(),
+			To:     cache.FindIDAround(player),
+		})
 
 	} else {
 		Unequip(player, uniqueID)
@@ -43,21 +57,17 @@ func Unequip(player *cache.Player, uniqueID uint8) bool {
 
 	availableSlot := player.Inventory.GetAvailableSlot()
 	if availableSlot < 0 {
-		// No space left in inventory
 		return false
 	}
 
-	parts := int32(math.Abs(float64(item.Position - inventory.EquipOffset)))
+	targetItem := &player.Inventory[availableSlot]
+	parts := resources.ItemsProp[item.ItemID].Parts
 
-	availableItem := &player.Inventory[availableSlot]
-	item.ItemBase, availableItem.ItemBase = availableItem.ItemBase, item.ItemBase
-
-	availableItem.Position = int16(availableSlot)
-	item.UniqueID = -1
-	item.Position = -1
+	item.ItemBase, targetItem.ItemBase = targetItem.ItemBase, item.ItemBase
+	targetItem.Position = (int16)(availableSlot)
 
 	messaging.Publish(messaging.ConnectionTopic, &external.PacketEmitter{
-		Packet: outgoing.Equip(player, availableItem, false, parts).Finalize(),
+		Packet: outgoing.Equip(player, targetItem, false, (int32)(parts)).Finalize(),
 		To:     cache.FindIDAround(player),
 	})
 
@@ -76,9 +86,9 @@ func Move(player *cache.Player, sourceSlot uint8, destSlot uint8) {
 		return
 	}
 
-	sourceItem.Position = int16(destSlot)
+	sourceItem.Position = (int16)(destSlot)
 	if destinationItem.Position != -1 {
-		destinationItem.Position = int16(sourceSlot)
+		destinationItem.Position = (int16)(sourceSlot)
 	}
 
 	sourceItem.ItemBase, destinationItem.ItemBase = destinationItem.ItemBase, sourceItem.ItemBase

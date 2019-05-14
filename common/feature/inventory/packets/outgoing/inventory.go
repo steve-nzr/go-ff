@@ -9,8 +9,8 @@ import (
 
 func Equip(player *cache.Player, item *def.Item, equip bool, targetSlot int32) *external.Packet {
 	p := external.StartMergePacket(player.EntityID, snapshottype.Doequip, 0xFFFFFF00).
-		WriteInt32(item.UniqueID).
-		WriteUInt8(0)
+		WriteInt8((int8)(item.UniqueID)).
+		WriteInt32(0 /* idGuild */)
 
 	if equip {
 		p.WriteInt8(1)
@@ -19,11 +19,12 @@ func Equip(player *cache.Player, item *def.Item, equip bool, targetSlot int32) *
 	}
 
 	p.WriteInt32(item.ItemID).
-		WriteUInt16(0).
-		WriteUInt8(0).
-		WriteUInt8(0).
-		WriteUInt32(0).
-		WriteInt32(targetSlot)
+		WriteInt16(0 /* Refine */).
+		WriteInt8(0 /* Element */).
+		WriteInt8(0 /* ElementRefine */).
+		WriteInt32(0)
+
+	p.WriteInt32(targetSlot) // nPart
 
 	return p
 }

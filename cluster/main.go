@@ -2,11 +2,11 @@ package main
 
 import (
 	"go-ff/common/def/packet/packettype"
-	"go-ff/common/def/resources"
 	"go-ff/common/feature/inventory/def"
 	"go-ff/common/service/database"
 	"go-ff/common/service/dotenv"
 	"go-ff/common/service/external"
+	"go-ff/common/service/resources/defines"
 	"go-ff/connectionserver/service/connectionmanager"
 	"log"
 
@@ -83,28 +83,28 @@ func onMessageHandler(ch <-chan *external.PacketHandler) {
 			player.Items = append(player.Items, database.Item{
 				ItemBase: def.ItemBase{
 					Count:    1,
-					ItemID:   resources.ItemsByName["II_WEA_SWO_WOODEN"],
+					ItemID:   (int32)(defines.MustGet("II_WEA_SWO_WOODEN")),
 					Position: 52,
 				},
 			})
 			player.Items = append(player.Items, database.Item{
 				ItemBase: def.ItemBase{
 					Count:    1,
-					ItemID:   resources.ItemsByName["II_ARM_M_VAG_SUIT01"],
+					ItemID:   (int32)(defines.MustGet("II_ARM_M_VAG_SUIT01")),
 					Position: 44,
 				},
 			})
 			player.Items = append(player.Items, database.Item{
 				ItemBase: def.ItemBase{
 					Count:    1,
-					ItemID:   resources.ItemsByName["II_ARM_M_VAG_GAUNTLET01"],
+					ItemID:   (int32)(defines.MustGet("II_ARM_M_VAG_GAUNTLET01")),
 					Position: 46,
 				},
 			})
 			player.Items = append(player.Items, database.Item{
 				ItemBase: def.ItemBase{
 					Count:    1,
-					ItemID:   resources.ItemsByName["II_ARM_M_VAG_BOOTS01"],
+					ItemID:   (int32)(defines.MustGet("II_ARM_M_VAG_BOOTS01")),
 					Position: 47,
 				},
 			})

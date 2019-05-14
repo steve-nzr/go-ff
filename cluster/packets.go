@@ -6,12 +6,12 @@ import (
 	"go-ff/common/service/database"
 	"go-ff/common/service/external"
 
-	. "github.com/ahmetb/go-linq"
+	linq "github.com/ahmetb/go-linq"
 )
 
 func sendWorldAddr(c *external.Client) {
 	packet := external.MakePacket(packettype.Cache_addr).
-		WriteString("127.0.0.1")
+		WriteString("192.168.1.38")
 
 	c.Send(packet)
 }
@@ -52,7 +52,7 @@ func sendPlayerList(c *external.Client, authKey int32) {
 			WriteUInt32(0)
 
 		var equipedItems []database.Item
-		From(c.Items).
+		linq.From(c.Items).
 			Where(func(i interface{}) bool {
 				item := i.(database.Item)
 				return item.Position > inventory.EquipOffset
