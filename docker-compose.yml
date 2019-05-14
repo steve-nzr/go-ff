@@ -14,11 +14,6 @@ services:
     restart: on-failure
     volumes:
       - db-data:/var/lib/mysql
-  adminer:
-    image: adminer:4-standalone
-    ports:
-      - 8080:8080
-    restart: on-failure
   cache:
     image: mariadb:10.3
     environment:
@@ -26,16 +21,23 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: db
+    ports:
+      - 3306:3306
     restart: on-failure
-  deps:
+  wait_dependencies:
+    image: dadarek/wait-for-dependencies
+    depends_on:
+      - db
+      - cache
+      - broker
+    command: db:5432 cache:3306 broker:5672
+  login:
     image: flyff-deps
     build:
       context: .
       dockerfile: deps.Dockerfile
-  login:
-    image: flyff-deps
     depends_on:
-      - deps
+      - wait_dependencies
     environment:
       ENV_FILE: docker.env
     entrypoint: go
@@ -51,8 +53,11 @@ services:
       - .:/go/src/go-ff/
   cluster:
     image: flyff-deps
+    build:
+      context: .
+      dockerfile: deps.Dockerfile
     depends_on:
-      - deps
+      - wait_dependencies
     environment:
       ENV_FILE: docker.env
     entrypoint: go
@@ -67,8 +72,11 @@ services:
       - .:/go/src/go-ff/
   connection:
     image: flyff-deps
+    build:
+      context: .
+      dockerfile: deps.Dockerfile
     depends_on:
-      - deps
+      - wait_dependencies
     environment:
       ENV_FILE: docker.env
     entrypoint: go
@@ -82,8 +90,11 @@ services:
       - .:/go/src/go-ff/
   entity:
     image: flyff-deps
+    build:
+      context: .
+      dockerfile: deps.Dockerfile
     depends_on:
-      - deps
+      - wait_dependencies
     environment:
       ENV_FILE: docker.env
     entrypoint: go
@@ -95,8 +106,11 @@ services:
       - .:/go/src/go-ff/
   chat:
     image: flyff-deps
+    build:
+      context: .
+      dockerfile: deps.Dockerfile
     depends_on:
-      - deps
+      - wait_dependencies
     environment:
       ENV_FILE: docker.env
     entrypoint: go
@@ -108,8 +122,11 @@ services:
       - .:/go/src/go-ff/
   moving:
     image: flyff-deps
+    build:
+      context: .
+      dockerfile: deps.Dockerfile
     depends_on:
-      - deps
+      - wait_dependencies
     environment:
       ENV_FILE: docker.env
     entrypoint: go
@@ -121,8 +138,11 @@ services:
       - .:/go/src/go-ff/
   action:
     image: flyff-deps
+    build:
+      context: .
+      dockerfile: deps.Dockerfile
     depends_on:
-      - deps
+      - wait_dependencies
     environment:
       ENV_FILE: docker.env
     entrypoint: modd
