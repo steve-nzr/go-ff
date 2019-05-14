@@ -1,0 +1,18 @@
+{
+    "LI_CHEERING": 0,
+    "LI_BLESSING": 1,
+    "LI_LOVE": 2,
+    "LI_SHOUT": 3,
+    "LI_RAGE": 4,
+    "LI_SUMMON": 5,
+    "LI_TELEPORT": 6,
+    "LI_PARTY": 7,
+    "LT_PASSIVE": 1,
+    "LT_ITEMBUF": 2,
+    "LT_SUMMON": 3,
+    "LT_TELEPORT": 4,
+    "LTT_NA": 0,
+    "LTT_SELF": 1,
+    "LTT_OTHER": 2,
+    "LTT_BOTH": 3
+}
